@@ -1,1 +1,15 @@
-   
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.authContainer{
+    background-image: url('assets/Images/auth-bg.jpg');
+    background-size: 100% 100% ;
+    background-position: center center;
+}
+
+.auth-overlay{
+    background: linear-gradient(30deg, #33812c84, #00000095 50%);
+}
