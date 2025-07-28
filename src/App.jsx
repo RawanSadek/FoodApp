@@ -11,11 +11,11 @@ import ForgotPassword from './Modules/Authentication/Components/ForgotPassword/F
 import VerifyAccount from './Modules/Authentication/Components/VerifyAccount/VerifyAccount'
 import AuthLayout from './Modules/Shared/Components/AuthLayout/AuthLayout'
 import MasterLayout from './Modules/Shared/Components/MasterLayout/MasterLayout'
-import Recipes from './Modules/Recipes/Components/Recipes'
-import Categories from './Modules/Categories/Components/Categories'
-import Users from './Modules/Users/Components/Users'
-import Favourits from './Modules/Favourits/Favourits'
-import Home from './Modules/Dashboard/Components/Home'
+import Recipes from './Modules/Recipes/Components/RecipesList/Recipes'
+import Categories from './Modules/Categories/Components/CategoriesList/CategoriesList'
+import Users from './Modules/Users/Components/UsersList/Users'
+import Favourits from './Modules/Favourits/Components/FavList/Favourits'
+import Home from './Modules/Dashboard/Components/Home/Home'
 
 function App() {
   const routes = createBrowserRouter([
