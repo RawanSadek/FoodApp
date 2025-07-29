@@ -13,3 +13,28 @@
 .auth-overlay{
     background: linear-gradient(30deg, #33812c84, #00000095 50%);
 }
+
+.auth-title{
+    color: #494949;
+    font-size: 25px;
+}
+
+.auth-subtitle{
+    color: #494949ab;
+}
+
+.form-control:focus{
+    box-shadow: none !important;
+}
+
+.theme-green-text{
+    color: #4AA35A;
+}
+
+.theme-green-bg{
+    background-color: #4AA35A;
+}
+
+.auth-btn:hover, .auth-btn:focus{
+    background-color: #3f8a4d !important;
+}

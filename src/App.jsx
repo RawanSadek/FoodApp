@@ -19,6 +19,7 @@ import Categories from './Modules/Categories/Components/CategoriesList/Categorie
 import Users from './Modules/Users/Components/UsersList/Users'
 import Favourits from './Modules/Favourits/Components/FavList/Favourits'
 import Home from './Modules/Dashboard/Components/Home/Home'
+import { ToastContainer } from 'react-toastify'
 
 function App() {
   const routes = createBrowserRouter([
@@ -52,7 +53,9 @@ function App() {
 
   return (
     <>
+    <ToastContainer/>
       <RouterProvider router={routes}></RouterProvider>
+      
     </>
   )
 }
