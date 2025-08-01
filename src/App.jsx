@@ -20,8 +20,15 @@ import Users from './Modules/Users/Components/UsersList/Users'
 import Favourits from './Modules/Favourits/Components/FavList/Favourits'
 import Home from './Modules/Dashboard/Components/Home/Home'
 import { ToastContainer } from 'react-toastify'
+import ProtectedRoutes from './Modules/Shared/Components/ProtectedRoutes/ProtectedRoutes'
+import { jwtDecode } from 'jwt-decode'
 
 function App() {
+
+let encodedData = localStorage.getItem('token');
+let decodedData = jwtDecode(encodedData);
+
+
   const routes = createBrowserRouter([
     {
       path:'',
@@ -38,7 +45,7 @@ function App() {
     },
     {
       path:'dashboard',
-      element: <MasterLayout/>,
+      element: <ProtectedRoutes><MasterLayout/></ProtectedRoutes>,
       errorElement: <NotFound/>,
       children: [
         {index: true, element: <Home/>},
