@@ -23,7 +23,7 @@ export default function ResetPassword() {
       navigate('/login');
 
     } catch (error) {
-      toast.error(error)
+      toast.error(error.message)
       console.log(error)
     }
   }

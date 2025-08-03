@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import '@fortawesome/fontawesome-free/css/all.min.css'
 import './App.css'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import NotFound from './Modules/Shared/Components/NotFound/NotFound'
 import Login from './Modules/Authentication/Components/Login/Login '
 import Register from './Modules/Authentication/Components/Register/Register'
@@ -25,44 +25,54 @@ import { jwtDecode } from 'jwt-decode'
 
 function App() {
 
-let encodedData = localStorage.getItem('token');
-let decodedData = jwtDecode(encodedData);
+  const [loginData, setLoginData] = useState();
+  let getLoginData = ()=>{
+    let encodedData = localStorage.getItem('token');
+    let decodedData = jwtDecode(encodedData);
+    setLoginData(decodedData);
+  }
+
+  const logout = ()=>{
+    localStorage.removeItem('token');
+    setLoginData(null);
+    <Navigate to='/login'/>
+  }
 
 
   const routes = createBrowserRouter([
     {
-      path:'',
-      element: <AuthLayout/>,
-      errorElement: <NotFound/>,
+      path: '',
+      element: <AuthLayout />,
+      errorElement: <NotFound />,
       children: [
-        {index: true, element: <Login/>},
-        {path:'login', element: <Login/>},
-        {path:'register', element: <Register/>},
-        {path:'reset-password', element: <ResetPassword/>},
-        {path:'forgot-password', element: <ForgotPassword/>},
-        {path:'verify-account', element: <VerifyAccount/>}
+        { index: true, element: <Login getLoginData={getLoginData}/> },
+        { path: 'login', element: <Login getLoginData={getLoginData} /> },
+        { path: 'register', element: <Register /> },
+        { path: 'reset-password', element: <ResetPassword /> },
+        { path: 'forgot-password', element: <ForgotPassword /> },
+        { path: 'verify-account', element: <VerifyAccount /> }
       ]
     },
     {
-      path:'dashboard',
-      element: <ProtectedRoutes><MasterLayout/></ProtectedRoutes>,
-      errorElement: <NotFound/>,
+      path: 'dashboard',
+      element: <ProtectedRoutes loginData={loginData}><MasterLayout logout={logout}/></ProtectedRoutes>,
+      errorElement: <NotFound />,
       children: [
-        {index: true, element: <Home/>},
-        {path:'home', element: <Home/>},
-        {path:'recipes', element: <Recipes/>},
-        {path:'categories', element: <Categories/>},
-        {path:'users', element: <Users/>},
-        {path:'favourits', element: <Favourits/>}
+        { index: true, element: <Home /> },
+        { path: 'home', element: <Home /> },
+        { path: 'recipes', element: <Recipes /> },
+        { path: 'categories', element: <Categories /> },
+        { path: 'users', element: <Users /> },
+        { path: 'favourits', element: <Favourits /> }
       ]
     }
   ])
 
   return (
     <>
-    <ToastContainer/>
+      <ToastContainer />
       <RouterProvider router={routes}></RouterProvider>
-      
+
     </>
   )
 }

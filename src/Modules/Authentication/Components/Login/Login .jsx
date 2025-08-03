@@ -5,7 +5,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { AUTH_URLs } from '../../../../Constants/END_POINTS.JSX';
 
-export default function Login() {
+export default function Login({getLoginData}) {
 
   let navigate = useNavigate();
 
@@ -17,6 +17,7 @@ export default function Login() {
       let response = await axios.post(AUTH_URLs.login, data);
       localStorage.setItem('token', response.data.token);
       // console.log(response.data.token)
+      getLoginData();
       toast.success('Welcome to the Food App!');
       navigate('/dashboard');
 
