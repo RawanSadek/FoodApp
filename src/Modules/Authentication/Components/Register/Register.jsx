@@ -1,5 +1,4 @@
-import React from 'react'
-import logo from '../../../../assets/Images/logo.png'
+
 import { useForm } from 'react-hook-form';
 
 export default function Register() {
