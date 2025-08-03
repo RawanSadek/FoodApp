@@ -1,13 +1,12 @@
 import React from 'react'
-import { Sidebar } from 'react-pro-sidebar'
 import { Outlet } from 'react-router-dom'
+import Sidebar from '../Sidebar/Sidebar'
 
-export default function MasterLayout() {
+export default function MasterLayout({logout}) {
   return (
     <div className='d-flex'>
       <div className='w-25 vh-100 bg-info'>
-        sidebar
-        <Sidebar />
+        <Sidebar logout={logout}/>
       </div>
       <div className='w-100 bg-secondary'>
         <div className='bg-success'>navbar</div>
