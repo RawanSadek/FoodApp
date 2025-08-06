@@ -53,7 +53,7 @@ function App() {
     },
     {
       path: 'dashboard',
-      element: <ProtectedRoutes loginData={loginData}><MasterLayout logout={logout}/></ProtectedRoutes>,
+      element: <ProtectedRoutes loginData={loginData}><MasterLayout logout={logout} loginData={loginData}/></ProtectedRoutes>,
       errorElement: <NotFound />,
       children: [
         { index: true, element: <Home /> },

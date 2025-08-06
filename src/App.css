@@ -38,3 +38,22 @@
 .auth-btn:hover, .auth-btn:focus{
     background-color: #3f8a4d !important;
 }
+
+.sidebar-container .ps-sidebar-container{
+    background-color: rgba(31, 38, 62, 1) !important;
+    border-top-right-radius: 60px;
+}
+
+.sidebar-container .ps-sidebar-root{
+    border: none;
+}
+
+.sidebar-container .ps-menu-button{
+    color: white !important;
+    transition: all .3s;
+}
+
+.sidebar-container .ps-menu-button:hover{
+    background-color: rgba(0, 146, 77, 0.2) !important;
+    border-left: 4px solid rgba(0, 146, 77);
+}
