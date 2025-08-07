@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import '@fortawesome/fontawesome-free/css/all.min.css'
@@ -29,6 +29,11 @@ function App() {
     let decodedData = jwtDecode(encodedData);
     setLoginData(decodedData);
   }
+
+  useEffect(()=>{
+    if(localStorage.getItem('token'))
+      getLoginData();
+  },[])
 
   const logout = ()=>{
     localStorage.removeItem('token');

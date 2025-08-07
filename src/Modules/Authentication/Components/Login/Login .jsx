@@ -3,12 +3,14 @@ import { useForm } from 'react-hook-form'
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { AUTH_URLs } from '../../../../Constants/END_POINTS.JSX';
+import loading from '../../../../assets/Images/loading.gif'
+
 
 export default function Login({getLoginData}) {
 
   let navigate = useNavigate();
 
-  let { register, handleSubmit, formState: { errors } } = useForm();
+  let { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
 
   let onSubmit = async (data) => {
     // console.log(AUTH_URLs.login)
@@ -54,7 +56,7 @@ export default function Login({getLoginData}) {
         <Link to='/forgot-password' className='text-decoration-none theme-green-text fw-semibold'>Forgot Password?</Link>
       </div>
 
-      <button type='submit' className='btn auth-btn theme-green-bg w-100 my-4 py-2 text-white fw-semibold fs-5'>Login</button>
+      <button disabled={isSubmitting} type='submit' className='btn auth-btn theme-green-bg w-100 my-4 py-2 text-white fw-semibold fs-5'>Login <img src={loading} alt="loading" hidden={!isSubmitting} className='loading-img'/></button>
     </form>
     </>
 

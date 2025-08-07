@@ -12,7 +12,7 @@ export default function MasterLayout({logout, loginData}) {
       <div className='w-100 p-4'>
         <Navbar loginData={loginData}/>
         {/* <Header /> */}
-      <Outlet />
+      <Outlet loginData={loginData}/>
       </div>
     </div>
   )

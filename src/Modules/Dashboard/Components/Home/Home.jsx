@@ -1,10 +1,11 @@
 import React from 'react'
 import Header from '../../../Shared/Components/Header/Header'
+import headerImg from '../../../../assets/Images/headerImg.svg'
 
-export default function Home() {
+export default function Home({loginData}) {
   return (
     <div>
-      <Header/>
+      <Header title={`Welcome ${loginData?.userName}`} desc={'You can now add your items that any user can order it from the Application and you can edit'} imgPath={headerImg}/>
       home
     </div>
   )

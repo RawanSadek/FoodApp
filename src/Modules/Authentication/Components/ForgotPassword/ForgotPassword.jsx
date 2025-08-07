@@ -4,23 +4,25 @@ import { useForm } from 'react-hook-form';
 import { AUTH_URLs } from '../../../../Constants/END_POINTS.JSX';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import loading from '../../../../assets/Images/loading.gif'
+
 
 
 export default function ForgotPassword() {
   let navigate = useNavigate();
 
-  let { register, handleSubmit, formState: { errors } } = useForm();
+  let { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
 
   let onSubmit = async (data) => {
     // console.log(AUTH_URLs.login)
     try {
       let response = await axios.post(AUTH_URLs.forgot, data);
       console.log(response)
-      toast.success(response.data.message);
-      navigate('/reset-password');
+      toast.success(response?.data?.message);
+      navigate('/reset-password', { state: { email: data.email } });  // should i do this? or store it in the local storage instead?
 
     } catch (error) {
-      toast.error(error)
+      toast.error(error.response.data.message)
       console.log(error)
     }
   }
@@ -40,7 +42,7 @@ export default function ForgotPassword() {
       </div>
       {errors.email && <span className='text-danger'>{errors.email.message}</span>}
 
-      <button type='submit' className='btn auth-btn theme-green-bg w-100 my-4 py-2 text-white fw-semibold fs-5'>Submit</button>
+      <button disabled={isSubmitting}  type='submit' className='btn auth-btn theme-green-bg w-100 my-4 py-2 text-white fw-semibold fs-5'>Submit <img src={loading} alt="loading" hidden={!isSubmitting} className='loading-img'/></button>
     </form>
 </>
   )
