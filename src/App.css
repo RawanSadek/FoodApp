@@ -4,6 +4,10 @@
     box-sizing: border-box;
 }
 
+body{
+    height: 100%;
+}
+
 .authContainer{
     background-image: url('assets/Images/auth-bg.jpg');
     background-size: 100% 100% ;
@@ -39,9 +43,14 @@
     background-color: #3f8a4d !important;
 }
 
+/* .main-content-container{
+    margin-left: 17vw;
+} */
+
 .sidebar-container .ps-sidebar-container{
     background-color: rgba(31, 38, 62, 1) !important;
     border-top-right-radius: 60px;
+    /* height: 100vh; */
 }
 
 .sidebar-container .ps-sidebar-root{
@@ -77,4 +86,17 @@
 
 .loading-img{
     width: 20px;
+}
+
+.bg-lightgrey{
+    background-color: rgba(226, 229, 235) !important;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd)>*{
+    --bs-table-bg-type: rgb(250, 250, 250) !important;
+}
+
+.action-item:focus{
+    background:  rgb(222, 222, 222) !important;
+    color: black !important;
 }

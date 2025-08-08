@@ -8,3 +8,8 @@ export const AUTH_URLs = {
     reset: `${BASE_USER}/reset`,
     verify: `${BASE_USER}/verify`
 }
+
+export const Categ_URLs = {
+    all: `${BASE_URL}/category`,
+    // oneCateg: `${BASE_URL}/register`
+}

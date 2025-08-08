@@ -19,8 +19,6 @@ export default function ResetPassword() {
 
   const password = watch('password'); // Watching the original password
 
-  // let errorMessage;
-
   let onSubmit = async (data) => {
     console.log(data)
     try {
@@ -30,8 +28,7 @@ export default function ResetPassword() {
       navigate('/login');
 
     } catch (error) {
-      // errorMessage = error.message
-      toast.error(error.response.data.message) //The error message returned from the backend is not user friendly??
+      toast.error(error.response.data.message)
       console.log(error)
     }
   }
