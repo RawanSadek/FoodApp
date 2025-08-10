@@ -7,9 +7,13 @@ import NoData from '../../../Shared/Components/NoData/NoData';
 import { Categ_URLs } from '../../../../Constants/END_POINTS.JSX';
 import { useEffect } from 'react';
 import axios from 'axios';
+import loading from '../../../../assets/Images/loading.gif'
+
 
 
 export default function Categories() {
+
+  let [isLoading, setIsLoading] = useState(true);
 
   let [categList, setCategList] = useState([]);
   let getCategList = async () => {
@@ -19,7 +23,7 @@ export default function Categories() {
     } catch (error) {
       console.log(error)
     }
-
+    setIsLoading(false);
   }
 
   useEffect(() => {
@@ -59,7 +63,13 @@ export default function Categories() {
           </thead>
 
           <tbody className='text-center'>
-            {categList.length === 0 ?
+            {isLoading? 
+            <tr>
+                <td colSpan="4">
+                  <img src={loading} alt="loading" className='mt-3'/>
+                </td>
+              </tr> : 
+            categList.length === 0 ?
               <tr>
                 <td colSpan="4">
                   <NoData />
@@ -67,7 +77,7 @@ export default function Categories() {
               </tr>
               :
               categList.map((item)=>(
-                <tr>
+                <tr key={item.id}>
                 <td>{item.id}</td>
                 <td>{item.name}</td>
                 <td>{item.creationDate}</td>
