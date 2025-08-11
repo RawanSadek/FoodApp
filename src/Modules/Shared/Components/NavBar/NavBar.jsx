@@ -2,6 +2,8 @@ import React from 'react'
 import userAvatar from '../../../../assets/Images/userAvatar.png'
 
 export default function Navbar({ loginData }) {
+  // console.log(loginData)
+
   return (
     <>
       <nav className="navbar navbar-light bg-light navbar-expand-lg justify-content-between p-3 rounded-4">

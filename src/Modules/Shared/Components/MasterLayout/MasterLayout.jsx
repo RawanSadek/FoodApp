@@ -6,10 +6,10 @@ import Header from '../Header/Header'
 export default function MasterLayout({logout, loginData}) {
   return (
     <div className='d-flex'>
-      <div className='vh-100'>
+      <div className=''>
         <SideBar logout={logout}/>
       </div>
-      <div className='w-100 p-4'>
+      <div className='w-100 p-4 page-content'>
         <Navbar loginData={loginData}/>
         {/* <Header /> */}
       <Outlet loginData={loginData}/>

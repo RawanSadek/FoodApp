@@ -39,6 +39,10 @@ body{
     background-color: rgba(0, 146, 71, 1);
 }
 
+.header-bg{
+    background-image: url(../src/assets/Images/circles.svg);
+}
+
 .auth-btn:hover, .auth-btn:focus, .auth-btn:disabled{
     background-color: rgb(1, 133, 65) !important;
 }
@@ -103,4 +107,12 @@ body{
 
 .recipes-header{
     background-color: rgba(240, 255, 239);
+}
+
+.page-content {
+  margin-left: var(--sidebar-w, 250px); 
+  transition: all .2s;
+  min-height: 100vh;
+  background: #f8f9fa;
+  padding: 16px;
 }

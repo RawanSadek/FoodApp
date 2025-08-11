@@ -1,7 +1,7 @@
 import React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-export default function RecipesHeader({ title, btnText }) {
+export default function RecipesHeader({ title='Fill', btnText }) {
     let navigate = useNavigate();
     // let location = useLocation();
     // let text = location.state?.text;

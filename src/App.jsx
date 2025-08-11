@@ -62,8 +62,8 @@ function App() {
       element: <ProtectedRoutes loginData={loginData}><MasterLayout logout={logout} loginData={loginData}/></ProtectedRoutes>,
       errorElement: <NotFound />,
       children: [
-        { index: true, element: <Home /> },
-        { path: 'home', element: <Home /> },
+        { index: true, element: <Home loginData={loginData}/> },
+        { path: 'home', element: <Home loginData={loginData}/> },
         { path: 'recipes', element: <Recipes /> },
         { path: 'recipe-data', element: <RecipesData /> },
         { path: 'categories', element: <Categories /> },
