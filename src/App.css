@@ -32,15 +32,15 @@ body{
 }
 
 .theme-green-text{
-    color: #4AA35A;
+    color: rgba(0, 146, 71, 1);
 }
 
 .theme-green-bg{
-    background-color: #4AA35A;
+    background-color: rgba(0, 146, 71, 1);
 }
 
 .auth-btn:hover, .auth-btn:focus, .auth-btn:disabled{
-    background-color: #3f8a4d !important;
+    background-color: rgb(1, 133, 65) !important;
 }
 
 /* .main-content-container{
@@ -99,4 +99,8 @@ body{
 .action-item:focus{
     background:  rgb(222, 222, 222) !important;
     color: black !important;
+}
+
+.recipes-header{
+    background-color: rgba(240, 255, 239);
 }

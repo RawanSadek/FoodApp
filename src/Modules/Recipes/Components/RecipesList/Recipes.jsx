@@ -1,24 +1,32 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../../../Shared/Components/Header/Header'
 import headerImg from '../../../../assets/Images/headerImg.svg'
-import { Dropdown, Table } from 'react-bootstrap'
+import { Button, Dropdown, Modal, Table } from 'react-bootstrap'
 import NoData from '../../../Shared/Components/NoData/NoData'
 import loading from '../../../../assets/Images/loading.gif'
 import axios from 'axios'
 import { Recipes_URLs } from '../../../../Constants/END_POINTS.JSX'
-import recipeImg1 from '../../../../assets/Images/recipeImg1.jpg'
-import recipeImg2 from '../../../../assets/Images/recipeImg2.jpg'
+import recipeImg from '../../../../assets/Images/recipeImg.png'
 import DeleteAlert from '../../../Shared/Components/DeleteAlert/DeleteAlert'
+import { BASE_URL } from '../../../../Constants/END_POINTS.JSX'
+import deleting from '../../../../assets/Images/deleting.gif'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
+
 
 
 
 export default function Recipes() {
 
-  // const [showDelete, setShowDelete] = useState(false);
+  let navigate = useNavigate();
 
-
-  const recipesImgs = [recipeImg1, recipeImg2]
-
+  // let [headerText, setHeaderText] = useState(null);
+  let handleNavigate=(text)=>
+  {
+    // setHeaderText(text);
+    // console.log(text)
+    navigate('/dashboard/recipe-data', { state: { text: text } })
+  }
   let [isLoading, setIsLoading] = useState(true);
 
   let [recipesList, setRecipesList] = useState([]);
@@ -37,8 +45,30 @@ export default function Recipes() {
   }, [])
 
 
-  const [showDelete, setShowDelete] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
+  let [show, setShow] = useState(false);
+  let [recipeId, setRecipeId] = useState(0);
+
+  const handleClose = () => setShow(false);
+  const handleShow = (id) => {
+    setShow(true);
+    setRecipeId(id);
+  }
+
+  let [isDeleting, setIsDeleting] = useState(false);
+
+  let deleteRecipe = async () => {
+    try {
+      setIsDeleting(true);
+      await axios.delete(`${Recipes_URLs.all}/${recipeId}`, { headers: { authorization: localStorage.getItem('token') } });
+      setIsDeleting(false);
+      toast.success('Item deleted successfully');
+      getRecipesList();
+      handleClose();
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
 
   const CustomToggle = React.forwardRef(({ onClick }, ref) => (
@@ -57,7 +87,7 @@ export default function Recipes() {
           <h5 className='m-0'>Recipe Table Details</h5>
           <p className='m-0'>You can check all details</p>
         </div>
-        <button className='btn btn-success px-4'>Add New Item</button>
+        <button onClick={()=>handleNavigate('Fill')} className='btn theme-green-bg text-white auth-btn px-5 py-2'>Add New Item</button>
       </div>
 
 
@@ -93,30 +123,25 @@ export default function Recipes() {
                   <tr key={item.id}>
                     <td>{item.name}</td>
                     <td>
-                      <img src={item.imagePath} alt="img" className='rounded-3'
+                      <img src={`${BASE_URL}/${item.imagePath}`} alt="img" className='rounded-3'
                         onError={(e) => {
                           e.target.onerror = null; // Prevent infinite loop
-                          e.target.src = recipesImgs[index % 2];
+                          e.target.src = recipeImg;
                         }}
-                        style={{ width: '60px', height: '60px' }}
+                        style={{ width: '60px', height: '50px' }}
                       />
                     </td>
                     <td>{item.price}</td>
                     <td>{item.description}</td>
                     <td>{item.tag.name}</td>
-                    <td>{item.category[0].name}</td>
+                    <td>{item.category.name}</td>
                     <td>
                       <Dropdown>
                         <Dropdown.Toggle as={CustomToggle} id="dropdown-custom"></Dropdown.Toggle>
                         <Dropdown.Menu className='rounded-4 border-0 shadow-sm'>
                           <Dropdown.Item className='action-item'><i className="fa-regular fa-eye me-2 text-success"></i>View</Dropdown.Item>
-                          <Dropdown.Item className='action-item'><i className="fa-regular fa-pen-to-square me-2 text-success"></i>Edit</Dropdown.Item>
-                          <Dropdown.Item className='action-item'
-                            onClick={() => {
-                              setSelectedItem(item);
-                              setShowDelete(true);
-                            }} >
-                            <i className="fa-regular fa-trash-can me-2 text-success"></i>Delete</Dropdown.Item>
+                          <Dropdown.Item onClick={()=>handleNavigate('Edit')} className='action-item'><i className="fa-regular fa-pen-to-square me-2 text-success"></i>Edit</Dropdown.Item>
+                          <Dropdown.Item onClick={() => handleShow(item.id)} className='action-item'><i className="fa-regular fa-trash-can me-2 text-success"></i>Delete</Dropdown.Item>
                         </Dropdown.Menu>
                       </Dropdown>
                     </td>
@@ -127,13 +152,20 @@ export default function Recipes() {
         </Table>
       </div>
 
-      <DeleteAlert
-        itemText={'item'}
-        item={selectedItem}
-        show={showDelete}
-        handleClose={() => setShowDelete(false)}
-        url={'recipe'}
-      />
+      {/* Delete confirmation */}
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton className='border-0'>
+        </Modal.Header>
+        <Modal.Body className='text-center'>
+          <DeleteAlert itemName={'recipe'} />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button disabled={isDeleting} className='btn btn-outline-danger text-danger bg-transparent fw-bold' variant="secondary" onClick={deleteRecipe}>
+            Delete this item
+            <img src={deleting} alt="loading" hidden={!isDeleting} className='loading-img ms-3' />
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   )
 }

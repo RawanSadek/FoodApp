@@ -20,6 +20,7 @@ import Home from './Modules/Dashboard/Components/Home/Home'
 import { ToastContainer } from 'react-toastify'
 import ProtectedRoutes from './Modules/Shared/Components/ProtectedRoutes/ProtectedRoutes'
 import { jwtDecode } from 'jwt-decode'
+import RecipesData from './Modules/Recipes/Components/RecipeData/RecipeData'
 
 function App() {
 
@@ -64,6 +65,7 @@ function App() {
         { index: true, element: <Home /> },
         { path: 'home', element: <Home /> },
         { path: 'recipes', element: <Recipes /> },
+        { path: 'recipe-data', element: <RecipesData /> },
         { path: 'categories', element: <Categories /> },
         { path: 'users', element: <Users /> },
         { path: 'favourits', element: <Favourits /> }

@@ -1,13 +1,16 @@
 import React, { useState } from 'react'
 import Header from '../../../Shared/Components/Header/Header'
 import headerImg from '../../../../assets/Images/headerImg.svg'
-import { Button, ButtonGroup, Dropdown, Table } from 'react-bootstrap'
+import { Button, ButtonGroup, Dropdown, Modal, Table } from 'react-bootstrap'
 import DeleteAlert from '../../../Shared/Components/DeleteAlert/DeleteAlert';
 import NoData from '../../../Shared/Components/NoData/NoData';
 import { Categ_URLs } from '../../../../Constants/END_POINTS.JSX';
 import { useEffect } from 'react';
 import axios from 'axios';
 import loading from '../../../../assets/Images/loading.gif'
+import { toast } from 'react-toastify';
+import deleting from '../../../../assets/Images/deleting.gif'
+
 
 
 
@@ -18,7 +21,7 @@ export default function Categories() {
   let [categList, setCategList] = useState([]);
   let getCategList = async () => {
     try {
-      let response = await axios.get(`${Categ_URLs.all}/?pageSize=5&pageNumber=1`, { headers: { authorization: localStorage.getItem('token') } })
+      let response = await axios.get(`${Categ_URLs.all}/?pageSize=5&pageNumber=1`, { headers: { authorization: localStorage.getItem('token') } });
       setCategList(response.data.data);
     } catch (error) {
       console.log(error)
@@ -30,11 +33,36 @@ export default function Categories() {
     getCategList();
   }, [])
 
+
+  let [show, setShow] = useState(false);
+  let [categId, setCategId] = useState(0);
+
+  const handleClose = () => setShow(false);
+  const handleShow = (id) => {
+    setShow(true);
+    setCategId(id);
+  }
+
+  let [isDeleting, setIsDeleting] = useState(false);
+
+  let deleteCategory = async () => {
+    try {
+      setIsDeleting(true);
+      await axios.delete(`${Categ_URLs.all}/${categId}`, { headers: { authorization: localStorage.getItem('token') } });
+      setIsDeleting(false);
+      toast.success('Item deleted successfully');
+      getCategList();
+      handleClose();
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const CustomToggle = React.forwardRef(({ onClick }, ref) => (
     <span style={{ cursor: 'pointer' }} onClick={(e) => {
       onClick(e);
     }}>
-      <i class="fa-solid fa-ellipsis"></i>
+      <i className="fa-solid fa-ellipsis"></i>
     </span>
   ));
 
@@ -63,41 +91,56 @@ export default function Categories() {
           </thead>
 
           <tbody className='text-center'>
-            {isLoading? 
-            <tr>
-                <td colSpan="4">
-                  <img src={loading} alt="loading" className='mt-3'/>
-                </td>
-              </tr> : 
-            categList.length === 0 ?
+            {isLoading ?
               <tr>
                 <td colSpan="4">
-                  <NoData />
+                  <img src={loading} alt="loading" className='mt-3' />
                 </td>
-              </tr>
-              :
-              categList.map((item)=>(
-                <tr key={item.id}>
-                <td>{item.id}</td>
-                <td>{item.name}</td>
-                <td>{item.creationDate}</td>
-                <td>
-                  <Dropdown>
-                    <Dropdown.Toggle as={CustomToggle} id="dropdown-custom"></Dropdown.Toggle>
-                    <Dropdown.Menu className='rounded-4 border-0 shadow-sm'>
-                      <Dropdown.Item className='action-item'><i className="fa-regular fa-eye me-2 text-success"></i>View</Dropdown.Item>
-                      <Dropdown.Item className='action-item'><i className="fa-regular fa-pen-to-square me-2 text-success"></i>Edit</Dropdown.Item>
-                      <Dropdown.Item className='action-item'><i class="fa-regular fa-trash-can me-2 text-success"></i>Delete</Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </td>
-              </tr>
-              ))
+              </tr> :
+              categList.length === 0 ?
+                <tr>
+                  <td colSpan="4">
+                    <NoData />
+                  </td>
+                </tr>
+                :
+                categList.map((item) => (
+                  <tr key={item.id}>
+                    <td>{item.id}</td>
+                    <td>{item.name}</td>
+                    <td>{item.creationDate}</td>
+                    <td>
+                      <Dropdown>
+                        <Dropdown.Toggle as={CustomToggle} id="dropdown-custom"></Dropdown.Toggle>
+                        <Dropdown.Menu className='rounded-4 border-0 shadow-sm'>
+                          <Dropdown.Item className='action-item'><i className="fa-regular fa-eye me-2 text-success"></i>View</Dropdown.Item>
+                          <Dropdown.Item className='action-item'><i className="fa-regular fa-pen-to-square me-2 text-success"></i>Edit</Dropdown.Item>
+                          <Dropdown.Item onClick={() => handleShow(item.id)} className='action-item'><i className="fa-regular fa-trash-can me-2 text-success"></i>Delete</Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </td>
+                  </tr>
+                ))
             }
           </tbody>
         </Table>
       </div>
 
+
+      {/* Delete confirmation */}
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton className='border-0'>
+        </Modal.Header>
+        <Modal.Body className='text-center'>
+          <DeleteAlert itemName={'category'}/>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button disabled={isDeleting} className='btn btn-outline-danger text-danger bg-transparent fw-bold' variant="secondary" onClick={deleteCategory}>
+            Delete this item
+            <img src={deleting} alt="loading" hidden={!isDeleting} className='loading-img ms-3'/>
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   )
 }
