@@ -34,6 +34,7 @@ export default function Categories() {
   }, [])
 
 
+  {/* Delete confirmation */}
   let [show, setShow] = useState(false);
   let [categId, setCategId] = useState(0);
 
@@ -41,6 +42,16 @@ export default function Categories() {
   const handleShow = (id) => {
     setShow(true);
     setCategId(id);
+  }
+
+  {/* Add new Category */}
+  let [categoryShow, setCategoryShow] = useState(false);
+  // let [categId, setCategId] = useState(0);
+
+  const handleCategoryClose = () => setCategoryShow(false);
+  const handleCategoryShow = () => {
+    setCategoryShow(true);
+    // setCategId(id);
   }
 
   let [isDeleting, setIsDeleting] = useState(false);
@@ -75,7 +86,7 @@ export default function Categories() {
           <h5 className='m-0'>Categories Table Details</h5>
           <p className='m-0'>You can check all details</p>
         </div>
-        <button className='btn btn-success px-4'>Add New Category</button>
+        <button onClick={handleCategoryShow} className='btn btn-success px-4'>Add New Category</button>
       </div>
 
 
@@ -135,9 +146,27 @@ export default function Categories() {
           <DeleteAlert itemName={'category'}/>
         </Modal.Body>
         <Modal.Footer>
-          <Button disabled={isDeleting} className='btn btn-outline-danger text-danger bg-transparent fw-bold' variant="secondary" onClick={deleteCategory}>
+          <Button onClick={deleteCategory} disabled={isDeleting} className='btn btn-outline-danger text-danger bg-transparent fw-bold' variant="secondary">
             Delete this item
             <img src={deleting} alt="loading" hidden={!isDeleting} className='loading-img ms-3'/>
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Add new category */}
+      <Modal show={categoryShow} onHide={handleCategoryClose}>
+        <Modal.Header closeButton className='border-0'>
+          Add Category
+        </Modal.Header>
+        <Modal.Body className='text-center'>
+          <form>
+            <input type="text" />
+          </form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={handleCategoryClose} disabled={isLoading} className='btn theme-green-bg auth-btn text-white fw-bold' variant="secondary">
+            Save
+            <img src={isLoading} alt="loading" hidden={!isLoading} className='loading-img ms-3'/>
           </Button>
         </Modal.Footer>
       </Modal>
