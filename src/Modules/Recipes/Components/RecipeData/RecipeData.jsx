@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import RecipesHeader from '../../../Shared/Components/RecipesHeader/RecipesHeader'
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import { Button } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
@@ -9,12 +9,18 @@ import { Tags_URLs } from '../../../../Constants/END_POINTS.JSX';
 import { getCategories } from '../../../ApiCalls/ApiCalls';
 import { Recipes_URLs } from '../../../../Constants/END_POINTS.JSX';
 import { toast } from 'react-toastify';
+import loading from '../../../../assets/Images/loading.gif'
+
 
 export default function RecipesData() {
 
-  let location = useLocation();
-  let text = location.state?.text;
 
+  let params = useParams();
+  let text
+  if (params.id)
+    text = 'Edit'
+  else
+    text = 'Fill'
 
   let fileInputRef = useRef();
 
@@ -32,7 +38,9 @@ export default function RecipesData() {
     }
   }
 
-  let { register, formState: { errors }, handleSubmit, reset } = useForm();
+  let [isLoading, setIsLoading] = useState(true);
+
+  let { register, formState: { errors, isSubmitting }, handleSubmit, reset } = useForm();
 
   let [tags, setTags] = useState([]);
   let getTags = async () => {
@@ -53,16 +61,60 @@ export default function RecipesData() {
 
   let navigate = useNavigate();
 
+  let appendToFormData = (data) => {
+    let formData = new FormData();
+    formData.append('name', data.name);
+    formData.append('price', data.price);
+    formData.append('tagId', data.tagId);
+    formData.append('categoriesIds', data.categoriesIds);
+    formData.append('description', data.description);
+    formData.append('recipeImage', fileInputRef.current.files[0]);
+    return formData;
+  }
+
   let onSubmit = async (data) => {
+    let recipeData = appendToFormData(data)
+
+    if(params.id)
+    {
+      try {
+        let response = await axios.put(`${Recipes_URLs.all}/${params.id}`, recipeData, { headers: { authorization: localStorage.getItem('token') } });
+        toast.success(response.data.message);
+        navigate('/dashboard/recipes');
+      } catch (error) {
+        toast.error(error);
+      }
+    }
+    else
+    {
+      try {
+        let response = await axios.post(Recipes_URLs.all, recipeData, { headers: { authorization: localStorage.getItem('token') } });
+        toast.success(response.data.message);
+        navigate('/dashboard/recipes');
+      } catch (error) {
+        toast.error(error);
+      }
+    }
+  }
+
+  // let [recipeDetails, setRecipeDetails] = useState(null);
+  let getRecipeDetails = async () => {
     try {
-      let response = await axios.post(Recipes_URLs.all, data, { headers: { authorization: localStorage.getItem('token') } });
-      toast.success(response.data.message);
-      navigate('/dashboard/recipes');
+      let response = await axios.get(`${Recipes_URLs.all}/${params.id}`, { headers: { authorization: localStorage.getItem('token') } });
+      // console.log(response.data)
+      reset({...response.data, tagId:response.data.name, categoriesIds:response.data.name})
+      // toast.success(response.data.message);
+      // navigate('/dashboard/recipes');
     } catch (error) {
       toast.error(error);
     }
-
+    setIsLoading(false);
   }
+
+  useEffect(()=>{
+    if(params.id)
+      getRecipeDetails();
+  },[])
 
   let cancelRecipe = () => {
     reset();
@@ -72,6 +124,10 @@ export default function RecipesData() {
   return (
     <>
       <RecipesHeader title={text} btnText={'All'} />
+
+      {isLoading && params.id? <div className='text-center mt-5'><img src={loading} alt="loading" className= 'mt-5' /></div>
+      
+      :
 
       <Form onSubmit={handleSubmit(onSubmit)} className='w-75 m-auto p-5'>
         <Form.Group className="mb-3">
@@ -111,17 +167,21 @@ export default function RecipesData() {
         </Form.Group>
 
         <Form.Group className="img-input-container rounded pt-2 text-center" onClick={handleClick}>
-          {uploaded ? <i class="fa-regular fa-circle-check fs-2 text-success"></i> : <i className="fa-solid fa-arrow-up-from-bracket fs-3 text-secondary"></i>}
+          {uploaded ? <i className="fa-regular fa-circle-check fs-2 text-success"></i> : <i className="fa-solid fa-arrow-up-from-bracket fs-3 text-secondary"></i>}
           <p className='fw-medium'>Drag & Drop or <span className="theme-green-text">Choose an Image</span> to Upload</p>
 
-          <Form.Control onChange={handleFileChange} type="file" ref={fileInputRef} hidden className='img-input' />
+          <Form.Control {...register('recipeImage')} ref={(e) => {
+            fileInputRef.current = e; // store for manual click
+            register("recipeImage").ref(e); // give to RHF
+          }} onChange={handleFileChange} type="file" hidden className='img-input' />
         </Form.Group>
 
         <div className="d-flex justify-content-end mt-4">
           <Button onClick={cancelRecipe} className='btn me-5 px-4 outlined-btn' type="button">Cancel</Button>
-          <Button className='btn auth-btn px-4 theme-green-bg text-white border-0' type="submit">Save</Button>
+          <Button disabled={isSubmitting} className='btn auth-btn px-4 theme-green-bg text-white border-0' type="submit">Save <img src={loading} alt="loading" hidden={!isSubmitting} className='loading-img ms-3' /></Button>
         </div>
       </Form>
+}
     </>
   )
 }

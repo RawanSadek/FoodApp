@@ -65,7 +65,7 @@ function App() {
         { index: true, element: <Home loginData={loginData}/> },
         { path: 'home', element: <Home loginData={loginData}/> },
         { path: 'recipes', element: <Recipes /> },
-        { path: 'recipe-data', element: <RecipesData /> },
+        { path: 'recipe-data/:id?', element: <RecipesData /> },
         { path: 'categories', element: <Categories /> },
         { path: 'users', element: <Users /> },
         { path: 'favourits', element: <Favourits /> }

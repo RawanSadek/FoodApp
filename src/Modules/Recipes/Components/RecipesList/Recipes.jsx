@@ -21,13 +21,14 @@ export default function Recipes() {
   let navigate = useNavigate();
 
   // let [headerText, setHeaderText] = useState(null);
-  let handleNavigate=(text)=>
-  {
-    // setHeaderText(text);
-    // console.log(text)
-    navigate('/dashboard/recipe-data', { state: { text: text } })
-  }
+  // let handleNavigate=(text)=>
+  // {
+  //   // setHeaderText(text);
+  //   // console.log(text)
+  //   navigate('/dashboard/recipe-data', { state: { text: text } })
+  // }
   let [isLoading, setIsLoading] = useState(true);
+  let [imgLoading, setImgLoading] = useState(true);
 
   let [recipesList, setRecipesList] = useState([]);
   let getRecipesList = async () => {
@@ -87,7 +88,7 @@ export default function Recipes() {
           <h5 className='m-0'>Recipe Table Details</h5>
           <p className='m-0'>You can check all details</p>
         </div>
-        <button onClick={()=>handleNavigate('Fill')} className='btn theme-green-bg text-white auth-btn px-5 py-2'>Add New Item</button>
+        <button onClick={()=>navigate('/dashboard/recipe-data')} className='btn theme-green-bg text-white auth-btn px-5 py-2'>Add New Item</button>
       </div>
 
 
@@ -95,7 +96,8 @@ export default function Recipes() {
         <Table striped className='table-borderless'>
           <thead>
             <tr className="text-center">
-              <th className="rounded-start-3 bg-lightgrey border-0 py-3">Name</th>
+              <th className="rounded-start-3 bg-lightgrey border-0 py-3">ID</th>
+              <th className="bg-lightgrey border-0 py-3">Name</th>
               <th className='bg-lightgrey border-0 py-3'>Image</th>
               <th className='bg-lightgrey border-0 py-3'>Price</th>
               <th className='bg-lightgrey border-0 py-3'>Description</th>
@@ -108,39 +110,43 @@ export default function Recipes() {
           <tbody className='text-center'>
             {isLoading ?
               <tr>
-                <td colSpan="7">
+                <td colSpan="8">
                   <img src={loading} alt="loading" className='mt-3' />
                 </td>
               </tr> :
               recipesList.length === 0 ?
                 <tr>
-                  <td colSpan="7">
+                  <td colSpan="8">
                     <NoData />
                   </td>
                 </tr>
                 :
-                recipesList.map((item, index) => (
+                recipesList.map((item) => (
                   <tr key={item.id}>
+                    <td>{item.id}</td>
                     <td>{item.name}</td>
                     <td>
-                      <img src={`${BASE_URL}/${item.imagePath}`} alt="img" className='rounded-3'
+                      {imgLoading&& <img src={loading} alt="loading" hidden={!imgLoading} className='loading-img ms-3' /> }
+                      <img src={`https://upskilling-egypt.com:3006/${item.imagePath}`} hidden={imgLoading} alt="img" className='rounded-3'
                         onError={(e) => {
                           e.target.onerror = null; // Prevent infinite loop
                           e.target.src = recipeImg;
                         }}
+                        onLoad={()=>setImgLoading(false)}
                         style={{ width: '60px', height: '50px' }}
-                      />
+                        />
+                      
                     </td>
                     <td>{item.price}</td>
                     <td>{item.description}</td>
                     <td>{item.tag.name}</td>
-                    <td>{item.category.name}</td>
+                    <td>{item.category[0].name}</td>
                     <td>
                       <Dropdown>
                         <Dropdown.Toggle as={CustomToggle} id="dropdown-custom"></Dropdown.Toggle>
                         <Dropdown.Menu className='rounded-4 border-0 shadow-sm'>
                           <Dropdown.Item className='action-item'><i className="fa-regular fa-eye me-2 text-success"></i>View</Dropdown.Item>
-                          <Dropdown.Item onClick={()=>handleNavigate('Edit')} className='action-item'><i className="fa-regular fa-pen-to-square me-2 text-success"></i>Edit</Dropdown.Item>
+                          <Dropdown.Item onClick={()=>navigate(`/dashboard/recipe-data/${item.id}`)} className='action-item'><i className="fa-regular fa-pen-to-square me-2 text-success"></i>Edit</Dropdown.Item>
                           <Dropdown.Item onClick={() => handleShow(item.id)} className='action-item'><i className="fa-regular fa-trash-can me-2 text-success"></i>Delete</Dropdown.Item>
                         </Dropdown.Menu>
                       </Dropdown>
