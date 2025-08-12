@@ -18,3 +18,7 @@ export const Recipes_URLs = {
     all: `${BASE_URL}/recipe`,
     // oneCateg: `${BASE_URL}/register`
 }
+
+export const Tags_URLs = {
+    all: `${BASE_URL}/tag`,
+}

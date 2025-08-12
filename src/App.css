@@ -111,8 +111,27 @@ body{
 
 .page-content {
   margin-left: var(--sidebar-w, 250px); 
-  transition: all .2s;
+  transition: all .4s;
   min-height: 100vh;
-  background: #f8f9fa;
   padding: 16px;
+}
+
+.sidebar{
+    transition: all .4s !important;
+}
+
+.img-input-container{
+    border: 1px dashed rgba(0, 146, 77) !important;
+   cursor: pointer;
+   background-color: rgba(240, 255, 239);
+}
+
+.outlined-btn{
+    background-color: transparent !important;
+    border-color: rgba(0, 146, 71, 1) !important;
+    color: rgba(0, 146, 71, 1) !important;
+}
+
+.outlined-btn:hover{
+    background-color: #f6f5f5 !important;
 }

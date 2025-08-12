@@ -11,6 +11,7 @@ import loading from '../../../../assets/Images/loading.gif'
 import { toast } from 'react-toastify';
 import deleting from '../../../../assets/Images/deleting.gif'
 import { useForm } from 'react-hook-form';
+import { getCategories } from '../../../ApiCalls/ApiCalls';
 
 
 
@@ -20,9 +21,9 @@ export default function Categories() {
   let [isLoading, setIsLoading] = useState(true);
 
   let [categList, setCategList] = useState([]);
-  let getCategList = async () => {
+  let getCategList = async() => {
     try {
-      let response = await axios.get(`${Categ_URLs.all}/?pageSize=5&pageNumber=1`, { headers: { authorization: localStorage.getItem('token') } });
+      let response =  await getCategories();
       setCategList(response.data.data);
     } catch (error) {
       console.log(error)
