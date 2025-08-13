@@ -13,7 +13,8 @@ import loading from '../../../../assets/Images/loading.gif'
 
 
 export default function RecipesData() {
-
+  let location = useLocation();
+  let view = location.state?.view;
 
   let params = useParams();
   let text
@@ -24,17 +25,18 @@ export default function RecipesData() {
 
   let fileInputRef = useRef();
 
-  let [uploaded, setUploaded] = useState(false);
   let handleClick = () => {
     fileInputRef.current.click();
-    uploaded = true;
   };
 
+
+  const [imgPreview, setImgPreview] = useState(null);
   let handleFileChange = (event) => {
     if (event.target.files.length > 0) {
-      setUploaded(true);
-    } else {
-      setUploaded(false);
+      const file = event.target.files[0];
+      if (file) {
+        setImgPreview(URL.createObjectURL(file)); // create a temporary preview URL
+      }
     }
   }
 
@@ -50,7 +52,7 @@ export default function RecipesData() {
 
   let [categories, setCategories] = useState([]);
   let getCategs = async () => {
-    let response = await getCategories();
+    let response = await getCategories(9999, 1);
     setCategories(response.data.data);
   }
 
@@ -73,10 +75,11 @@ export default function RecipesData() {
   }
 
   let onSubmit = async (data) => {
+    console.log(fileInputRef.current.files[0])
+
     let recipeData = appendToFormData(data)
 
-    if(params.id)
-    {
+    if (params.id) {
       try {
         let response = await axios.put(`${Recipes_URLs.all}/${params.id}`, recipeData, { headers: { authorization: localStorage.getItem('token') } });
         toast.success(response.data.message);
@@ -85,8 +88,7 @@ export default function RecipesData() {
         toast.error(error);
       }
     }
-    else
-    {
+    else {
       try {
         let response = await axios.post(Recipes_URLs.all, recipeData, { headers: { authorization: localStorage.getItem('token') } });
         toast.success(response.data.message);
@@ -97,24 +99,22 @@ export default function RecipesData() {
     }
   }
 
-  // let [recipeDetails, setRecipeDetails] = useState(null);
+  let [recipeDetails, setRecipeDetails] = useState(null);
   let getRecipeDetails = async () => {
     try {
       let response = await axios.get(`${Recipes_URLs.all}/${params.id}`, { headers: { authorization: localStorage.getItem('token') } });
-      // console.log(response.data)
-      reset({...response.data, tagId:response.data.name, categoriesIds:response.data.name})
-      // toast.success(response.data.message);
-      // navigate('/dashboard/recipes');
+      // console.log(response.data.imagePath)
+      setRecipeDetails(response.data)
     } catch (error) {
       toast.error(error);
     }
     setIsLoading(false);
   }
 
-  useEffect(()=>{
-    if(params.id)
+  useEffect(() => {
+    if (params.id)
       getRecipeDetails();
-  },[])
+  }, [])
 
   let cancelRecipe = () => {
     reset();
@@ -125,63 +125,61 @@ export default function RecipesData() {
     <>
       <RecipesHeader title={text} btnText={'All'} />
 
-      {isLoading && params.id? <div className='text-center mt-5'><img src={loading} alt="loading" className= 'mt-5' /></div>
-      
-      :
+      {isLoading && params.id ? <div className='text-center mt-5'><img src={loading} alt="loading" className='mt-5' /></div>
+        :
+        <Form onSubmit={handleSubmit(onSubmit)} className='w-75 m-auto p-5'>
+          <Form.Group className="mb-3">
+            <Form.Control defaultValue={recipeDetails?.name} disabled={view} {...register('name', { required: 'Recipe name is required!' })} type="text" placeholder="Recipe Name" className='bg-light' />
+            {errors.name && <span className='text-danger'>{errors.name.message}</span>}
+          </Form.Group>
 
-      <Form onSubmit={handleSubmit(onSubmit)} className='w-75 m-auto p-5'>
-        <Form.Group className="mb-3">
-          <Form.Control {...register('name', { required: 'Recipe name is required!' })} type="text" placeholder="Recipe Name" className='bg-light' />
-          {errors.name && <span className='text-danger'>{errors.name.message}</span>}
-        </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Select defaultValue={params.id ? recipeDetails?.tag.id : ''} disabled={view}  {...register('tagId', { required: 'Tag is required!' })} placeholder='Tag' className='bg-light'>
+              <option value="" disabled hidden>Tag</option>
+              {tags.map(tag =>
+                (<option key={tag.id} value={tag.id}>{tag.name}</option>)
+              )}
 
-        <Form.Group className="mb-3">
-          <Form.Select  {...register('tagId', { required: 'Tag is required!' })} placeholder='Tag' className='bg-light' defaultValue="">
-            <option value="" disabled hidden>Tag</option>
-            {tags.map(tag =>
-              (<option key={tag.id} value={tag.id}>{tag.name}</option>)
-            )}
+            </Form.Select>
+            {errors.tagId && <span className='text-danger'>{errors.tagId.message}</span>}
+          </Form.Group>
 
-          </Form.Select>
-          {errors.tagId && <span className='text-danger'>{errors.tagId.message}</span>}
-        </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Control defaultValue={recipeDetails?.price} disabled={view} {...register('price', { required: 'price is required!' })} type="number" placeholder="Price" className='bg-light' />
+            {errors.price && <span className='text-danger'>{errors.price.message}</span>}
+          </Form.Group>
 
-        <Form.Group className="mb-3">
-          <Form.Control {...register('price', { required: 'price is required!' })} type="number" placeholder="Price" className='bg-light' />
-          {errors.price && <span className='text-danger'>{errors.price.message}</span>}
-        </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Select defaultValue={params.id ? recipeDetails?.category[0].id : ''} disabled={view} {...register('categoriesIds', { required: 'Category is required!' })} placeholder='Category' className='bg-light'>
+              <option value="" disabled hidden>Category</option>
+              {categories.map(category => (
+                <option key={category.id} value={category.id}>{category.name}</option>
+              ))}
+            </Form.Select>
+            {errors.categoriesIds && <span className='text-danger'>{errors.categoriesIds.message}</span>}
+          </Form.Group>
 
-        <Form.Group className="mb-3">
-          <Form.Select {...register('categoriesIds', { required: 'Category is required!' })} placeholder='Category' className='bg-light' defaultValue=''>
-            <option value="" disabled hidden>Category</option>
-            {categories.map(category => (
-              <option key={category.id} value={category.id}>{category.name}</option>
-            ))}
-          </Form.Select>
-          {errors.categoriesIds && <span className='text-danger'>{errors.categoriesIds.message}</span>}
-        </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Control defaultValue={recipeDetails?.description} disabled={view} {...register('description', { required: 'Description is required!' })} as="textarea" placeholder="Description" className='bg-light' />
+            {errors.description && <span className='text-danger'>{errors.description.message}</span>}
+          </Form.Group>
 
-        <Form.Group className="mb-3">
-          <Form.Control {...register('description', { required: 'Description is required!' })} as="textarea" placeholder="Description" className='bg-light' />
-          {errors.description && <span className='text-danger'>{errors.description.message}</span>}
-        </Form.Group>
+          <Form.Group className="img-input-container rounded pt-2 text-center" onClick={handleClick}>
+            {imgPreview || recipeDetails?.imagePath ? <img src={imgPreview ? imgPreview : `https://upskilling-egypt.com:3006/${recipeDetails?.imagePath}`} className='w-25' /> : <i className="fa-solid fa-arrow-up-from-bracket fs-3 text-secondary"></i>}
+            <p className='fw-medium'>Drag & Drop or <span className="theme-green-text">Choose an Image</span> to Upload</p>
 
-        <Form.Group className="img-input-container rounded pt-2 text-center" onClick={handleClick}>
-          {uploaded ? <i className="fa-regular fa-circle-check fs-2 text-success"></i> : <i className="fa-solid fa-arrow-up-from-bracket fs-3 text-secondary"></i>}
-          <p className='fw-medium'>Drag & Drop or <span className="theme-green-text">Choose an Image</span> to Upload</p>
+            <Form.Control disabled={view} {...register('recipeImage')} ref={(e) => {
+              fileInputRef.current = e; // store for manual click
+              register("recipeImage").ref(e); // give to RHF
+            }} onChange={handleFileChange} type="file" hidden className='img-input' />
+          </Form.Group>
 
-          <Form.Control {...register('recipeImage')} ref={(e) => {
-            fileInputRef.current = e; // store for manual click
-            register("recipeImage").ref(e); // give to RHF
-          }} onChange={handleFileChange} type="file" hidden className='img-input' />
-        </Form.Group>
-
-        <div className="d-flex justify-content-end mt-4">
-          <Button onClick={cancelRecipe} className='btn me-5 px-4 outlined-btn' type="button">Cancel</Button>
-          <Button disabled={isSubmitting} className='btn auth-btn px-4 theme-green-bg text-white border-0' type="submit">Save <img src={loading} alt="loading" hidden={!isSubmitting} className='loading-img ms-3' /></Button>
-        </div>
-      </Form>
-}
+          <div className="d-flex justify-content-end mt-4">
+            <Button onClick={cancelRecipe} className='btn me-5 px-4 outlined-btn' type="button">Cancel</Button>
+            <Button disabled={isSubmitting} className='btn auth-btn px-4 theme-green-bg text-white border-0' type="submit">Save <img src={loading} alt="loading" hidden={!isSubmitting} className='loading-img ms-3' /></Button>
+          </div>
+        </Form>
+      }
     </>
   )
 }

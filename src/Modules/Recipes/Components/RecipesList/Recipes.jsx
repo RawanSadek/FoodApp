@@ -6,7 +6,7 @@ import NoData from '../../../Shared/Components/NoData/NoData'
 import loading from '../../../../assets/Images/loading.gif'
 import axios from 'axios'
 import { Recipes_URLs } from '../../../../Constants/END_POINTS.JSX'
-import recipeImg from '../../../../assets/Images/recipeImg.png'
+import noImg from '../../../../assets/Images/noImg.png'
 import DeleteAlert from '../../../Shared/Components/DeleteAlert/DeleteAlert'
 import { BASE_URL } from '../../../../Constants/END_POINTS.JSX'
 import deleting from '../../../../assets/Images/deleting.gif'
@@ -14,19 +14,10 @@ import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 
 
-
-
 export default function Recipes() {
 
   let navigate = useNavigate();
 
-  // let [headerText, setHeaderText] = useState(null);
-  // let handleNavigate=(text)=>
-  // {
-  //   // setHeaderText(text);
-  //   // console.log(text)
-  //   navigate('/dashboard/recipe-data', { state: { text: text } })
-  // }
   let [isLoading, setIsLoading] = useState(true);
   let [imgLoading, setImgLoading] = useState(true);
 
@@ -91,7 +82,6 @@ export default function Recipes() {
         <button onClick={()=>navigate('/dashboard/recipe-data')} className='btn theme-green-bg text-white auth-btn px-5 py-2'>Add New Item</button>
       </div>
 
-
       <div className="data-table">
         <Table striped className='table-borderless'>
           <thead>
@@ -130,7 +120,7 @@ export default function Recipes() {
                       <img src={`https://upskilling-egypt.com:3006/${item.imagePath}`} hidden={imgLoading} alt="img" className='rounded-3'
                         onError={(e) => {
                           e.target.onerror = null; // Prevent infinite loop
-                          e.target.src = recipeImg;
+                          e.target.src = noImg;
                         }}
                         onLoad={()=>setImgLoading(false)}
                         style={{ width: '60px', height: '50px' }}
@@ -145,7 +135,7 @@ export default function Recipes() {
                       <Dropdown>
                         <Dropdown.Toggle as={CustomToggle} id="dropdown-custom"></Dropdown.Toggle>
                         <Dropdown.Menu className='rounded-4 border-0 shadow-sm'>
-                          <Dropdown.Item className='action-item'><i className="fa-regular fa-eye me-2 text-success"></i>View</Dropdown.Item>
+                          <Dropdown.Item onClick={()=>navigate(`/dashboard/recipe-data/${item.id}`,{ state: { view: true } })} className='action-item'><i className="fa-regular fa-eye me-2 text-success"></i>View</Dropdown.Item>
                           <Dropdown.Item onClick={()=>navigate(`/dashboard/recipe-data/${item.id}`)} className='action-item'><i className="fa-regular fa-pen-to-square me-2 text-success"></i>Edit</Dropdown.Item>
                           <Dropdown.Item onClick={() => handleShow(item.id)} className='action-item'><i className="fa-regular fa-trash-can me-2 text-success"></i>Delete</Dropdown.Item>
                         </Dropdown.Menu>

@@ -14,8 +14,6 @@ import { useForm } from 'react-hook-form';
 import { getCategories } from '../../../ApiCalls/ApiCalls';
 
 
-
-
 export default function Categories() {
 
   let [isLoading, setIsLoading] = useState(true);
@@ -23,7 +21,7 @@ export default function Categories() {
   let [categList, setCategList] = useState([]);
   let getCategList = async() => {
     try {
-      let response =  await getCategories();
+      let response =  await getCategories(10,1);
       setCategList(response.data.data);
     } catch (error) {
       console.log(error)
@@ -55,12 +53,10 @@ export default function Categories() {
     setCategoryShow(true);
   }
 
-  // let [categName, setCategName] = useState(null);
   const handleCategoryEditShow = (name,id) => {
     reset({ name });
     setCategoryShow(true);
     setCategId(id);
-    // alert(id)
   }
 
   let { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm();
@@ -98,8 +94,6 @@ export default function Categories() {
     }
   }
 
-
-
   const CustomToggle = React.forwardRef(({ onClick }, ref) => (
     <span style={{ cursor: 'pointer' }} onClick={(e) => {
       onClick(e);
@@ -119,7 +113,6 @@ export default function Categories() {
         </div>
         <button onClick={handleCategoryShow} className='btn btn-success px-4'>Add New Category</button>
       </div>
-
 
       <div className="data-table">
         <Table striped className='table-borderless'>
@@ -155,7 +148,7 @@ export default function Categories() {
                       <Dropdown>
                         <Dropdown.Toggle as={CustomToggle} id="dropdown-custom"></Dropdown.Toggle>
                         <Dropdown.Menu className='rounded-4 border-0 shadow-sm'>
-                          <Dropdown.Item className='action-item'><i className="fa-regular fa-eye me-2 text-success"></i>View</Dropdown.Item>
+                          {/* <Dropdown.Item className='action-item'><i className="fa-regular fa-eye me-2 text-success"></i>View</Dropdown.Item> */}
                           <Dropdown.Item onClick={() => handleCategoryEditShow(item.name,item.id)} className='action-item'><i className="fa-regular fa-pen-to-square me-2 text-success"></i>Edit</Dropdown.Item>
                           <Dropdown.Item onClick={() => handleShow(item.id)} className='action-item'><i className="fa-regular fa-trash-can me-2 text-success"></i>Delete</Dropdown.Item>
                         </Dropdown.Menu>
@@ -167,7 +160,6 @@ export default function Categories() {
           </tbody>
         </Table>
       </div>
-
 
       {/* Delete confirmation */}
       <Modal show={show} onHide={handleClose}>
