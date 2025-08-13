@@ -1,4 +1,3 @@
-import React from 'react'
 import userAvatar from '../../../../assets/Images/userAvatar.png'
 
 export default function Navbar({ loginData }) {

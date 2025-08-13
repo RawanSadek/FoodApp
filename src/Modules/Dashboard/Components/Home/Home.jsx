@@ -1,4 +1,3 @@
-import React from 'react'
 import Header from '../../../Shared/Components/Header/Header'
 import headerImg from '../../../../assets/Images/headerImg.svg'
 import RecipesHeader from '../../../Shared/Components/RecipesHeader/RecipesHeader'

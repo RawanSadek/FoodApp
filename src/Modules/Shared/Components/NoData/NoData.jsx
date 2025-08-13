@@ -1,4 +1,3 @@
-import React from 'react'
 import noDataImg from '../../../../assets/Images/nodata.png'
 
 export default function NoData() {

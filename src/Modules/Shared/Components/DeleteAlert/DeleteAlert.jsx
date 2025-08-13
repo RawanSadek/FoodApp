@@ -1,8 +1,5 @@
-import React, { useState } from 'react'
-import { Button, Modal } from 'react-bootstrap'
+
 import noDataImg from '../../../../assets/Images/nodata.png'
-import axios from 'axios'
-import { BASE_URL } from '../../../../Constants/END_POINTS.JSX'
 
 
 export default function DeleteAlert({itemName}) {

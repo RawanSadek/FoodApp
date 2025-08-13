@@ -1,4 +1,3 @@
-import React from 'react'
 import girlImg from '../../../../assets/Images/girlImg.png'
 import { useLocation } from 'react-router-dom'
 

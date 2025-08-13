@@ -1,7 +1,6 @@
 import { Outlet } from 'react-router-dom'
-import Navbar from '../Navbar/Navbar'
+import Navbar from '../Navbar/Navbar.jsx'
 import SideBar from '../SideBar/SideBar'
-import Header from '../Header/Header'
 
 export default function MasterLayout({logout, loginData}) {
   return (

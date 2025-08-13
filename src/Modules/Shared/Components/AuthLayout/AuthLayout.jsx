@@ -1,6 +1,5 @@
 import logo from '../../../../assets/Images/logo.png'
 import { Outlet } from 'react-router-dom'
-import loading from '../../../../assets/Images/loading.gif'
 
 export default function AuthLayout() {
   return (
