@@ -123,7 +123,7 @@ export default function Recipes() {
                           e.target.src = noImg;
                         }}
                         onLoad={()=>setImgLoading(false)}
-                        style={{ width: '60px', height: '50px' }}
+                        style={{ width: '60px', height: '60px' }}
                         />
                       
                     </td>
