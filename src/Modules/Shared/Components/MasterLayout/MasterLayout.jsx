@@ -1,12 +1,14 @@
 import { Outlet } from 'react-router-dom'
 // import Navbar from '../Navbar/Navbar.jsx'
-import SideBar from '../SideBar/SideBar'
+// import SideBar from '../SideBar/SideBar'
 import Navbar from '../Navbar/Navbar'
+import SideBar from '../SideBar/SideBar'
 
 export default function MasterLayout({logout, loginData}) {
   return (
     <div className='d-flex'>
       <div className=''>
+        {/* <SideBar logout={logout}/> */}
         <SideBar logout={logout}/>
       </div>
       <div className='w-100 p-4 page-content'>
