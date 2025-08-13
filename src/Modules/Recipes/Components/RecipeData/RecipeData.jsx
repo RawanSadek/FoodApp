@@ -75,7 +75,7 @@ export default function RecipesData() {
   }
 
   let onSubmit = async (data) => {
-    console.log(fileInputRef.current.files[0])
+    // console.log(fileInputRef.current.files[0])
 
     let recipeData = appendToFormData(data)
 

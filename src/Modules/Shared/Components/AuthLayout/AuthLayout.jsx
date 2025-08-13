@@ -1,14 +1,18 @@
 import logo from '../../../../assets/Images/logo.png'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 
 export default function AuthLayout() {
+
+  const location = useLocation();
+
+  const isRegister = location.pathname === "/register";
   return (
     <div className='authContainer vh-100 position-relative'>
       <div className="container-fluid auth-overlay h-100">
         <div className="row vh-100 justify-content-center align-items-center ">
-          <div className="col-md-5 bg-white rounded-4 px-5 py-4">
+          <div className={`${isRegister ? "col-md-8" : "col-md-5"} bg-white rounded-4 px-5 py-4`}>
             <div className="logo text-center">
-              <img src={logo} alt="logo" className='w-75' />
+              <img src={logo} alt="logo" className={`${isRegister? 'w-50':'w-75'}`} />
             </div>
             
             <Outlet />

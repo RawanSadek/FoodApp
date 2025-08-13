@@ -1,23 +1,118 @@
 
 import { useForm } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
+import { AUTH_URLs } from '../../../../Constants/END_POINTS.JSX';
+import { toast } from 'react-toastify';
+import axios from 'axios';
+import loading from '../../../../assets/Images/loading.gif'
+
 
 export default function Register() {
-  let { register, handleSubmit, formState: { errors } } = useForm();
+  let { register, handleSubmit, formState: { errors, isSubmitting }, watch } = useForm();
 
-  let onSubmit = (data) => {
-    console.log(data)
+  const password = watch('password'); // Watching the original password
+
+  let navigate = useNavigate();
+
+  let appendToFormData = (data) => {
+    let formData = new FormData();
+    formData.append('userName', data.userName);
+    formData.append('email', data.email);
+    formData.append('country', data.country);
+    formData.append('phoneNumber', data.phoneNumber);
+    formData.append('password', data.password);
+    formData.append('confirmPassword', data.confirmPassword);
+    formData.append('profileImage', data.profileImage);
+    return formData;
+  }
+
+  let onSubmit = async (data) => {
+    let userData = appendToFormData(data)
+
+    try {
+      let response = await axios.post(AUTH_URLs.register, userData);
+      // console.log(response)
+      toast.success(response.data.message);
+      navigate('/verify-account',{ state: { email: data.email } });
+
+    } catch (error) {
+      toast.error(error.message)
+    }
   }
 
   return (
-
     <>
       <div className="auth-title-container my-3">
         <h5 className='auth-title fw-bold'>Register</h5>
         <p className='auth-subtitle text-secondary'>Welcome Back! Please enter your details</p>
       </div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <button type='submit' className='btn auth-btn theme-green-bg w-100 my-4 py-2 text-white fw-semibold fs-5'>Register</button>
 
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="row">
+
+          <div className="col-md-6">
+
+            <div className="input-group mt-4 bg-light rounded-3">
+              <div className="input-group-prepend">
+                <span className="input-group-text rounded-end-0 border-0 py-2" id="basic-addon1"><i className="fa-solid fa-mobile-screen fs-5 text-secondary py-2 pe-2 border-end border-1 border-secondary"></i></span>
+              </div>
+              <input {...register('userName', { required: 'Username is required!' })} type="text" className="form-control border-0 bg-light" placeholder="UserName" aria-label="username" aria-describedby="basic-addon1" />
+            </div>
+            {errors.userName && <span className='text-danger'>{errors.userName.message}</span>}
+
+            <div className="input-group mt-4 bg-light rounded-3">
+              <div className="input-group-prepend">
+                <span className="input-group-text rounded-end-0 border-0 py-2" id="basic-addon1"><i className="fa-solid fa-earth-africa fs-5 text-secondary py-2 pe-2 border-end border-1 border-secondary"></i></span>
+              </div>
+              <input {...register('country', { required: 'Country is required!' })} type="text" className="form-control border-0 bg-light" placeholder="Country" aria-label="country" aria-describedby="basic-addon1" />
+            </div>
+            {errors.country && <span className='text-danger'>{errors.country.message}</span>}
+
+            <div className="input-group mt-3">
+              <div className="input-group-prepend">
+                <span className="input-group-text rounded-end-0 border-0 py-2" id="basic-addon1"><i className="fa-solid fa-lock fs-5 text-secondary py-2 pe-2 border-end border-1 border-secondary"></i></span>
+              </div>
+              <input {...register('password', { required: 'Password is required!', pattern: { value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\S]{6,}$/, message: 'The password must include at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 6 characters long' } })} type="password" className="form-control border-0 bg-light mb-1" placeholder="New Password" aria-label="password" aria-describedby="basic-addon1" />
+            </div>
+            {errors.password && <span className='text-danger'>{errors.password.message}</span>}
+
+
+          </div>
+
+          <div className="col-md-6">
+            <div className="input-group mt-4 bg-light rounded-3">
+              <div className="input-group-prepend">
+                <span className="input-group-text rounded-end-0 border-0 py-2" id="basic-addon1"><i className="fa-solid fa-mobile-screen fs-5 text-secondary py-2 pe-2 border-end border-1 border-secondary"></i></span>
+              </div>
+              <input {...register('email', { required: 'Email is required!', pattern: { value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, message: 'Invalid Email!' } })} type="text" className="form-control border-0 bg-light" placeholder="Enter your E-mail" aria-label="email" aria-describedby="basic-addon1" />
+            </div>
+            {errors.email && <span className='text-danger'>{errors.email.message}</span>}
+
+            <div className="input-group mt-4 bg-light rounded-3">
+              <div className="input-group-prepend">
+                <span className="input-group-text rounded-end-0 border-0 py-2" id="basic-addon1"><i className="fa-solid fa-phone fs-5 text-secondary py-2 pe-2 border-end border-1 border-secondary"></i></span>
+              </div>
+              <input {...register('phoneNumber', { required: 'Phone Number is required!', pattern: { value: /^\+?[0-9\s\-]{9,15}$/, message: "Invalid phone number!!" } })} type="text" className="form-control border-0 bg-light" placeholder="Phone Number" aria-label="phoneNumber" aria-describedby="basic-addon1" />
+            </div>
+            {errors.phoneNumber && <span className='text-danger'>{errors.phoneNumber.message}</span>}
+
+            <div className="input-group mt-3">
+              <div className="input-group-prepend">
+                <span className="input-group-text rounded-end-0 border-0 py-2" id="basic-addon1"><i className="fa-solid fa-lock fs-5 text-secondary py-2 pe-2 border-end border-1 border-secondary"></i></span>
+              </div>
+              <input {...register('confirmPassword', { required: 'Please confirm your password', validate: (value) => value === password || 'Passwords must match' })} type="password" className="form-control border-0 bg-light mb-1" placeholder="Confirm Password" aria-label="password" aria-describedby="basic-addon1" />
+            </div>
+            {errors.confirmPassword && <span className='text-danger'>{errors.confirmPassword.message}</span>}
+
+            <div className="links d-flex justify-content-end align-items-center">
+              <Link to='/login' className='text-decoration-none fw-semibold theme-green-text'>Login Now?</Link>
+            </div>
+          </div>
+        </div>
+
+        <div className="text-center">
+          <button type='submit' className='btn auth-btn theme-green-bg w-75 my-4 py-2 text-white fw-semibold fs-5'>Register <img src={loading} alt="loading" hidden={!isSubmitting} className='loading-img'/></button>
+        </div>
       </form>
     </>
   )
