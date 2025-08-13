@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom'
-import Navbar from '../Navbar/Navbar.jsx'
+// import Navbar from '../Navbar/Navbar.jsx'
 import SideBar from '../SideBar/SideBar'
+import Navbar from '../Navbar/Navbar'
 
 export default function MasterLayout({logout, loginData}) {
   return (
@@ -9,6 +10,7 @@ export default function MasterLayout({logout, loginData}) {
         <SideBar logout={logout}/>
       </div>
       <div className='w-100 p-4 page-content'>
+        {/* <Navbar loginData={loginData}/> */}
         <Navbar loginData={loginData}/>
         {/* <Header /> */}
       <Outlet loginData={loginData}/>
