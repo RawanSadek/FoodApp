@@ -129,7 +129,7 @@ export default function Recipes() {
                     <td>{item.price}</td>
                     <td>{item.description}</td>
                     <td>{item.tag.name}</td>
-                    <td>{item.category[0].name}</td>
+                    <td>{item.category[0]?.name}</td>
                     <td>
                       <Dropdown>
                         <Dropdown.Toggle as={CustomToggle} id="dropdown-custom"></Dropdown.Toggle>
