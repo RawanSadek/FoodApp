@@ -21,6 +21,7 @@ import { ToastContainer } from 'react-toastify'
 import ProtectedRoutes from './Modules/Shared/Components/ProtectedRoutes/ProtectedRoutes'
 import { jwtDecode } from 'jwt-decode'
 import RecipesData from './Modules/Recipes/Components/RecipeData/RecipeData'
+import ChangePassword from './Modules/Authentication/Components/ChangePassword/ChangePassword'
 
 function App() {
 
@@ -54,7 +55,8 @@ function App() {
         { path: 'register', element: <Register /> },
         { path: 'reset-password', element: <ResetPassword /> },
         { path: 'forgot-password', element: <ForgotPassword /> },
-        { path: 'verify-account', element: <VerifyAccount /> }
+        { path: 'verify-account', element: <VerifyAccount /> },
+        // { path: 'change-password', element: <ChangePassword /> }
       ]
     },
     {

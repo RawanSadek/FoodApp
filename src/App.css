@@ -135,3 +135,8 @@ body{
 .outlined-btn:hover{
     background-color: #f6f5f5 !important;
 }
+
+.notfound-container{
+    background-image: url(../src/assets/Images/notfound.svg);
+    background-size: 150% 100%;
+}
