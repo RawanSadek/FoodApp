@@ -23,7 +23,7 @@ export default function SideBar({ logout }) {
           <MenuItem component={<Link to='users'></Link>} icon={<i className="fa-solid fa-users"></i>}> Users </MenuItem>
           <MenuItem component={<Link to='recipes'></Link>} icon={<i className="fa-regular fa-newspaper"></i>}> Recipes </MenuItem>
           <MenuItem component={<Link to='categories'></Link>} icon={<i className="fa-regular fa-calendar-days"></i>}> Categories </MenuItem>
-          <MenuItem component={<Link to='/change-password'></Link>} icon={<i className="fa-solid fa-unlock-keyhole"></i>}> Change Password </MenuItem>
+          <MenuItem icon={<i className="fa-solid fa-unlock-keyhole"></i>}> Change Password </MenuItem>
           <MenuItem onClick={logout} component={<Link to='/login'></Link>} icon={<i className="fa-solid fa-right-from-bracket"></i>}> Logout </MenuItem>
         </Menu>
       </Sidebar>
