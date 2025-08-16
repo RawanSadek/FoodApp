@@ -59,6 +59,8 @@ export default function RecipesData() {
   useEffect(() => {
     getTags();
     getCategs();
+    if (params.id)
+      getRecipeDetails();
   }, []);
 
   let navigate = useNavigate();
@@ -111,10 +113,9 @@ export default function RecipesData() {
     setIsLoading(false);
   }
 
-  useEffect(() => {
-    if (params.id)
-      getRecipeDetails();
-  }, [])
+  // useEffect(() => {
+    
+  // }, [])
 
   let cancelRecipe = () => {
     reset();

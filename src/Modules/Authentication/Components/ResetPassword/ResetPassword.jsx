@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { AUTH_URLs } from '../../../../Constants/END_POINTS.JSX';
 import { useLocation, useNavigate } from 'react-router-dom';
 import loading from '../../../../assets/Images/loading.gif'
+import { useState } from 'react';
 
 
 
@@ -32,6 +33,9 @@ export default function ResetPassword() {
       console.log(error)
     }
   }
+
+      let [showPass, setShowPass] = useState(false);
+
 
   return (
     <>
@@ -69,12 +73,15 @@ export default function ResetPassword() {
           <div className="input-group-prepend">
             <span className="input-group-text rounded-end-0 border-0 py-2" id="basic-addon1"><i className="fa-solid fa-lock fs-5 text-secondary py-2 pe-2 border-end border-1 border-secondary"></i></span>
           </div>
-          <input {...register('confirmPassword', { required: 'Please confirm your password', validate: (value) => value === password || 'Passwords must match' })} type="password" className="form-control border-0 bg-light mb-1" placeholder="Confirm New Password" aria-label="password" aria-describedby="basic-addon1" />
+          <input {...register('confirmPassword', { required: 'Please confirm your password', validate: (value) => value === password || 'Passwords must match' })} type={showPass?'text':'password'} className="form-control border-0 bg-light mb-1" placeholder="Confirm New Password" aria-label="password" aria-describedby="basic-addon1" />
+          <div className="pss-toggle">
+            <button onClick={() => setShowPass(!showPass)} type='button' className="input-group-text py-2 border-0" id="basic-addon1">{showPass ? <i className="fa-solid fa-eye-slash fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i> : <i className="fa-solid fa-eye fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i>}</button>
+          </div>
         </div>
         {errors.confirmPassword && <span className='text-danger'>{errors.confirmPassword.message}</span>}
 
 
-        <button disabled={isSubmitting} type='submit' className='btn auth-btn theme-green-bg w-100 my-3 py-2 text-white fw-semibold fs-5'>Reset Password <img src={loading} alt="loading" hidden={!isSubmitting} className='loading-img'/></button>
+        <button disabled={isSubmitting} type='submit' className='btn auth-btn theme-green-bg w-100 my-3 py-2 text-white fw-semibold fs-5'>Reset Password <img src={loading} alt="loading" hidden={!isSubmitting} className='loading-img' /></button>
       </form>
     </>
 

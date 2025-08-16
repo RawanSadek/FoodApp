@@ -5,6 +5,7 @@ import { AUTH_URLs } from '../../../../Constants/END_POINTS.JSX';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import loading from '../../../../assets/Images/loading.gif'
+import { useState } from 'react';
 
 
 export default function Register() {
@@ -33,12 +34,16 @@ export default function Register() {
       let response = await axios.post(AUTH_URLs.register, userData);
       // console.log(response)
       toast.success(response.data.message);
-      navigate('/verify-account',{ state: { email: data.email } });
+      navigate('/verify-account', { state: { email: data.email } });
 
     } catch (error) {
       toast.error(error.message)
     }
   }
+
+    let [showPass, setShowPass] = useState(false);
+    let [showConfirmPass, setShowConfirmPass] = useState(false);
+
 
   return (
     <>
@@ -72,7 +77,10 @@ export default function Register() {
               <div className="input-group-prepend">
                 <span className="input-group-text rounded-end-0 border-0 py-2" id="basic-addon1"><i className="fa-solid fa-lock fs-5 text-secondary py-2 pe-2 border-end border-1 border-secondary"></i></span>
               </div>
-              <input {...register('password', { required: 'Password is required!', pattern: { value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\S]{6,}$/, message: 'The password must include at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 6 characters long' } })} type="password" className="form-control border-0 bg-light mb-1" placeholder="New Password" aria-label="password" aria-describedby="basic-addon1" />
+              <input {...register('password', { required: 'Password is required!', pattern: { value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\S]{6,}$/, message: 'The password must include at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 6 characters long' } })} type={showPass?'text':'password'} className="form-control border-0 bg-light mb-1" placeholder="New Password" aria-label="password" aria-describedby="basic-addon1" />
+              <div className="pss-toggle">
+                <button onClick={() => setShowPass(!showPass)} type='button' className="input-group-text py-2 border-0" id="basic-addon1">{showPass ? <i className="fa-solid fa-eye-slash fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i> : <i className="fa-solid fa-eye fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i>}</button>
+              </div>
             </div>
             {errors.password && <span className='text-danger'>{errors.password.message}</span>}
 
@@ -100,7 +108,10 @@ export default function Register() {
               <div className="input-group-prepend">
                 <span className="input-group-text rounded-end-0 border-0 py-2" id="basic-addon1"><i className="fa-solid fa-lock fs-5 text-secondary py-2 pe-2 border-end border-1 border-secondary"></i></span>
               </div>
-              <input {...register('confirmPassword', { required: 'Please confirm your password', validate: (value) => value === password || 'Passwords must match' })} type="password" className="form-control border-0 bg-light mb-1" placeholder="Confirm Password" aria-label="password" aria-describedby="basic-addon1" />
+              <input {...register('confirmPassword', { required: 'Please confirm your password', validate: (value) => value === password || 'Passwords must match' })} type={showConfirmPass?'text':'password'} className="form-control border-0 bg-light mb-1" placeholder="Confirm Password" aria-label="password" aria-describedby="basic-addon1" />
+              <div className="pss-toggle">
+                <button onClick={() => setShowConfirmPass(!showConfirmPass)} type='button' className="input-group-text py-2 border-0" id="basic-addon1">{showConfirmPass ? <i className="fa-solid fa-eye-slash fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i> : <i className="fa-solid fa-eye fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i>}</button>
+              </div>
             </div>
             {errors.confirmPassword && <span className='text-danger'>{errors.confirmPassword.message}</span>}
 
@@ -111,7 +122,7 @@ export default function Register() {
         </div>
 
         <div className="text-center">
-          <button type='submit' className='btn auth-btn theme-green-bg w-75 my-4 py-2 text-white fw-semibold fs-5'>Register <img src={loading} alt="loading" hidden={!isSubmitting} className='loading-img'/></button>
+          <button type='submit' className='btn auth-btn theme-green-bg w-75 my-4 py-2 text-white fw-semibold fs-5'>Register <img src={loading} alt="loading" hidden={!isSubmitting} className='loading-img' /></button>
         </div>
       </form>
     </>

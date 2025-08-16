@@ -4,6 +4,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { AUTH_URLs } from '../../../../Constants/END_POINTS.JSX';
 import loading from '../../../../assets/Images/loading.gif'
+import { useState } from 'react';
 
 
 export default function Login({getLoginData}) {
@@ -28,6 +29,8 @@ export default function Login({getLoginData}) {
     }
   }
 
+  let [showPass, setShowPass] = useState(false);
+
   return (
     <>
     <div className="auth-title-container my-3">
@@ -47,7 +50,10 @@ export default function Login({getLoginData}) {
         <div className="input-group-prepend">
           <span className="input-group-text rounded-end-0 border-0 py-2" id="basic-addon1"><i className="fa-solid fa-lock fs-5 text-secondary py-2 pe-2 border-end border-1 border-secondary"></i></span>
         </div>
-        <input {...register('password', { required: 'Password is required!' })} type="password" className="form-control border-0 bg-light" placeholder="Password" aria-label="password" aria-describedby="basic-addon1" />
+        <input {...register('password', { required: 'Password is required!' })} type={showPass?'text':'password'} className="form-control border-0 bg-light" placeholder="Password" aria-label="password" aria-describedby="basic-addon1" />
+        <div className="pss-toggle">
+          <button onClick={()=>setShowPass(!showPass)} type='button' className="input-group-text py-2 border-0" id="basic-addon1">{showPass?<i className="fa-solid fa-eye-slash fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i>:<i className="fa-solid fa-eye fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i>}</button>
+        </div>
       </div>
       {errors.password && <span className='text-danger'>{errors.password.message}</span>}
 
