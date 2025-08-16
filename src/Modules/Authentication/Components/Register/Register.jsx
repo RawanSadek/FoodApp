@@ -29,10 +29,9 @@ export default function Register() {
 
   let onSubmit = async (data) => {
     let userData = appendToFormData(data)
-
+    
     try {
       let response = await axios.post(AUTH_URLs.register, userData);
-      // console.log(response)
       toast.success(response.data.message);
       navigate('/verify-account', { state: { email: data.email } });
 
@@ -122,7 +121,11 @@ export default function Register() {
         </div>
 
         <div className="text-center">
+<<<<<<< HEAD
           <button type='submit' className='btn auth-btn theme-green-bg w-75 my-4 py-2 text-white fw-semibold fs-5'>Register <img src={loading} alt="loading" hidden={!isSubmitting} className='loading-img' /></button>
+=======
+          <button disabled={isSubmitting} type='submit' className='btn auth-btn theme-green-bg w-75 my-4 py-2 text-white fw-semibold fs-5'>Register <img src={loading} alt="loading" hidden={!isSubmitting} className='loading-img'/></button>
+>>>>>>> c31dceed0f28935d97f2082176d65f06e7707627
         </div>
       </form>
     </>

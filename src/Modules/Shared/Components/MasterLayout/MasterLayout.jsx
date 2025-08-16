@@ -3,6 +3,8 @@ import { Outlet } from 'react-router-dom'
 // import SideBar from '../SideBar/SideBar'
 import Navbar from '../Navbar/Navbar'
 import SideBar from '../SideBar/SideBar'
+// import SideBar from '../SidebBar/SideBar'
+
 
 export default function MasterLayout({logout, loginData}) {
   return (
