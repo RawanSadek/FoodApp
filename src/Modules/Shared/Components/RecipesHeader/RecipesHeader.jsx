@@ -8,7 +8,7 @@ export default function RecipesHeader({ title='Fill', btnText }) {
         <div className="recipes-header py-4 px-5 mt-4 rounded-4 d-flex justify-content-between align-items-center">
             <div>
                 <h4>{title} the <span className='theme-green-text'>Recipes</span> !</h4>
-                <p>you can now fill the meals easily using the table and form ,<br /> click here and sill it with the table !</p>
+                <p>you can now <span className='text-lowercase'>{title}</span> the meals easily using the table and form ,<br /> click here and sill it with the table !</p>
             </div>
             <button onClick={()=>{
                 if(btnText==='Fill')

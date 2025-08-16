@@ -5,11 +5,11 @@ import { AUTH_URLs } from '../../../../Constants/END_POINTS.JSX';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import loading from '../../../../assets/Images/loading.gif'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 
 export default function Register() {
-  let { register, handleSubmit, formState: { errors, isSubmitting }, watch } = useForm();
+  let { register, handleSubmit, formState: { errors, isSubmitting }, watch, trigger } = useForm();
 
   const password = watch('password'); // Watching the original password
 
@@ -43,6 +43,9 @@ export default function Register() {
   let [showPass, setShowPass] = useState(false);
   let [showConfirmPass, setShowConfirmPass] = useState(false);
 
+  useEffect(()=>{
+    trigger('confirmPassword');
+  },[watch('password')])
 
   return (
     <>
@@ -78,7 +81,7 @@ export default function Register() {
               </div>
               <input {...register('password', { required: 'Password is required!', pattern: { value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\S]{6,}$/, message: 'The password must include at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 6 characters long' } })} type={showPass ? 'text' : 'password'} className="form-control border-0 bg-light mb-1" placeholder="New Password" aria-label="password" aria-describedby="basic-addon1" />
               <div className="pss-toggle">
-                <button onClick={() => setShowPass(!showPass)} type='button' className="input-group-text py-2 border-0" id="basic-addon1">{showPass ? <i className="fa-solid fa-eye-slash fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i> : <i className="fa-solid fa-eye fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i>}</button>
+                <button onMouseDown={(e)=>e.preventDefault()} onMouseUp={(e)=>e.preventDefault()} onClick={() => setShowPass(!showPass)} type='button' className="input-group-text py-2 border-0" id="basic-addon1">{showPass ? <i className="fa-solid fa-eye-slash fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i> : <i className="fa-solid fa-eye fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i>}</button>
               </div>
             </div>
             {errors.password && <span className='text-danger'>{errors.password.message}</span>}
@@ -115,7 +118,7 @@ export default function Register() {
             {errors.confirmPassword && <span className='text-danger'>{errors.confirmPassword.message}</span>}
 
             <div className="links d-flex justify-content-end align-items-center">
-              <Link to='/login' className='text-decoration-none fw-semibold theme-green-text'>Login Now?</Link>
+              <Link to='/login' className='text-decoration-none fw-semibold mt-3 theme-green-text'>Login Now?</Link>
             </div>
           </div>
         </div>

@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { AUTH_URLs } from '../../../../Constants/END_POINTS.JSX';
 import { useLocation, useNavigate } from 'react-router-dom';
 import loading from '../../../../assets/Images/loading.gif'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 
 
@@ -16,7 +16,7 @@ export default function ResetPassword() {
 
   let navigate = useNavigate();
 
-  let { register, handleSubmit, formState: { errors, isSubmitting }, watch } = useForm();
+  let { register, handleSubmit, formState: { errors, isSubmitting }, watch, trigger } = useForm();
 
   const password = watch('password'); // Watching the original password
 
@@ -36,6 +36,10 @@ export default function ResetPassword() {
 
   let [showPass, setShowPass] = useState(false);
   let [showConfirmPass, setShowConfirmPass] = useState(false);
+
+  useEffect(()=>{
+      trigger('confirmPassword');
+    },[watch('password')])
 
   return (
     <>
@@ -78,7 +82,7 @@ export default function ResetPassword() {
           </div>
           <input {...register('confirmPassword', { required: 'Please confirm your password', validate: (value) => value === password || 'Passwords must match' })} type={showConfirmPass ? 'text' : 'password'} className="form-control border-0 bg-light mb-1" placeholder="Confirm New Password" aria-label="password" aria-describedby="basic-addon1" />
           <div className="pss-toggle">
-            <button onClick={() => setShowConfirmPass(!showConfirmPass)} type='button' className="input-group-text py-2 border-0" id="basic-addon1">{showConfirmPass ? <i className="fa-solid fa-eye-slash fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i> : <i className="fa-solid fa-eye fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i>}</button>
+            <button onMouseDown={(e)=>e.preventDefault()} onMouseUp={(e)=>e.preventDefault()} onClick={() => setShowConfirmPass(!showConfirmPass)} type='button' className="input-group-text py-2 border-0" id="basic-addon1">{showConfirmPass ? <i className="fa-solid fa-eye-slash fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i> : <i className="fa-solid fa-eye fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i>}</button>
           </div>
         </div>
         {errors.confirmPassword && <span className='text-danger'>{errors.confirmPassword.message}</span>}

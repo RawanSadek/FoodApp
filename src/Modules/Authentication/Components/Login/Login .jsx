@@ -52,7 +52,7 @@ export default function Login({getLoginData}) {
         </div>
         <input {...register('password', { required: 'Password is required!' })} type={showPass?'text':'password'} className="form-control border-0 bg-light" placeholder="Password" aria-label="password" aria-describedby="basic-addon1" />
         <div className="pss-toggle">
-          <button onClick={()=>setShowPass(!showPass)} type='button' className="input-group-text py-2 border-0" id="basic-addon1">{showPass?<i className="fa-solid fa-eye-slash fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i>:<i className="fa-solid fa-eye fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i>}</button>
+          <button onMouseDown={(e)=>e.preventDefault()} onMouseUp={(e)=>e.preventDefault()} onClick={()=>setShowPass(!showPass)} type='button' className="input-group-text py-2 border-0" id="basic-addon1">{showPass?<i className="fa-solid fa-eye-slash fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i>:<i className="fa-solid fa-eye fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i>}</button>
         </div>
       </div>
       {errors.password && <span className='text-danger'>{errors.password.message}</span>}

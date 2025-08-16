@@ -38,6 +38,8 @@ export default function Categories() {
   let [show, setShow] = useState(false);
   let [categId, setCategId] = useState(0);
 
+  let [title, setTitle] = useState(null);
+
   const handleClose = () => setShow(false);
   const handleShow = (id) => {
     setShow(true);
@@ -49,11 +51,13 @@ export default function Categories() {
 
   const handleCategoryClose = () => setCategoryShow(false);
   const handleCategoryShow = () => {
+    setTitle('Add')
     reset({ name: '' });
     setCategoryShow(true);
   }
 
   const handleCategoryEditShow = (name,id) => {
+    setTitle('Edit')
     reset({ name });
     setCategoryShow(true);
     setCategId(id);
@@ -176,10 +180,10 @@ export default function Categories() {
         </Modal.Footer>
       </Modal>
 
-      {/* Add new category */}
+      {/* Add/Edit new category */}
       <Modal show={categoryShow} onHide={handleCategoryClose}>
         <Modal.Header closeButton className='border-0'>
-          Add Category
+          {`${title} Category`}
         </Modal.Header>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Modal.Body className=' p-5'>

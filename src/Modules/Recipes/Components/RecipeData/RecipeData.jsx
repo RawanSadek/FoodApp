@@ -19,7 +19,13 @@ export default function RecipesData() {
   let params = useParams();
   let text
   if (params.id)
-    text = 'Edit'
+  {
+    if(view)
+      text = 'View'
+    else
+      text = 'Edit'
+
+  }
   else
     text = 'Fill'
 
@@ -105,7 +111,7 @@ export default function RecipesData() {
   let getRecipeDetails = async () => {
     try {
       let response = await axios.get(`${Recipes_URLs.all}/${params.id}`, { headers: { authorization: localStorage.getItem('token') } });
-      // console.log(response.data.imagePath)
+      console.log(response.data)
       setRecipeDetails(response.data)
     } catch (error) {
       toast.error(error);
@@ -176,8 +182,8 @@ export default function RecipesData() {
           </Form.Group>
 
           <div className="d-flex justify-content-end mt-4">
-            <Button onClick={cancelRecipe} className='btn me-5 px-4 outlined-btn' type="button">Cancel</Button>
-            <Button disabled={isSubmitting} className='btn auth-btn px-4 theme-green-bg text-white border-0' type="submit">Save <img src={loading} alt="loading" hidden={!isSubmitting} className='loading-img ms-3' /></Button>
+            <Button hidden={view} onClick={cancelRecipe} className='btn me-5 px-4 outlined-btn' type="button">Cancel</Button>
+            <Button hidden={view} disabled={isSubmitting} className='btn auth-btn px-4 theme-green-bg text-white border-0' type="submit">Save <img src={loading} alt="loading" hidden={!isSubmitting} className='loading-img ms-3' /></Button>
           </div>
         </Form>
       }
