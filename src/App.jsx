@@ -15,6 +15,7 @@ import MasterLayout from './Modules/Shared/Components/MasterLayout/MasterLayout'
 import Recipes from './Modules/Recipes/Components/RecipesList/Recipes'
 import Categories from './Modules/Categories/Components/CategoriesList/CategoriesList'
 import Users from './Modules/Users/Components/UsersList/Users'
+import UserData from './Modules/Users/Components/UserData/UserData'
 import Favourits from './Modules/Favourits/Components/FavList/Favourits'
 import Home from './Modules/Dashboard/Components/Home/Home'
 import { ToastContainer } from 'react-toastify'
@@ -70,6 +71,7 @@ function App() {
         { path: 'recipe-data/:id?', element: <RecipesData /> },
         { path: 'categories', element: <Categories /> },
         { path: 'users', element: <Users /> },
+        { path: 'users/:id', element: <UserData /> },
         { path: 'favourits', element: <Favourits /> }
       ]
     }

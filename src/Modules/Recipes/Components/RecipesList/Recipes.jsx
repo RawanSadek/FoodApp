@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Header from '../../../Shared/Components/Header/Header'
 import headerImg from '../../../../assets/Images/headerImg.svg'
-import { Button, Dropdown, Modal, Table } from 'react-bootstrap'
+import { Button, Dropdown, Modal, Pagination, Table } from 'react-bootstrap'
 import NoData from '../../../Shared/Components/NoData/NoData'
 import loading from '../../../../assets/Images/loading.gif'
 import axios from 'axios'
@@ -21,10 +21,14 @@ export default function Recipes() {
   let [imgLoading, setImgLoading] = useState(true);
 
   let [recipesList, setRecipesList] = useState([]);
-  let getRecipesList = async () => {
+  let [noOfPages, setNoOfPages] = useState([]);
+  let getRecipesList = async (pageNumber) => {
     try {
-      let response = await axios.get(`${Recipes_URLs.all}/?pageSize=5&pageNumber=1`, { headers: { authorization: localStorage.getItem('token') } })
+      setIsLoading(true);
+      let response = await axios.get(`${Recipes_URLs.all}/?pageSize=5&pageNumber=${pageNumber}`, { headers: { authorization: localStorage.getItem('token') } })
       setRecipesList(response.data.data);
+      setNoOfPages(Array(response.data.totalNumberOfPages).fill().map((_, index) => index + 1));
+
     } catch (error) {
       console.log(error)
     }
@@ -69,6 +73,15 @@ export default function Recipes() {
       <i className="fa-solid fa-ellipsis"></i>
     </span>
   ));
+
+  const [activePage, setActivePage] = useState(1); // default first page
+
+  const handleClick = (page) => {
+    setActivePage(page);
+    getRecipesList(page);
+    setImgLoading(true);
+  };
+
   return (
     <>
       <Header title={'Recipes Items'} desc={'You can now add your items that any user can order it from the Application and you can edit'} imgPath={headerImg} />
@@ -78,7 +91,7 @@ export default function Recipes() {
           <h5 className='m-0'>Recipe Table Details</h5>
           <p className='m-0'>You can check all details</p>
         </div>
-        <button onClick={()=>navigate('/dashboard/recipe-data')} className='btn theme-green-bg text-white auth-btn px-5 py-2'>Add New Item</button>
+        <button onClick={() => navigate('/dashboard/recipe-data')} className='btn theme-green-bg text-white auth-btn px-5 py-2'>Add New Item</button>
       </div>
 
       <div className="data-table">
@@ -115,16 +128,16 @@ export default function Recipes() {
                     <td>{item.id}</td>
                     <td>{item.name}</td>
                     <td>
-                      {imgLoading&& <img src={loading} alt="loading" hidden={!imgLoading} className='loading-img ms-3' /> }
+                      {imgLoading && <img src={loading} alt="loading" hidden={!imgLoading} className='loading-img ms-3' />}
                       <img src={`https://upskilling-egypt.com:3006/${item.imagePath}`} hidden={imgLoading} alt="img" className='rounded-3'
                         onError={(e) => {
                           e.target.onerror = null; // Prevent infinite loop
                           e.target.src = noImg;
                         }}
-                        onLoad={()=>setImgLoading(false)}
+                        onLoad={() => setImgLoading(false)}
                         style={{ width: '60px', height: '60px' }}
-                        />
-                      
+                      />
+
                     </td>
                     <td>{item.price}</td>
                     <td>{item.description}</td>
@@ -134,8 +147,8 @@ export default function Recipes() {
                       <Dropdown>
                         <Dropdown.Toggle as={CustomToggle} id="dropdown-custom"></Dropdown.Toggle>
                         <Dropdown.Menu className='rounded-4 border-0 shadow-sm'>
-                          <Dropdown.Item onClick={()=>navigate(`/dashboard/recipe-data/${item.id}`,{ state: { view: true } })} className='action-item'><i className="fa-regular fa-eye me-2 text-success"></i>View</Dropdown.Item>
-                          <Dropdown.Item onClick={()=>navigate(`/dashboard/recipe-data/${item.id}`)} className='action-item'><i className="fa-regular fa-pen-to-square me-2 text-success"></i>Edit</Dropdown.Item>
+                          <Dropdown.Item onClick={() => navigate(`/dashboard/recipe-data/${item.id}`, { state: { view: true } })} className='action-item'><i className="fa-regular fa-eye me-2 text-success"></i>View</Dropdown.Item>
+                          <Dropdown.Item onClick={() => navigate(`/dashboard/recipe-data/${item.id}`)} className='action-item'><i className="fa-regular fa-pen-to-square me-2 text-success"></i>Edit</Dropdown.Item>
                           <Dropdown.Item onClick={() => handleShow(item.id)} className='action-item'><i className="fa-regular fa-trash-can me-2 text-success"></i>Delete</Dropdown.Item>
                         </Dropdown.Menu>
                       </Dropdown>
@@ -145,6 +158,21 @@ export default function Recipes() {
             }
           </tbody>
         </Table>
+
+        {/* Pagination */}
+        <div className='mt-5 d-flex justify-content-center'>
+          <Pagination hidden={noOfPages.length === 0}>
+            <Pagination.First onClick={() => handleClick(1)} disabled={activePage === 1} data-bs-toggle="tooltip" data-bs-placement="right" title="First page" />
+            <Pagination.Prev onClick={() => handleClick(activePage - 1)} disabled={activePage === 1} data-bs-toggle="tooltip" data-bs-placement="right" title="Previous page" />
+            {noOfPages.map((page) => (
+              <Pagination.Item key={page} active={page === activePage} onClick={() => handleClick(page)}>{page}</Pagination.Item>
+
+            ))}
+            <Pagination.Next onClick={() => handleClick(activePage + 1)} disabled={activePage === noOfPages.length} data-bs-toggle="tooltip" data-bs-placement="right" title="Next page" />
+            <Pagination.Last onClick={() => handleClick(noOfPages[noOfPages.length - 1])} disabled={activePage === noOfPages.length} data-bs-toggle="tooltip" data-bs-placement="right" title="Last page" />
+          </Pagination>
+        </div>
+
       </div>
 
       {/* Delete confirmation */}

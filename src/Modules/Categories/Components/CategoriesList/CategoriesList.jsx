@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Header from '../../../Shared/Components/Header/Header'
 import headerImg from '../../../../assets/Images/headerImg.svg'
-import { Button, Dropdown, Modal, Table } from 'react-bootstrap'
+import { Button, Dropdown, Modal, Pagination, Table } from 'react-bootstrap'
 import DeleteAlert from '../../../Shared/Components/DeleteAlert/DeleteAlert';
 import NoData from '../../../Shared/Components/NoData/NoData';
 import { Categ_URLs } from '../../../../Constants/END_POINTS.JSX';
@@ -16,13 +16,17 @@ import { getCategories } from '../../../ApiCalls/ApiCalls';
 
 export default function Categories() {
 
+  let [noOfPages, setNoOfPages] = useState([]);
+
   let [isLoading, setIsLoading] = useState(true);
 
   let [categList, setCategList] = useState([]);
-  let getCategList = async() => {
+  let getCategList = async (pageNumber) => {
     try {
-      let response =  await getCategories(10,1);
+      setIsLoading(true);
+      let response = await getCategories(5, pageNumber);
       setCategList(response.data.data);
+      setNoOfPages(Array(response.data.totalNumberOfPages).fill().map((_, index) => index + 1));
     } catch (error) {
       console.log(error)
     }
@@ -56,7 +60,7 @@ export default function Categories() {
     setCategoryShow(true);
   }
 
-  const handleCategoryEditShow = (name,id) => {
+  const handleCategoryEditShow = (name, id) => {
     setTitle('Edit')
     reset({ name });
     setCategoryShow(true);
@@ -66,11 +70,11 @@ export default function Categories() {
   let { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm();
   let onSubmit = async (data) => {
     try {
-      if(categId){
-        await axios.put(`${Categ_URLs.all}/${categId}`,data, { headers: { authorization: localStorage.getItem('token') } });
+      if (categId) {
+        await axios.put(`${Categ_URLs.all}/${categId}`, data, { headers: { authorization: localStorage.getItem('token') } });
         toast.success('Category Name updated successfully');
       }
-      else{
+      else {
         await axios.post(Categ_URLs.all, data, { headers: { authorization: localStorage.getItem('token') } });
         toast.success('Category created successfully');
       }
@@ -105,6 +109,14 @@ export default function Categories() {
       <i className="fa-solid fa-ellipsis"></i>
     </span>
   ));
+
+  const [activePage, setActivePage] = useState(1); // default first page
+
+  const handleClick = (page) => {
+    setActivePage(page);
+    getCategList(page);
+  };
+
 
   return (
     <>
@@ -153,7 +165,7 @@ export default function Categories() {
                         <Dropdown.Toggle as={CustomToggle} id="dropdown-custom"></Dropdown.Toggle>
                         <Dropdown.Menu className='rounded-4 border-0 shadow-sm'>
                           {/* <Dropdown.Item className='action-item'><i className="fa-regular fa-eye me-2 text-success"></i>View</Dropdown.Item> */}
-                          <Dropdown.Item onClick={() => handleCategoryEditShow(item.name,item.id)} className='action-item'><i className="fa-regular fa-pen-to-square me-2 text-success"></i>Edit</Dropdown.Item>
+                          <Dropdown.Item onClick={() => handleCategoryEditShow(item.name, item.id)} className='action-item'><i className="fa-regular fa-pen-to-square me-2 text-success"></i>Edit</Dropdown.Item>
                           <Dropdown.Item onClick={() => handleShow(item.id)} className='action-item'><i className="fa-regular fa-trash-can me-2 text-success"></i>Delete</Dropdown.Item>
                         </Dropdown.Menu>
                       </Dropdown>
@@ -163,6 +175,21 @@ export default function Categories() {
             }
           </tbody>
         </Table>
+
+        {/* Pagination */}
+        <div className='mt-5 d-flex justify-content-center'>
+          <Pagination hidden={noOfPages.length===0}>
+            <Pagination.First onClick={() => handleClick(1)} disabled={activePage === 1} data-bs-toggle="tooltip" data-bs-placement="right" title="First page" />
+            <Pagination.Prev onClick={() => handleClick(activePage - 1)} disabled={activePage === 1} data-bs-toggle="tooltip" data-bs-placement="right" title="Previous page" />
+            {noOfPages.map((page) => (
+              <Pagination.Item key={page} active={page === activePage} onClick={() => handleClick(page)}>{page}</Pagination.Item>
+
+            ))}
+            <Pagination.Next onClick={() => handleClick(activePage + 1)} disabled={activePage === noOfPages.length} data-bs-toggle="tooltip" data-bs-placement="right" title="Next page" />
+            <Pagination.Last onClick={() => handleClick(noOfPages[noOfPages.length - 1])} disabled={activePage === noOfPages.length} data-bs-toggle="tooltip" data-bs-placement="right" title="Last page" />
+          </Pagination>
+        </div>
+
       </div>
 
       {/* Delete confirmation */}
