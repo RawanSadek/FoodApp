@@ -16,7 +16,7 @@ export default function SideBar({ logout }) {
 
   return (
     <div className="sidebar-container">
-      <Sidebar className="vh-100 position-fixed sidebar" collapsed={collapse}>
+      <Sidebar className="h-100 position-fixed sidebar" collapsed={collapse}>
         <img onClick={getCollapse} src={logo} alt="logo" className="w-50 mt-5 mx-3" />
         <Menu className="mt-5">
           <MenuItem component={<Link to='home'></Link>} icon={<i className="fa-solid fa-house"></i>}> Home </MenuItem>

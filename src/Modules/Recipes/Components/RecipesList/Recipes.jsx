@@ -11,6 +11,9 @@ import DeleteAlert from '../../../Shared/Components/DeleteAlert/DeleteAlert'
 import deleting from '../../../../assets/Images/deleting.gif'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
+import { getCategories } from '../../../ApiCalls/ApiCalls';
+import { Tags_URLs } from '../../../../Constants/END_POINTS.JSX'
+
 
 
 export default function Recipes() {
@@ -22,10 +25,10 @@ export default function Recipes() {
 
   let [recipesList, setRecipesList] = useState([]);
   let [noOfPages, setNoOfPages] = useState([]);
-  let getRecipesList = async (pageNumber) => {
+  let getRecipesList = async (name, tag, categ, pageNumber) => {
     try {
       setIsLoading(true);
-      let response = await axios.get(`${Recipes_URLs.all}/?pageSize=5&pageNumber=${pageNumber}`, { headers: { authorization: localStorage.getItem('token') } })
+      let response = await axios.get(`${Recipes_URLs.all}/?name=${name}&tagId=${tag}&categoryId=${categ}&pageSize=5&pageNumber=${pageNumber}`, { headers: { authorization: localStorage.getItem('token') } })
       setRecipesList(response.data.data);
       setNoOfPages(Array(response.data.totalNumberOfPages).fill().map((_, index) => index + 1));
 
@@ -36,7 +39,9 @@ export default function Recipes() {
   }
 
   useEffect(() => {
-    getRecipesList();
+    getRecipesList(nameSearchValue, tagSearchValue, categSearchValue, activePage);
+    getCategs();
+    getTags();
   }, [])
 
 
@@ -57,7 +62,7 @@ export default function Recipes() {
       await axios.delete(`${Recipes_URLs.all}/${recipeId}`, { headers: { authorization: localStorage.getItem('token') } });
       setIsDeleting(false);
       toast.success('Item deleted successfully');
-      getRecipesList(activePage);
+      getRecipesList(nameSearchValue, tagSearchValue, categSearchValue, activePage);
       handleClose();
 
     } catch (error) {
@@ -78,9 +83,45 @@ export default function Recipes() {
 
   const handleClick = (page) => {
     setActivePage(page);
-    getRecipesList(page);
+    getRecipesList(nameSearchValue, tagSearchValue, categSearchValue, page);
     setImgLoading(true);
   };
+
+  
+  let [categories, setCategories] = useState([]);
+  let getCategs = async () => {
+    let response = await getCategories('', 9999, 1);
+    setCategories(response.data.data);
+  }
+  
+  let [tags, setTags] = useState([]);
+  let getTags = async () => {
+    let response = await axios.get(Tags_URLs.all, { headers: { authorization: localStorage.getItem('token') } });
+    setTags(response.data);
+  }
+
+  
+  let [nameSearchValue, setNameSearchValue] = useState('');
+  let [tagSearchValue, setTagSearchValue] = useState('');
+  let [categSearchValue, setCategSearchValue] = useState('');
+
+  let getNameSearchValue = (input) => {
+    setNameSearchValue(input.target.value);
+    getRecipesList(input.target.value, tagSearchValue, categSearchValue, 1);
+    setActivePage(1);
+  }
+
+  let getTagSearchValue = (selection) => {
+    setTagSearchValue(selection.target.value);
+    getRecipesList(nameSearchValue, selection.target.value, categSearchValue, 1);
+    setActivePage(1);
+  }
+
+  let getCategSearchValue = (selection) => {
+    setCategSearchValue(selection.target.value);
+    getRecipesList(nameSearchValue, tagSearchValue, selection.target.value, 1);
+    setActivePage(1);
+  }
 
   return (
     <>
@@ -92,6 +133,32 @@ export default function Recipes() {
           <p className='m-0'>You can check all details</p>
         </div>
         <button onClick={() => navigate('/dashboard/recipe-data')} className='btn theme-green-bg text-white auth-btn px-5 py-2'>Add New Item</button>
+      </div>
+
+      <div className="search-inputs row justify-content-between align-items-center">
+        <div className="search-name col-12 col-md-7 border border-1 mb-4 px-3 py-2 rounded-3">
+          <i className="fa-solid fa-magnifying-glass text-secondary me-2"></i>
+          <input onChange={getNameSearchValue} type="text" placeholder='Search by Name' className='border-0' />
+        </div>
+
+        <div className="search-tags col-6 col-md-2 border border-1 mb-4 px-3 py-2 rounded-3">
+          <select onChange={getTagSearchValue} name="tags" id="tags" className='w-100 border-0'>
+            <option value="" >Search by Tag</option>
+            {tags.map((tag) => (
+              <option key={tag.id} value={tag.id}>{tag.name}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="search-categs col-6 col-md-2 border border-1 mb-4 px-3 py-2 rounded-3">
+          <select onChange={getCategSearchValue} name="categories" id="categories" className='w-100 border-0'>
+            <option value="">Search by Category</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>{category.name}</option>
+            ))}
+          </select>
+        </div>
+
       </div>
 
       <div className="data-table">

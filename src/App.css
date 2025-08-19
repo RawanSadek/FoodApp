@@ -49,14 +49,9 @@ body {
     background-color: rgb(1, 133, 65) !important;
 }
 
-/* .main-content-container{
-    margin-left: 17vw;
-} */
-
 .sidebar-container .ps-sidebar-container {
     background-color: rgba(31, 38, 62, 1) !important;
     border-top-right-radius: 60px;
-    /* height: 100vh; */
 }
 
 .sidebar-container .ps-sidebar-root {
@@ -149,14 +144,75 @@ body {
     --bs-pagination-hover-color: black;
     --bs-pagination-active-border-color: none;
     --bs-pagination-border-width: none;
-    --bs-pagination-hover-bg:  rgba(0, 146, 71, 0.1);
+    --bs-pagination-hover-bg: rgba(0, 146, 71, 0.1);
     --bs-pagination-focus-box-shadow: none;
     --bs-pagination-focus-color: none;
     --bs-pagination-disabled-color: rgba(0, 0, 0, 0.4);
     --bs-pagination-disabled-bg: none;
 }
 
-.pagination .page-link{
+.pagination .page-link {
     border-radius: 15% !important;
     margin: 0 5px;
+}
+
+.search-name input:focus,
+.search-tags select:focus,
+.search-categs select:focus {
+    outline: none;
+    border: none;
+}
+
+.search-name input {
+    width: 95%;
+}
+
+.sidebar-container {
+    aside {
+        border-radius: 0px 58px 0px 0px;
+        background-color: #1f263e;
+        position: fixed;
+        z-index: 1;
+
+        .ps-sidebar-root {
+            border: none;
+            width: 200px;
+            min-width: 200px;
+        }
+
+        .ps-sidebar-container {
+            background-color: unset;
+
+            .ps-menu-label {
+                color: rgba(255, 255, 255, 0.65);
+            }
+
+            .logoImage {
+                margin: 20px 0;
+
+                img {
+                    width: 85px;
+                }
+            }
+
+            span {
+                width: fit-content;
+            }
+
+            .ps-menu-button:hover {
+                background-color: unset;
+            }
+
+            .link {
+                .ps-menu-button:hover {
+                    background-color: white;
+
+                    .ps-menu-label {
+                        color: white !important;
+                    }
+                }
+            }
+        }
+    }
+
 }

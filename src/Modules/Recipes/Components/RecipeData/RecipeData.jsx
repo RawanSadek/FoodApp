@@ -58,7 +58,7 @@ export default function RecipesData() {
 
   let [categories, setCategories] = useState([]);
   let getCategs = async () => {
-    let response = await getCategories(9999, 1);
+    let response = await getCategories('',9999, 1);
     setCategories(response.data.data);
   }
 
@@ -157,7 +157,7 @@ export default function RecipesData() {
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Select defaultValue={params.id ? recipeDetails?.category[0].id : ''} disabled={view} {...register('categoriesIds', { required: 'Category is required!' })} placeholder='Category' className='bg-light'>
+            <Form.Select multiple defaultValue={params.id ? recipeDetails?.category[0].id : ''} disabled={view} {...register('categoriesIds', { required: 'Category is required!' })} placeholder='Category' className='bg-light'>
               <option value="" disabled hidden>Category</option>
               {categories.map(category => (
                 <option key={category.id} value={category.id}>{category.name}</option>

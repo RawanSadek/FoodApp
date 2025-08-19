@@ -21,10 +21,10 @@ export default function Categories() {
   let [isLoading, setIsLoading] = useState(true);
 
   let [categList, setCategList] = useState([]);
-  let getCategList = async (pageNumber) => {
+  let getCategList = async (name, pageNumber) => {
     try {
       setIsLoading(true);
-      let response = await getCategories(5, pageNumber);
+      let response = await getCategories(name, 5, pageNumber);
       setCategList(response.data.data);
       setNoOfPages(Array(response.data.totalNumberOfPages).fill().map((_, index) => index + 1));
     } catch (error) {
@@ -34,7 +34,7 @@ export default function Categories() {
   }
 
   useEffect(() => {
-    getCategList();
+    getCategList(nameSearchValue, 1);
   }, [])
 
 
@@ -80,7 +80,7 @@ export default function Categories() {
       }
       // reset();
       setCategId(null)
-      getCategList();
+      getCategList(nameSearchValue, activePage);
       handleCategoryClose();
     } catch (error) {
       toast.error(error)
@@ -95,7 +95,8 @@ export default function Categories() {
       await axios.delete(`${Categ_URLs.all}/${categId}`, { headers: { authorization: localStorage.getItem('token') } });
       setIsDeleting(false);
       toast.success('Item deleted successfully');
-      getCategList(activePage);
+      getCategList(nameSearchValue, activePage);
+      // console.log(nameSearchValue)
       handleClose();
     } catch (error) {
       console.log(error)
@@ -112,10 +113,19 @@ export default function Categories() {
 
   const [activePage, setActivePage] = useState(1); // default first page
 
-  const handleClick = (page) => {
-    setActivePage(page);
-    getCategList(page);
+  const handleClick = (pageNumber) => {
+    setActivePage(pageNumber);
+    getCategList(nameSearchValue, pageNumber);
   };
+
+
+  let [nameSearchValue, setNameSearchValue] = useState('');
+
+  let getSearchValue = (input) => {
+    setNameSearchValue(input.target.value);
+    getCategList(input.target.value, 1);
+    setActivePage(1);
+  }
 
 
   return (
@@ -128,6 +138,11 @@ export default function Categories() {
           <p className='m-0'>You can check all details</p>
         </div>
         <button onClick={handleCategoryShow} className='btn btn-success px-4'>Add New Category</button>
+      </div>
+
+      <div className="search-name border border-1 mb-4 px-3 py-2 rounded-3">
+        <i className="fa-solid fa-magnifying-glass text-secondary me-2"></i>
+        <input onChange={getSearchValue} type="text" placeholder='Search by Name' className='border-0' />
       </div>
 
       <div className="data-table">
@@ -178,7 +193,7 @@ export default function Categories() {
 
         {/* Pagination */}
         <div className='mt-5 d-flex justify-content-center'>
-          <Pagination hidden={noOfPages.length===0}>
+          <Pagination hidden={noOfPages.length === 0}>
             <Pagination.First onClick={() => handleClick(1)} disabled={activePage === 1} data-bs-toggle="tooltip" data-bs-placement="right" title="First page" />
             <Pagination.Prev onClick={() => handleClick(activePage - 1)} disabled={activePage === 1} data-bs-toggle="tooltip" data-bs-placement="right" title="Previous page" />
             {noOfPages.map((page) => (
