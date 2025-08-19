@@ -12,7 +12,7 @@ export default function NotFound() {
           <h2 className='fw-bolder fs-1'>Oops....</h2>
           <h4 className='theme-green-text mb-4'>Page not found </h4>
           <p>This Page doesn't exist or was removed! <br/> We suggest you  back to home.</p>
-          <Link to='/dashboard/home'><button className='btn auth-btn theme-green-bg text-white mt-5 w-100'><i class="fa-solid fa-arrow-left"></i> Back To <br/> Home</button></Link>
+          <Link to='/dashboard/home'><button className='btn auth-btn theme-green-bg text-white mt-5 w-100'><i className="fa-solid fa-arrow-left"></i> Back To <br/> Home</button></Link>
         </div>
       </div>
     </div>

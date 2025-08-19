@@ -156,18 +156,17 @@ body {
     margin: 0 5px;
 }
 
-.search-name input:focus,
-.search-tags select:focus,
-.search-categs select:focus {
+.search-inputs input:focus,
+.search-inputs select:focus {
     outline: none;
     border: none;
 }
 
-.search-name input {
-    width: 95%;
+.search-inputs input {
+    width: 80%;
 }
 
-.sidebar-container {
+/* .sidebar-container {
     aside {
         border-radius: 0px 58px 0px 0px;
         background-color: #1f263e;
@@ -215,4 +214,4 @@ body {
         }
     }
 
-}
+} */

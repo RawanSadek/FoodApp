@@ -140,7 +140,7 @@ export default function Categories() {
         <button onClick={handleCategoryShow} className='btn btn-success px-4'>Add New Category</button>
       </div>
 
-      <div className="search-name border border-1 mb-4 px-3 py-2 rounded-3">
+      <div className="search-inputs border border-1 mb-4 px-3 py-2 rounded-3">
         <i className="fa-solid fa-magnifying-glass text-secondary me-2"></i>
         <input onChange={getSearchValue} type="text" placeholder='Search by Name' className='border-0' />
       </div>

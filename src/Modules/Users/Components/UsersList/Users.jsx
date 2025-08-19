@@ -10,6 +10,7 @@ import deleting from '../../../../assets/Images/deleting.gif'
 import NoData from '../../../Shared/Components/NoData/NoData'
 import axios from 'axios';
 import { BASE_USER } from '../../../../Constants/END_POINTS.JSX';
+import { toast } from 'react-toastify';
 
 
 export default function Users() {
@@ -22,10 +23,10 @@ export default function Users() {
   let [usersList, setUsersList] = useState([]);
   let [noOfPages, setNoOfPages] = useState([]);
 
-  let getUsersList = async (pageNumber) => {
+  let getUsersList = async (userName, email, country, groups, pageNumber) => {
     try {
       setIsLoading(true);
-      let response = await axios.get(`${BASE_USER}/?pageSize=5&pageNumber=${pageNumber}`, { headers: { authorization: localStorage.getItem('token') } })
+      let response = await axios.get(`${BASE_USER}/?userName=${userName}&email=${email}&country=${country}&groups=${groups}&pageSize=5&pageNumber=${pageNumber}`, { headers: { authorization: localStorage.getItem('token') } })
       setUsersList(response.data.data);
       setNoOfPages(Array(response.data.totalNumberOfPages).fill().map((_, index) => index + 1));
 
@@ -36,7 +37,7 @@ export default function Users() {
   }
 
   useEffect(() => {
-    getUsersList();
+    getUsersList(userNameSearchValue, emailSearchValue, countrySearchValue, groupSearchValue, 1);
   }, [])
 
   let [show, setShow] = useState(false);
@@ -56,7 +57,7 @@ export default function Users() {
       await axios.delete(`${BASE_USER}/${userId}`, { headers: { authorization: localStorage.getItem('token') } });
       setIsDeleting(false);
       handleClose();
-      getUsersList(activePage);
+      getUsersList(userNameSearchValue, emailSearchValue, countrySearchValue, groupSearchValue, activePage);
       toast.success('User deleted successfully');
 
     } catch (error) {
@@ -77,7 +78,7 @@ export default function Users() {
 
   const handleClick = (page) => {
     setActivePage(page);
-    getUsersList(page);
+    getUsersList(userNameSearchValue, emailSearchValue, countrySearchValue, groupSearchValue, page);
     setImgLoading(true)
   };
 
@@ -97,10 +98,37 @@ export default function Users() {
       </Pagination.Item>
     );
   }
-  console.log(pageNumbers)
+  // console.log(pageNumbers)
 
 
+  let [userNameSearchValue, setUserNameSearchValue] = useState('');
+  let [emailSearchValue, setEmailSearchValue] = useState('');
+  let [countrySearchValue, setCountrySearchValue] = useState('');
+  let [groupSearchValue, setGroupSearchValue] = useState('');
 
+  let getUserNameSearchValue = (input) => {
+    setUserNameSearchValue(input.target.value);
+    getUsersList(input.target.value, emailSearchValue, countrySearchValue, groupSearchValue, 1);
+    setActivePage(1);
+  }
+
+  let getEmailSearchValue = (input) => {
+    setEmailSearchValue(input.target.value);
+    getUsersList(userNameSearchValue, input.target.value, countrySearchValue, groupSearchValue, 1);
+    setActivePage(1);
+  }
+
+  let getCountrySearchValue = (input) => {
+    setCountrySearchValue(input.target.value);
+    getUsersList(userNameSearchValue, emailSearchValue, input.target.value, groupSearchValue, 1);
+    setActivePage(1);
+  }
+
+  let getGroupSearchValue = (selection) => {
+    setGroupSearchValue(selection.target.value);
+    getUsersList(userNameSearchValue, emailSearchValue, countrySearchValue, selection.target.value, 1);
+    setActivePage(1);
+  }
 
 
   return (
@@ -110,6 +138,33 @@ export default function Users() {
       <div className=" py-4">
         <h5 className='m-0'>Users Table Details</h5>
         <p className='m-0'>You can check all details</p>
+      </div>
+
+      <div className="search-inputs row justify-content-between align-items-center">
+
+        <div className="search-nam col-12 col-md-3 border border-1 mb-4 px-3 py-2 rounded-3">
+          <i className="fa-solid fa-magnifying-glass text-secondary me-2"></i>
+          <input onChange={getUserNameSearchValue} type="text" placeholder='Search by Username' className='border-0' />
+        </div>
+
+        <div className="search-email col-12 col-md-3 border border-1 mb-4 px-3 py-2 rounded-3">
+          <i className="fa-solid fa-magnifying-glass text-secondary me-2"></i>
+          <input onChange={getEmailSearchValue} type="text" placeholder='Search by Email' className='border-0' />
+        </div>
+
+        <div className="search-country col-12 col-md-3 border border-1 mb-4 px-3 py-2 rounded-3">
+          <i className="fa-solid fa-magnifying-glass text-secondary me-2"></i>
+          <input onChange={getCountrySearchValue} type="text" placeholder='Search by Country' className='border-0' />
+        </div>
+
+        <div className="search-tags col-6 col-md-2 border border-1 mb-4 px-3 py-2 rounded-3">
+          <select onChange={getGroupSearchValue} name="group" id="group" className='w-100 border-0'>
+            <option value="" >Search by country</option>
+            <option value="1">Admin</option>
+            <option value="2">System User</option>
+          </select>
+        </div>
+
       </div>
 
       <div className="data-table">
@@ -165,7 +220,7 @@ export default function Users() {
                       <Dropdown>
                         <Dropdown.Toggle as={CustomToggle} id="dropdown-custom"></Dropdown.Toggle>
                         <Dropdown.Menu className='rounded-4 border-0 shadow-sm'>
-                          <Dropdown.Item onClick={() => navigate(`/dashboard/users/${user.id}`, { state: { view: true } })} className='action-item'><i className="fa-regular fa-eye me-2 text-success"></i>View</Dropdown.Item>
+                          <Dropdown.Item onClick={() => navigate(`/dashboard/users/${user.id}`)} className='action-item'><i className="fa-regular fa-eye me-2 text-success"></i>View</Dropdown.Item>
                           <Dropdown.Item onClick={() => handleShow(user.id)} className='action-item'><i className="fa-regular fa-trash-can me-2 text-success"></i>Delete</Dropdown.Item>
                         </Dropdown.Menu>
                       </Dropdown>
@@ -181,7 +236,7 @@ export default function Users() {
           <Pagination hidden={noOfPages.length === 0}>
             <Pagination.First onClick={() => handleClick(1)} disabled={activePage === 1} data-bs-toggle="tooltip" data-bs-placement="right" title="First page" />
             <Pagination.Prev onClick={() => handleClick(activePage - 1)} disabled={activePage === 1} data-bs-toggle="tooltip" data-bs-placement="right" title="Previous page" />
-            {start > 1 && 
+            {start > 1 &&
               <>
                 <Pagination.Item onClick={() => handleClick(1)}>1</Pagination.Item>
                 <Pagination.Ellipsis disabled />
