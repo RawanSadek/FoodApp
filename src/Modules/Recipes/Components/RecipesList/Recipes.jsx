@@ -57,7 +57,7 @@ export default function Recipes() {
       await axios.delete(`${Recipes_URLs.all}/${recipeId}`, { headers: { authorization: localStorage.getItem('token') } });
       setIsDeleting(false);
       toast.success('Item deleted successfully');
-      getRecipesList();
+      getRecipesList(activePage);
       handleClose();
 
     } catch (error) {

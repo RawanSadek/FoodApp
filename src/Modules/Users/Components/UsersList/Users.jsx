@@ -56,7 +56,7 @@ export default function Users() {
       await axios.delete(`${BASE_USER}/${userId}`, { headers: { authorization: localStorage.getItem('token') } });
       setIsDeleting(false);
       handleClose();
-      getUsersList();
+      getUsersList(activePage);
       toast.success('User deleted successfully');
 
     } catch (error) {

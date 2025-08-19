@@ -95,7 +95,7 @@ export default function Categories() {
       await axios.delete(`${Categ_URLs.all}/${categId}`, { headers: { authorization: localStorage.getItem('token') } });
       setIsDeleting(false);
       toast.success('Item deleted successfully');
-      getCategList();
+      getCategList(activePage);
       handleClose();
     } catch (error) {
       console.log(error)
