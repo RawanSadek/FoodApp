@@ -21,15 +21,15 @@ export default function Categories() {
   let [isLoading, setIsLoading] = useState(true);
 
   let [categList, setCategList] = useState([]);
+
   let getCategList = async (name, pageNumber) => {
     try {
       setIsLoading(true);
       let response = await getCategories(name, 5, pageNumber);
       setCategList(response.data.data);
-      // console.log();
       setNoOfPages(Array(response.data.totalNumberOfPages).fill().map((_, index) => index + 1));
     } catch (error) {
-      console.log(error)
+      toast.error(error.response.data.message || "Something went wrong!")
     }
     setIsLoading(false);
   }
@@ -84,7 +84,7 @@ export default function Categories() {
       getCategList(nameSearchValue, activePage);
       handleCategoryClose();
     } catch (error) {
-      toast.error(error)
+      toast.error(error.response.data.message || "Something went wrong!")
     }
   }
 
@@ -101,7 +101,7 @@ export default function Categories() {
       // console.log(nameSearchValue)
       handleClose();
     } catch (error) {
-      console.log(error)
+      toast.error(error.response.data.message || "Something went wrong!")
     }
   }
 
@@ -139,7 +139,7 @@ export default function Categories() {
           <h5 className='m-0'>Categories Table Details</h5>
           <p className='m-0'>You can check all details</p>
         </div>
-        <button onClick={handleCategoryShow} className='btn btn-success px-4'>Add New Category</button>
+        <button onClick={handleCategoryShow} className='btn auth-btn theme-green-bg text-white px-4'>Add New Category</button>
       </div>
 
       <div className="search-inputs border border-1 mb-4 px-3 py-2 rounded-3">
@@ -159,43 +159,45 @@ export default function Categories() {
           </thead>
 
           <tbody className='text-center'>
-            {isLoading ?
+            {isLoading &&
               <tr>
                 <td colSpan="4">
                   <img src={loading} alt="loading" className='mt-3' />
                 </td>
-              </tr> :
-              categList.length === 0 ?
-                <tr>
-                  <td colSpan="4">
-                    <NoData />
-                  </td>
-                </tr>
-                :
-                categList.map((item) => (
-                  <tr key={item.id}>
-                    <td>{item.id}</td>
-                    <td>{item.name}</td>
-                    <td>{new Date(item.creationDate).toLocaleDateString("en-GB", {
-                      weekday: "long",
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}</td>
-                    <td>
-                      <Dropdown>
-                        <Dropdown.Toggle as={CustomToggle} id="dropdown-custom"></Dropdown.Toggle>
-                        <Dropdown.Menu className='rounded-4 border-0 shadow-sm'>
-                          {/* <Dropdown.Item className='action-item'><i className="fa-regular fa-eye me-2 text-success"></i>View</Dropdown.Item> */}
-                          <Dropdown.Item onClick={() => handleCategoryEditShow(item.name, item.id)} className='action-item'><i className="fa-regular fa-pen-to-square me-2 text-success"></i>Edit</Dropdown.Item>
-                          <Dropdown.Item onClick={() => handleShow(item.id)} className='action-item'><i className="fa-regular fa-trash-can me-2 text-success"></i>Delete</Dropdown.Item>
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    </td>
-                  </tr>
-                ))
+              </tr>}
+
+            {!isLoading && categList.length === 0 &&
+              <tr>
+                <td colSpan="4">
+                  <NoData />
+                </td>
+              </tr>
+            }
+
+            {!isLoading && categList.map((item) => (
+              <tr key={item.id}>
+                <td>{item.id}</td>
+                <td>{item.name}</td>
+                <td>{new Date(item.creationDate).toLocaleDateString("en-GB", {
+                  weekday: "long",
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}</td>
+                <td>
+                  <Dropdown>
+                    <Dropdown.Toggle as={CustomToggle} id="dropdown-custom"></Dropdown.Toggle>
+                    <Dropdown.Menu className='rounded-4 border-0 shadow-sm'>
+                      {/* <Dropdown.Item className='action-item'><i className="fa-regular fa-eye me-2 text-success"></i>View</Dropdown.Item> */}
+                      <Dropdown.Item onClick={() => handleCategoryEditShow(item.name, item.id)} className='action-item'><i className="fa-regular fa-pen-to-square me-2 text-success"></i>Edit</Dropdown.Item>
+                      <Dropdown.Item onClick={() => handleShow(item.id)} className='action-item'><i className="fa-regular fa-trash-can me-2 text-success"></i>Delete</Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </td>
+              </tr>
+            ))
             }
           </tbody>
         </Table>

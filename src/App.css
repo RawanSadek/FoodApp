@@ -68,6 +68,11 @@ body {
     border-left: 4px solid rgba(0, 146, 77);
 }
 
+.ps-menuitem-root.ps-active {
+    background-color: rgba(0, 146, 77, 0.2) !important;
+    border-left: 4px solid rgba(0, 146, 77);
+}
+
 .avatar-img {
     width: 40px;
     background-color: rgba(244, 206, 155, 1);

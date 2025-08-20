@@ -23,7 +23,7 @@ export default function UserData() {
       console.log(response.data)
       setUserDetails(response.data)
     } catch (error) {
-      toast.error(error);
+      toast.error(error.response.data.message || "Something went wrong!")
     }
     setIsLoading(false);
 

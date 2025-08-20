@@ -29,9 +29,9 @@ export default function Users() {
       let response = await axios.get(`${BASE_USER}/?userName=${userName}&email=${email}&country=${country}&groups=${groups}&pageSize=5&pageNumber=${pageNumber}`, { headers: { authorization: localStorage.getItem('token') } })
       setUsersList(response.data.data);
       setNoOfPages(Array(response.data.totalNumberOfPages).fill().map((_, index) => index + 1));
-
+      
     } catch (error) {
-      console.log(error)
+      toast.error(error.response.data.message || 'Something wrong happen!')
     }
     setIsLoading(false);
   }
@@ -61,7 +61,7 @@ export default function Users() {
       toast.success('User deleted successfully');
 
     } catch (error) {
-      console.log(error)
+      toast.error(error.response.data.message || "Something went wrong!")
     }
   }
 
@@ -183,50 +183,51 @@ export default function Users() {
           </thead>
 
           <tbody className='text-center'>
-            {isLoading ?
+            {isLoading &&
               <tr>
                 <td colSpan="8">
                   <img src={loading} alt="loading" className='mt-3' />
                 </td>
-              </tr> :
-              usersList.length === 0 ?
-                <tr>
-                  <td colSpan="8">
-                    <NoData />
-                  </td>
-                </tr>
-                :
-                usersList.map((user) => (
-                  <tr key={user.id}>
-                    <td>{user.id}</td>
-                    <td>{user.userName}</td>
-                    <td>
-                      {imgLoading && <img src={loading} alt="loading" hidden={!imgLoading} className='loading-img ms-3' />}
-                      <img src={`https://upskilling-egypt.com:3006/${user.imagePath}`} hidden={imgLoading} alt="img" className='rounded-circle'
-                        onError={(e) => {
-                          e.target.onerror = null; // Prevent infinite loop
-                          e.target.src = noUserImg;
-                        }}
-                        onLoad={() => setImgLoading(false)}
-                        style={{ width: '50px', height: '50px' }}
-                      />
+              </tr>}
 
-                    </td>
-                    <td>{user.email}</td>
-                    <td>{user.phoneNumber}</td>
-                    <td>{user.country}</td>
-                    <td>{user.group.name}</td>
-                    <td>
-                      <Dropdown>
-                        <Dropdown.Toggle as={CustomToggle} id="dropdown-custom"></Dropdown.Toggle>
-                        <Dropdown.Menu className='rounded-4 border-0 shadow-sm'>
-                          <Dropdown.Item onClick={() => navigate(`/dashboard/users/${user.id}`)} className='action-item'><i className="fa-regular fa-eye me-2 text-success"></i>View</Dropdown.Item>
-                          <Dropdown.Item onClick={() => handleShow(user.id)} className='action-item'><i className="fa-regular fa-trash-can me-2 text-success"></i>Delete</Dropdown.Item>
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    </td>
-                  </tr>
-                ))
+            {!isLoading && usersList.length === 0 &&
+              <tr>
+                <td colSpan="8">
+                  <NoData />
+                </td>
+              </tr>
+            }
+            {!isLoading && usersList.map((user) => (
+              <tr key={user.id}>
+                <td>{user.id}</td>
+                <td>{user.userName}</td>
+                <td>
+                  {imgLoading && <img src={loading} alt="loading" hidden={!imgLoading} className='loading-img ms-3' />}
+                  <img src={`https://upskilling-egypt.com:3006/${user.imagePath}`} hidden={imgLoading} alt="img" className='rounded-circle'
+                    onError={(e) => {
+                      e.target.onerror = null; // Prevent infinite loop
+                      e.target.src = noUserImg;
+                    }}
+                    onLoad={() => setImgLoading(false)}
+                    style={{ width: '50px', height: '50px' }}
+                  />
+
+                </td>
+                <td>{user.email}</td>
+                <td>{user.phoneNumber}</td>
+                <td>{user.country}</td>
+                <td>{user.group.name}</td>
+                <td>
+                  <Dropdown>
+                    <Dropdown.Toggle as={CustomToggle} id="dropdown-custom"></Dropdown.Toggle>
+                    <Dropdown.Menu className='rounded-4 border-0 shadow-sm'>
+                      <Dropdown.Item onClick={() => navigate(`/dashboard/users/${user.id}`)} className='action-item'><i className="fa-regular fa-eye me-2 text-success"></i>View</Dropdown.Item>
+                      <Dropdown.Item onClick={() => handleShow(user.id)} className='action-item'><i className="fa-regular fa-trash-can me-2 text-success"></i>Delete</Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
+                </td>
+              </tr>
+            ))
             }
           </tbody>
         </Table>

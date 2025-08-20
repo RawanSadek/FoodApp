@@ -33,7 +33,7 @@ export default function Recipes() {
       setNoOfPages(Array(response.data.totalNumberOfPages).fill().map((_, index) => index + 1));
 
     } catch (error) {
-      console.log(error)
+      toast.error(error.response.data.message || "Something went wrong!")
     }
     setIsLoading(false);
   }
@@ -66,7 +66,7 @@ export default function Recipes() {
       handleClose();
 
     } catch (error) {
-      console.log(error)
+      toast.error(error.response.data.message || "Something went wrong!")
     }
   }
 
@@ -132,7 +132,7 @@ export default function Recipes() {
           <h5 className='m-0'>Recipe Table Details</h5>
           <p className='m-0'>You can check all details</p>
         </div>
-        <button onClick={() => navigate('/dashboard/recipe-data')} className='btn theme-green-bg text-white auth-btn px-5 py-2'>Add New Item</button>
+        <button onClick={() => navigate('/dashboard/new-recipe')} className='btn theme-green-bg text-white auth-btn px-5 py-2'>Add New Recipe</button>
       </div>
 
       <div className="search-inputs row justify-content-between align-items-center">
@@ -177,20 +177,21 @@ export default function Recipes() {
           </thead>
 
           <tbody className='text-center'>
-            {isLoading ?
+            {isLoading &&
               <tr>
                 <td colSpan="8">
                   <img src={loading} alt="loading" className='mt-3' />
                 </td>
-              </tr> :
-              recipesList.length === 0 ?
+              </tr> }
+
+              {!isLoading && recipesList.length === 0 &&
                 <tr>
                   <td colSpan="8">
                     <NoData />
                   </td>
-                </tr>
-                :
-                recipesList.map((item) => (
+                </tr>}
+                
+                {!isLoading && recipesList.map((item) => (
                   <tr key={item.id}>
                     <td>{item.id}</td>
                     <td>{item.name}</td>
@@ -214,8 +215,8 @@ export default function Recipes() {
                       <Dropdown>
                         <Dropdown.Toggle as={CustomToggle} id="dropdown-custom"></Dropdown.Toggle>
                         <Dropdown.Menu className='rounded-4 border-0 shadow-sm'>
-                          <Dropdown.Item onClick={() => navigate(`/dashboard/recipe-data/${item.id}`, { state: { view: true } })} className='action-item'><i className="fa-regular fa-eye me-2 text-success"></i>View</Dropdown.Item>
-                          <Dropdown.Item onClick={() => navigate(`/dashboard/recipe-data/${item.id}`)} className='action-item'><i className="fa-regular fa-pen-to-square me-2 text-success"></i>Edit</Dropdown.Item>
+                          <Dropdown.Item onClick={() => navigate(`/dashboard/view-recipe/${item.id}`, { state: { view: true } })} className='action-item'><i className="fa-regular fa-eye me-2 text-success"></i>View</Dropdown.Item>
+                          <Dropdown.Item onClick={() => navigate(`/dashboard/update-recipe/${item.id}`)} className='action-item'><i className="fa-regular fa-pen-to-square me-2 text-success"></i>Edit</Dropdown.Item>
                           <Dropdown.Item onClick={() => handleShow(item.id)} className='action-item'><i className="fa-regular fa-trash-can me-2 text-success"></i>Delete</Dropdown.Item>
                         </Dropdown.Menu>
                       </Dropdown>

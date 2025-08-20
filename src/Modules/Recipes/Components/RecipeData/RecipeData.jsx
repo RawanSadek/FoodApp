@@ -93,7 +93,7 @@ export default function RecipesData() {
         toast.success(response.data.message);
         navigate('/dashboard/recipes');
       } catch (error) {
-        toast.error(error);
+        toast.error(error.response.data.message || "Something went wrong!")
       }
     }
     else {
@@ -102,7 +102,7 @@ export default function RecipesData() {
         toast.success(response.data.message);
         navigate('/dashboard/recipes');
       } catch (error) {
-        toast.error(error);
+        toast.error(error.response.data.message || "Something went wrong!")
       }
     }
   }
@@ -114,7 +114,7 @@ export default function RecipesData() {
       console.log(response.data)
       setRecipeDetails(response.data)
     } catch (error) {
-      toast.error(error);
+      toast.error(error.response.data.message || "Something went wrong!")
     }
     setIsLoading(false);
   }
@@ -157,7 +157,7 @@ export default function RecipesData() {
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Select multiple defaultValue={params.id ? recipeDetails?.category[0].id : ''} disabled={view} {...register('categoriesIds', { required: 'Category is required!' })} placeholder='Category' className='bg-light'>
+            <Form.Select defaultValue={params.id ? recipeDetails?.category[0].id : ''} disabled={view} {...register('categoriesIds', { required: 'Category is required!' })} placeholder='Category' className='bg-light'>
               <option value="" disabled hidden>Category</option>
               {categories.map(category => (
                 <option key={category.id} value={category.id}>{category.name}</option>
@@ -173,7 +173,7 @@ export default function RecipesData() {
 
           <Form.Group className="img-input-container rounded pt-2 text-center" onClick={handleClick}>
             {imgPreview || recipeDetails?.imagePath ? <img src={imgPreview ? imgPreview : `https://upskilling-egypt.com:3006/${recipeDetails?.imagePath}`} className='w-25' /> : <i className="fa-solid fa-arrow-up-from-bracket fs-3 text-secondary"></i>}
-            <p className='fw-medium'>Drag & Drop or <span className="theme-green-text">Choose an Image</span> to Upload</p>
+            <p className='fw-medium mt-2'>Drag & Drop or <span className="theme-green-text">Choose an Image</span> to Upload</p>
 
             <Form.Control disabled={view} {...register('recipeImage')} ref={(e) => {
               fileInputRef.current = e; // store for manual click
