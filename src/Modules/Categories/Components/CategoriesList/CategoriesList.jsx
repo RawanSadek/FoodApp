@@ -26,6 +26,7 @@ export default function Categories() {
       setIsLoading(true);
       let response = await getCategories(name, 5, pageNumber);
       setCategList(response.data.data);
+      // console.log();
       setNoOfPages(Array(response.data.totalNumberOfPages).fill().map((_, index) => index + 1));
     } catch (error) {
       console.log(error)
@@ -40,7 +41,7 @@ export default function Categories() {
 
   {/* Delete confirmation */ }
   let [show, setShow] = useState(false);
-  let [categId, setCategId] = useState(0);
+  let [categId, setCategId] = useState(null);
 
   let [title, setTitle] = useState(null);
 
@@ -96,6 +97,7 @@ export default function Categories() {
       setIsDeleting(false);
       toast.success('Item deleted successfully');
       getCategList(nameSearchValue, activePage);
+      setCategId(null)
       // console.log(nameSearchValue)
       handleClose();
     } catch (error) {
@@ -174,7 +176,14 @@ export default function Categories() {
                   <tr key={item.id}>
                     <td>{item.id}</td>
                     <td>{item.name}</td>
-                    <td>{item.creationDate}</td>
+                    <td>{new Date(item.creationDate).toLocaleDateString("en-GB", {
+                      weekday: "long",
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}</td>
                     <td>
                       <Dropdown>
                         <Dropdown.Toggle as={CustomToggle} id="dropdown-custom"></Dropdown.Toggle>
