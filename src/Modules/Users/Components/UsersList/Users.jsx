@@ -198,12 +198,12 @@ export default function Users() {
               </tr>
             }
             {!isLoading && usersList.map((user) => (
-              <tr key={user.id}>
-                <td>{user.id}</td>
-                <td>{user.userName}</td>
+              <tr key={user?.id}>
+                <td>{user?.id}</td>
+                <td>{user?.userName}</td>
                 <td>
                   {imgLoading && <img src={loading} alt="loading" hidden={!imgLoading} className='loading-img ms-3' />}
-                  <img src={`https://upskilling-egypt.com:3006/${user.imagePath}`} hidden={imgLoading} alt="img" className='rounded-circle'
+                  <img src={`https://upskilling-egypt.com:3006/${user?.imagePath}`} hidden={imgLoading} alt="img" className='rounded-circle'
                     onError={(e) => {
                       e.target.onerror = null; // Prevent infinite loop
                       e.target.src = noUserImg;
@@ -213,16 +213,16 @@ export default function Users() {
                   />
 
                 </td>
-                <td>{user.email}</td>
-                <td>{user.phoneNumber}</td>
-                <td>{user.country}</td>
-                <td>{user.group.name}</td>
+                <td>{user?.email}</td>
+                <td>{user?.phoneNumber}</td>
+                <td>{user?.country}</td>
+                <td>{user?.group.name}</td>
                 <td>
                   <Dropdown>
                     <Dropdown.Toggle as={CustomToggle} id="dropdown-custom"></Dropdown.Toggle>
                     <Dropdown.Menu className='rounded-4 border-0 shadow-sm'>
-                      <Dropdown.Item onClick={() => navigate(`/dashboard/users/${user.id}`)} className='action-item'><i className="fa-regular fa-eye me-2 text-success"></i>View</Dropdown.Item>
-                      <Dropdown.Item onClick={() => handleShow(user.id)} className='action-item'><i className="fa-regular fa-trash-can me-2 text-success"></i>Delete</Dropdown.Item>
+                      <Dropdown.Item onClick={() => navigate(`/dashboard/users/${user?.id}`)} className='action-item'><i className="fa-regular fa-eye me-2 text-success"></i>View</Dropdown.Item>
+                      <Dropdown.Item onClick={() => handleShow(user?.id)} className='action-item'><i className="fa-regular fa-trash-can me-2 text-success"></i>Delete</Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
                 </td>

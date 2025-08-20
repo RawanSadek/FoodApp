@@ -144,7 +144,7 @@ export default function RecipesData() {
             <Form.Select defaultValue={params.id ? recipeDetails?.tag.id : ''} disabled={view}  {...register('tagId', { required: 'Tag is required!' })} placeholder='Tag' className='bg-light'>
               <option value="" disabled hidden>Tag</option>
               {tags.map(tag =>
-                (<option key={tag.id} value={tag.id}>{tag.name}</option>)
+                (<option key={tag?.id} value={tag?.id}>{tag?.name}</option>)
               )}
 
             </Form.Select>
@@ -157,10 +157,10 @@ export default function RecipesData() {
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Select defaultValue={params.id ? recipeDetails?.category[0].id : ''} disabled={view} {...register('categoriesIds', { required: 'Category is required!' })} placeholder='Category' className='bg-light'>
+            <Form.Select defaultValue={params.id ? recipeDetails?.category[0]?.id : ''} disabled={view} {...register('categoriesIds', { required: 'Category is required!' })} placeholder='Category' className='bg-light'>
               <option value="" disabled hidden>Category</option>
               {categories.map(category => (
-                <option key={category.id} value={category.id}>{category.name}</option>
+                <option key={category?.id} value={category?.id}>{category?.name}</option>
               ))}
             </Form.Select>
             {errors.categoriesIds && <span className='text-danger'>{errors.categoriesIds.message}</span>}

@@ -175,10 +175,10 @@ export default function Categories() {
             }
 
             {!isLoading && categList.map((item) => (
-              <tr key={item.id}>
-                <td>{item.id}</td>
-                <td>{item.name}</td>
-                <td>{new Date(item.creationDate).toLocaleDateString("en-GB", {
+              <tr key={item?.id}>
+                <td>{item?.id}</td>
+                <td>{item?.name}</td>
+                <td>{new Date(item?.creationDate).toLocaleDateString("en-GB", {
                   weekday: "long",
                   year: "numeric",
                   month: "long",
@@ -191,8 +191,8 @@ export default function Categories() {
                     <Dropdown.Toggle as={CustomToggle} id="dropdown-custom"></Dropdown.Toggle>
                     <Dropdown.Menu className='rounded-4 border-0 shadow-sm'>
                       {/* <Dropdown.Item className='action-item'><i className="fa-regular fa-eye me-2 text-success"></i>View</Dropdown.Item> */}
-                      <Dropdown.Item onClick={() => handleCategoryEditShow(item.name, item.id)} className='action-item'><i className="fa-regular fa-pen-to-square me-2 text-success"></i>Edit</Dropdown.Item>
-                      <Dropdown.Item onClick={() => handleShow(item.id)} className='action-item'><i className="fa-regular fa-trash-can me-2 text-success"></i>Delete</Dropdown.Item>
+                      <Dropdown.Item onClick={() => handleCategoryEditShow(item?.name, item?.id)} className='action-item'><i className="fa-regular fa-pen-to-square me-2 text-success"></i>Edit</Dropdown.Item>
+                      <Dropdown.Item onClick={() => handleShow(item?.id)} className='action-item'><i className="fa-regular fa-trash-can me-2 text-success"></i>Delete</Dropdown.Item>
                     </Dropdown.Menu>
                   </Dropdown>
                 </td>

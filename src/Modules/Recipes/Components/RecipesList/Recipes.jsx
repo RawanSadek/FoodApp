@@ -192,12 +192,12 @@ export default function Recipes() {
                 </tr>}
                 
                 {!isLoading && recipesList.map((item) => (
-                  <tr key={item.id}>
-                    <td>{item.id}</td>
-                    <td>{item.name}</td>
+                  <tr key={item?.id}>
+                    <td>{item?.id}</td>
+                    <td>{item?.name}</td>
                     <td>
                       {imgLoading && <img src={loading} alt="loading" hidden={!imgLoading} className='loading-img ms-3' />}
-                      <img src={`https://upskilling-egypt.com:3006/${item.imagePath}`} hidden={imgLoading} alt="img" className='rounded-3'
+                      <img src={`https://upskilling-egypt.com:3006/${item?.imagePath}`} hidden={imgLoading} alt="img" className='rounded-3'
                         onError={(e) => {
                           e.target.onerror = null; // Prevent infinite loop
                           e.target.src = noImg;
@@ -207,17 +207,17 @@ export default function Recipes() {
                       />
 
                     </td>
-                    <td>{item.price}</td>
-                    <td>{item.description}</td>
-                    <td>{item.tag.name}</td>
-                    <td>{item.category[0]?.name}</td>
+                    <td>{item?.price}</td>
+                    <td>{item?.description}</td>
+                    <td>{item?.tag.name}</td>
+                    <td>{item?.category[0]?.name}</td>
                     <td>
                       <Dropdown>
                         <Dropdown.Toggle as={CustomToggle} id="dropdown-custom"></Dropdown.Toggle>
                         <Dropdown.Menu className='rounded-4 border-0 shadow-sm'>
-                          <Dropdown.Item onClick={() => navigate(`/dashboard/view-recipe/${item.id}`, { state: { view: true } })} className='action-item'><i className="fa-regular fa-eye me-2 text-success"></i>View</Dropdown.Item>
-                          <Dropdown.Item onClick={() => navigate(`/dashboard/update-recipe/${item.id}`)} className='action-item'><i className="fa-regular fa-pen-to-square me-2 text-success"></i>Edit</Dropdown.Item>
-                          <Dropdown.Item onClick={() => handleShow(item.id)} className='action-item'><i className="fa-regular fa-trash-can me-2 text-success"></i>Delete</Dropdown.Item>
+                          <Dropdown.Item onClick={() => navigate(`/dashboard/view-recipe/${item?.id}`, { state: { view: true } })} className='action-item'><i className="fa-regular fa-eye me-2 text-success"></i>View</Dropdown.Item>
+                          <Dropdown.Item onClick={() => navigate(`/dashboard/update-recipe/${item?.id}`)} className='action-item'><i className="fa-regular fa-pen-to-square me-2 text-success"></i>Edit</Dropdown.Item>
+                          <Dropdown.Item onClick={() => handleShow(item?.id)} className='action-item'><i className="fa-regular fa-trash-can me-2 text-success"></i>Delete</Dropdown.Item>
                         </Dropdown.Menu>
                       </Dropdown>
                     </td>
