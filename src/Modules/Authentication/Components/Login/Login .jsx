@@ -4,10 +4,13 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { AUTH_URLs } from '../../../../Constants/END_POINTS.JSX';
 import loading from '../../../../assets/Images/loading.gif'
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { AuthContext } from '../../../../Contexts/AuthContext/AuthContext';
 
 
-export default function Login({getLoginData}) {
+export default function Login() {
+
+  let {getLoginData} = useContext(AuthContext);
 
   let navigate = useNavigate();
 

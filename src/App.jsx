@@ -26,24 +26,6 @@ import ChangePassword from './Modules/Authentication/Components/ChangePassword/C
 
 function App() {
 
-  const [loginData, setLoginData] = useState();
-  let getLoginData = ()=>{
-    let encodedData = localStorage.getItem('token');
-    let decodedData = jwtDecode(encodedData);
-    setLoginData(decodedData);
-  }
-
-  useEffect(()=>{
-    if(localStorage.getItem('token'))
-      getLoginData();
-  },[])
-
-  const logout = ()=>{
-    localStorage.removeItem('token');
-    setLoginData(null);
-    <Navigate to='/login'/>
-  }
-
 
   const routes = createBrowserRouter([
     {
@@ -51,8 +33,8 @@ function App() {
       element: <AuthLayout />,
       errorElement: <NotFound />,
       children: [
-        { index: true, element: <Login getLoginData={getLoginData}/> },
-        { path: 'login', element: <Login getLoginData={getLoginData} /> },
+        { index: true, element: <Login /> },
+        { path: 'login', element: <Login /> },
         { path: 'register', element: <Register /> },
         { path: 'reset-password', element: <ResetPassword /> },
         { path: 'forgot-password', element: <ForgotPassword /> },
@@ -62,11 +44,11 @@ function App() {
     },
     {
       path: 'dashboard',
-      element: <ProtectedRoutes loginData={loginData}><MasterLayout logout={logout} loginData={loginData}/></ProtectedRoutes>,
+      element: <ProtectedRoutes ><MasterLayout/></ProtectedRoutes>,
       errorElement: <NotFound />,
       children: [
-        { index: true, element: <Home loginData={loginData}/> },
-        { path: 'home', element: <Home loginData={loginData}/> },
+        { index: true, element: <Home /> },
+        { path: 'home', element: <Home /> },
         { path: 'recipes', element: <Recipes /> },
         { path: 'new-recipe', element: <RecipesData /> },
         { path: 'update-recipe/:id?', element: <RecipesData /> },

@@ -7,7 +7,7 @@ export default function Navbar({ loginData }) {
     <>
       <nav className="navbar navbar-light bg-light navbar-expand-lg justify-content-between p-3 rounded-4">
         <div className="container-fluid">
-          <a className="navbar-brand">Food App</a>
+          <a className="navbar-brand">{loginData.roles[0]}</a>
 
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#UserInfo" aria-controls="UserInfo" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>

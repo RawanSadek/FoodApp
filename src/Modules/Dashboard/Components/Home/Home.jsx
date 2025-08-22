@@ -1,8 +1,13 @@
 import Header from '../../../Shared/Components/Header/Header'
 import headerImg from '../../../../assets/Images/headerImg.svg'
 import RecipesHeader from '../../../Shared/Components/RecipesHeader/RecipesHeader'
+import { useContext } from 'react';
+import { AuthContext } from '../../../../Contexts/AuthContext/AuthContext';
 
-export default function Home({ loginData }) {
+export default function Home() {
+
+    let {loginData} = useContext(AuthContext);
+
   console.log(loginData)
   return (
     <div>
