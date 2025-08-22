@@ -1,13 +1,16 @@
+import { useContext } from 'react';
 import userAvatar from '../../../../assets/Images/userAvatar.png'
+import { AuthContext } from '../../../../Contexts/AuthContext/AuthContext';
 
-export default function Navbar({ loginData }) {
-  // console.log(loginData)
+export default function Navbar() {
+
+    let {loginData} = useContext(AuthContext);
 
   return (
     <>
       <nav className="navbar navbar-light bg-light navbar-expand-lg justify-content-between p-3 rounded-4">
         <div className="container-fluid">
-          <a className="navbar-brand">{loginData.roles[0]}</a>
+          <a className="navbar-brand">{loginData?.userGroup}</a>
 
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#UserInfo" aria-controls="UserInfo" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
