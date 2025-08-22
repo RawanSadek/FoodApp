@@ -26,8 +26,6 @@ import ChangePassword from './Modules/Authentication/Components/ChangePassword/C
 
 function App() {
 
-  let {loginData} = useContext(AuthContext);
-
   const routes = createBrowserRouter([
     {
       path: '',
