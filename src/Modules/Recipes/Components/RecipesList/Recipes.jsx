@@ -114,14 +114,9 @@ export default function Recipes() {
 
   let getFavs = async () => {
     try {
-      // setIsDeleting(true);
       let response = await axios.get(`${Favs_URLs.all}`, { headers: { authorization: localStorage.getItem('token') } });
-      console.log(response.data.data)
+      // console.log(response.data.data)
       setFavList(response.data.data)
-      // setIsDeleting(false);
-      // toast.success('Item deleted successfully');
-      // getRecipesList(nameSearchValue, tagSearchValue, categSearchValue, activePage);
-      // handleClose();
 
     } catch (error) {
       toast.error(error.response.data.message || "Something went wrong!")
