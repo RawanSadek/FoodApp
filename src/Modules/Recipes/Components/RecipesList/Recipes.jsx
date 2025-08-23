@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Header from '../../../Shared/Components/Header/Header'
 import headerImg from '../../../../assets/Images/headerImg.svg'
 import { Button, Dropdown, Modal, Pagination, Table } from 'react-bootstrap'
@@ -13,10 +13,14 @@ import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { getCategories } from '../../../ApiCalls/ApiCalls';
 import { Tags_URLs } from '../../../../Constants/END_POINTS.JSX'
+import { AuthContext } from '../../../../Contexts/AuthContext/AuthContext'
+import { Favs_URLs } from '../../../../Constants/END_POINTS.JSX'
 
 
 
 export default function Recipes() {
+
+  let { loginData } = useContext(AuthContext);
 
   let navigate = useNavigate();
 
@@ -42,6 +46,10 @@ export default function Recipes() {
     getRecipesList(nameSearchValue, tagSearchValue, categSearchValue, activePage);
     getCategs();
     getTags();
+
+    if (loginData?.userGroup == 'SystemUser')
+      getFavs();
+
   }, [])
 
 
@@ -70,6 +78,56 @@ export default function Recipes() {
     }
   }
 
+  let [favsLoading, setFavsLoading] = useState(false);
+
+  let addToFavs = async (recipe) => {
+    try {
+      setFavsLoading(true);
+      await axios.post(`${Favs_URLs.all}`, { recipeId: recipe?.id }, { headers: { authorization: localStorage.getItem('token') } });
+      getFavs();
+      setFavsLoading(false);
+      toast.success(`${recipe.name} added to favourits`);
+
+    } catch (error) {
+      toast.error(error.response.data.message || "Something went wrong!")
+    }
+  }
+
+  let removeFromFavs = async (recipe, favId) => {
+    let favItem = favList.find(fav => fav.recipe.id === recipe?.id);
+    try {
+      setFavsLoading(true);
+      await axios.delete(`${Favs_URLs.all}/${favItem.id}`, { headers: { authorization: localStorage.getItem('token') } });
+      getFavs();
+      setFavsLoading(false);
+      toast.success(`${recipe.name} removed from favourits`);
+      // getRecipesList(nameSearchValue, tagSearchValue, categSearchValue, activePage);
+      // handleClose();
+
+    } catch (error) {
+      toast.error(error.response.data.message || "Something went wrong!")
+    }
+  }
+
+
+  let [favList, setFavList] = useState([]);
+
+  let getFavs = async () => {
+    try {
+      // setIsDeleting(true);
+      let response = await axios.get(`${Favs_URLs.all}`, { headers: { authorization: localStorage.getItem('token') } });
+      console.log(response.data.data)
+      setFavList(response.data.data)
+      // setIsDeleting(false);
+      // toast.success('Item deleted successfully');
+      // getRecipesList(nameSearchValue, tagSearchValue, categSearchValue, activePage);
+      // handleClose();
+
+    } catch (error) {
+      toast.error(error.response.data.message || "Something went wrong!")
+    }
+  }
+
 
   const CustomToggle = React.forwardRef(({ onClick }, ref) => (
     <span style={{ cursor: 'pointer' }} onClick={(e) => {
@@ -87,20 +145,20 @@ export default function Recipes() {
     setImgLoading(true);
   };
 
-  
+
   let [categories, setCategories] = useState([]);
   let getCategs = async () => {
     let response = await getCategories('', 9999, 1);
     setCategories(response.data.data);
   }
-  
+
   let [tags, setTags] = useState([]);
   let getTags = async () => {
     let response = await axios.get(Tags_URLs.all, { headers: { authorization: localStorage.getItem('token') } });
     setTags(response.data);
   }
 
-  
+
   let [nameSearchValue, setNameSearchValue] = useState('');
   let [tagSearchValue, setTagSearchValue] = useState('');
   let [categSearchValue, setCategSearchValue] = useState('');
@@ -161,7 +219,8 @@ export default function Recipes() {
 
       </div>
 
-      <div className="data-table">
+      <div className="data-table position-relative">
+        {favsLoading && <div className='loading-overlay'></div>}
         <Table striped className='table-borderless'>
           <thead>
             <tr className="text-center">
@@ -182,47 +241,54 @@ export default function Recipes() {
                 <td colSpan="8">
                   <img src={loading} alt="loading" className='mt-3' />
                 </td>
-              </tr> }
+              </tr>}
 
-              {!isLoading && recipesList.length === 0 &&
-                <tr>
-                  <td colSpan="8">
-                    <NoData />
-                  </td>
-                </tr>}
-                
-                {!isLoading && recipesList.map((item) => (
-                  <tr key={item?.id}>
-                    <td>{item?.id}</td>
-                    <td>{item?.name}</td>
-                    <td>
-                      {imgLoading && <img src={loading} alt="loading" hidden={!imgLoading} className='loading-img ms-3' />}
-                      <img src={`https://upskilling-egypt.com:3006/${item?.imagePath}`} hidden={imgLoading} alt="img" className='rounded-3'
-                        onError={(e) => {
-                          e.target.onerror = null; // Prevent infinite loop
-                          e.target.src = noImg;
-                        }}
-                        onLoad={() => setImgLoading(false)}
-                        style={{ width: '60px', height: '60px' }}
-                      />
+            {!isLoading && recipesList.length === 0 &&
+              <tr>
+                <td colSpan="8">
+                  <NoData />
+                </td>
+              </tr>}
 
-                    </td>
-                    <td>{item?.price}</td>
-                    <td>{item?.description}</td>
-                    <td>{item?.tag.name}</td>
-                    <td>{item?.category[0]?.name}</td>
-                    <td>
-                      <Dropdown>
-                        <Dropdown.Toggle as={CustomToggle} id="dropdown-custom"></Dropdown.Toggle>
-                        <Dropdown.Menu className='rounded-4 border-0 shadow-sm'>
-                          <Dropdown.Item onClick={() => navigate(`/dashboard/view-recipe/${item?.id}`, { state: { view: true } })} className='action-item'><i className="fa-regular fa-eye me-2 text-success"></i>View</Dropdown.Item>
-                          <Dropdown.Item onClick={() => navigate(`/dashboard/update-recipe/${item?.id}`)} className='action-item'><i className="fa-regular fa-pen-to-square me-2 text-success"></i>Edit</Dropdown.Item>
-                          <Dropdown.Item onClick={() => handleShow(item?.id)} className='action-item'><i className="fa-regular fa-trash-can me-2 text-success"></i>Delete</Dropdown.Item>
-                        </Dropdown.Menu>
-                      </Dropdown>
-                    </td>
-                  </tr>
-                ))
+            {!isLoading && recipesList.map((item) => (
+              <tr key={item?.id}>
+                <td>{item?.id}</td>
+                <td>{item?.name}</td>
+                <td>
+                  {imgLoading && <img src={loading} alt="loading" hidden={!imgLoading} className='loading-img ms-3' />}
+                  <img src={`https://upskilling-egypt.com:3006/${item?.imagePath}`} hidden={imgLoading} alt="img" className='rounded-3'
+                    onError={(e) => {
+                      e.target.onerror = null; // Prevent infinite loop
+                      e.target.src = noImg;
+                    }}
+                    onLoad={() => setImgLoading(false)}
+                    style={{ width: '60px', height: '60px' }}
+                  />
+
+                </td>
+                <td>{item?.price}</td>
+                <td>{item?.description}</td>
+                <td>{item?.tag.name}</td>
+                <td>{item?.category[0]?.name}</td>
+                <td>
+                  {loginData?.userGroup == 'SuperAdmin' ?
+                    <Dropdown>
+                      <Dropdown.Toggle as={CustomToggle} id="dropdown-custom"></Dropdown.Toggle>
+                      <Dropdown.Menu className='rounded-4 border-0 shadow-sm'>
+                        <Dropdown.Item onClick={() => navigate(`/dashboard/view-recipe/${item?.id}`, { state: { view: true } })} className='action-item'><i className="fa-regular fa-eye me-2 text-success"></i>View</Dropdown.Item>
+                        <Dropdown.Item onClick={() => navigate(`/dashboard/update-recipe/${item?.id}`)} className='action-item'><i className="fa-regular fa-pen-to-square me-2 text-success"></i>Edit</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleShow(item?.id)} className='action-item'><i className="fa-regular fa-trash-can me-2 text-success"></i>Delete</Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+                    : <>
+                      <i onClick={() => navigate(`/dashboard/view-recipe/${item?.id}`, { state: { view: true } })} className="fa-regular fa-eye me-2 text-success pointer" data-bs-toggle="tooltip" data-bs-placement="right" title="View"></i>
+                      {favList.some(fav => fav.recipe.id === item?.id) ? <i onClick={() => removeFromFavs(item)} className="fa-solid fa-heart me-2 text-danger pointer" data-bs-toggle="tooltip" data-bs-placement="right" title="Remove from favourits"></i>
+                        : <i onClick={() => addToFavs(item)} className="fa-regular fa-heart me-2 text-success pointer" data-bs-toggle="tooltip" data-bs-placement="right" title="Add to favourits"></i>
+                      }
+                    </>}
+                </td>
+              </tr>
+            ))
             }
           </tbody>
         </Table>

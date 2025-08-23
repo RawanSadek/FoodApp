@@ -22,3 +22,7 @@ export const Recipes_URLs = {
 export const Tags_URLs = {
     all: `${BASE_URL}/tag`,
 }
+
+export const Favs_URLs = {
+    all: `${BASE_URL}/userRecipe`,
+}
