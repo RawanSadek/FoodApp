@@ -4,61 +4,77 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import noImg from '../../../../assets/Images/noImg.png'
-import { Card } from "react-bootstrap";
+import { Button, Card, Modal } from "react-bootstrap";
 import { Favs_URLs } from "../../../../Constants/END_POINTS.JSX";
+import loading from '../../../../assets/Images/loading.gif'
+import NoData from "../../../Shared/Components/NoData/NoData";
+import DeleteAlert from "../../../Shared/Components/DeleteAlert/DeleteAlert";
+import deleting from '../../../../assets/Images/deleting.gif'
 
 
 
 export default function Favourits() {
 
+  let [isLoading, setIsLoading] = useState(false);
+
   let [favList, setFavList] = useState([]);
 
   let getFavs = async () => {
+    setIsLoading(true);
     try {
       let response = await axios.get(`${Favs_URLs.all}`, { headers: { authorization: localStorage.getItem('token') } });
-      setFavList(response.data.data)
+      setFavList(response.data.data);
+
+    } catch (error) {
+      toast.error(error.response.data.message || "Something went wrong!")
+    }
+    setIsLoading(false);
+  }
+
+  useEffect(() => {
+    getFavs();
+  }, [])
+
+
+  let [show, setShow] = useState(false);
+  let [recipe, setRecipe] = useState({});
+
+  const handleClose = () => setShow(false);
+  const handleShow = (item) => {
+    setShow(true);
+    setRecipe(item);
+  }
+
+  let [isDeleting, setIsDeleting] = useState(false);
+
+  let removeFromFavs = async () => {
+    try {
+      setIsDeleting(true)
+      await axios.delete(`${Favs_URLs.all}/${recipe.id}`, { headers: { authorization: localStorage.getItem('token') } });
+      getFavs();
+      setIsDeleting(false);
+      handleClose();
+      toast.success(`${recipe.recipe.name} removed from favourits`);
 
     } catch (error) {
       toast.error(error.response.data.message || "Something went wrong!")
     }
   }
 
-
-  useEffect(() => {
-    getFavs();
-  }, [])
-
-  // let [nameSearchValue, setNameSearchValue] = useState('');
-  // let [tagSearchValue, setTagSearchValue] = useState('');
-  // let [categSearchValue, setCategSearchValue] = useState('');
-
-  // let getNameSearchValue = (input) => {
-  //   setNameSearchValue(input.target.value);
-  //   // getRecipesList(input.target.value, tagSearchValue, categSearchValue, 1);
-  //   setActivePage(1);
-  // }
-
-  // let getTagSearchValue = (selection) => {
-  //   setTagSearchValue(selection.target.value);
-  //   // getRecipesList(nameSearchValue, selection.target.value, categSearchValue, 1);
-  //   setActivePage(1);
-  // }
-
-  // let getCategSearchValue = (selection) => {
-  //   setCategSearchValue(selection.target.value);
-  //   // getRecipesList(nameSearchValue, tagSearchValue, selection.target.value, 1);
-  //   setActivePage(1);
-  // }
-
   return (
     <>
       <Header title={'Favorite Items'} desc={'You can now add/remove your items from Your favourite list'} imgPath={headerImg} />
 
-      <div className="row justify-content-around align-items-center my-4">
+      <div className="row justify-content-around align-items-center my-5">
 
-        {favList.map(item => (
-          <div key={item.id} className="fav-recipe-container col-6 col-md-3 px-0">
-            <div className="card-container mb-4">
+        {isLoading && <img src={loading} alt="loading" className='mt-5 w-25' />}
+
+        {!isLoading && favList.length === 0 && <NoData />}
+
+        {!isLoading && favList.map(item => (
+          <div key={item.id} className="fav-recipe-container col-6 col-md-4 px-0">
+            <div className="card-container mb-4 position-relative">
+              <i onClick={() => handleShow(item)} className="fa-solid fa-heart text-danger bg-white py-1 border border-2 border-black pointer fav-icon rounded-3" data-bs-toggle="tooltip" data-bs-placement="right" title="Remove from favourits"></i>
               <Card className="w-100">
                 <Card.Img variant="top" src={item?.recipe.imagePath ? `https://upskilling-egypt.com:3006/${item?.recipe.imagePath}` : noImg} />
                 <Card.Body>
@@ -76,19 +92,19 @@ export default function Favourits() {
 
 
       {/* Delete confirmation */}
-      {/* <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton className='border-0'>
         </Modal.Header>
         <Modal.Body className='text-center'>
           <DeleteAlert itemName={'recipe'} />
         </Modal.Body>
         <Modal.Footer>
-          <Button disabled={isDeleting} className='btn btn-outline-danger text-danger bg-transparent fw-bold' variant="secondary" onClick={deleteRecipe}>
-            Delete this item
+          <Button disabled={isDeleting} className='btn btn-outline-danger text-danger bg-transparent fw-bold' variant="secondary" onClick={removeFromFavs}>
+            Remove this item
             <img src={deleting} alt="loading" hidden={!isDeleting} className='loading-img ms-3' />
           </Button>
         </Modal.Footer>
-      </Modal> */}
+      </Modal>
     </>
   )
 }

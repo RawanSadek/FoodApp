@@ -93,7 +93,7 @@ export default function Recipes() {
     }
   }
 
-  let removeFromFavs = async (recipe, favId) => {
+  let removeFromFavs = async (recipe) => {
     let favItem = favList.find(fav => fav.recipe.id === recipe?.id);
     try {
       setFavsLoading(true);
@@ -185,7 +185,7 @@ export default function Recipes() {
           <h5 className='m-0'>Recipe Table Details</h5>
           <p className='m-0'>You can check all details</p>
         </div>
-        <button onClick={() => navigate('/dashboard/new-recipe')} className='btn theme-green-bg text-white auth-btn px-5 py-2'>Add New Recipe</button>
+        <button onClick={() => navigate('/dashboard/new-recipe')} hidden={loginData?.userGroup == 'SystemUser'} className='btn theme-green-bg text-white auth-btn px-5 py-2'>Add New Recipe</button>
       </div>
 
       <div className="search-inputs row justify-content-between align-items-center">
