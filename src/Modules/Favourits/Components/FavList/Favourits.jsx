@@ -3,6 +3,10 @@ import headerImg from '../../../../assets/Images/headerImg.svg'
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
+import noImg from '../../../../assets/Images/noImg.png'
+import { Card } from "react-bootstrap";
+import { Favs_URLs } from "../../../../Constants/END_POINTS.JSX";
+
 
 
 export default function Favourits() {
@@ -12,7 +16,6 @@ export default function Favourits() {
   let getFavs = async () => {
     try {
       let response = await axios.get(`${Favs_URLs.all}`, { headers: { authorization: localStorage.getItem('token') } });
-      // console.log(response.data.data)
       setFavList(response.data.data)
 
     } catch (error) {
@@ -20,27 +23,11 @@ export default function Favourits() {
     }
   }
 
-  
-  let [categories, setCategories] = useState([]);
-  let getCategs = async () => {
-    let response = await getCategories('', 9999, 1);
-    setCategories(response.data.data);
-  }
-  
-  let [tags, setTags] = useState([]);
-  let getTags = async () => {
-    let response = await axios.get(Tags_URLs.all, { headers: { authorization: localStorage.getItem('token') } });
-    setTags(response.data);
-  }
-
 
   useEffect(() => {
     getFavs();
-    getCategs();
-    getTags();
-
   }, [])
-  
+
   // let [nameSearchValue, setNameSearchValue] = useState('');
   // let [tagSearchValue, setTagSearchValue] = useState('');
   // let [categSearchValue, setCategSearchValue] = useState('');
@@ -65,33 +52,26 @@ export default function Favourits() {
 
   return (
     <>
-      <Header title={'Favorite Items'} desc={'You can now add/remove your items in Your favourite list'} imgPath={headerImg} />
+      <Header title={'Favorite Items'} desc={'You can now add/remove your items from Your favourite list'} imgPath={headerImg} />
 
-      {/* <div className="search-inputs row justify-content-between align-items-center mt-4">
-        <div className="search-name col-12 col-md-7 border border-1 mb-4 px-3 py-2 rounded-3">
-          <i className="fa-solid fa-magnifying-glass text-secondary me-2"></i>
-          <input onChange={getNameSearchValue} type="text" placeholder='Search by Name' className='border-0' />
-        </div>
+      <div className="row justify-content-around align-items-center my-4">
 
-        <div className="search-tags col-6 col-md-2 border border-1 mb-4 px-3 py-2 rounded-3">
-          <select onChange={getTagSearchValue} name="tags" id="tags" className='w-100 border-0'>
-            <option value="" >Search by Tag</option>
-            {tags.map((tag) => (
-              <option key={tag.id} value={tag.id}>{tag.name}</option>
-            ))}
-          </select>
-        </div>
+        {favList.map(item => (
+          <div key={item.id} className="fav-recipe-container col-6 col-md-3 px-0">
+            <div className="card-container mb-4">
+              <Card className="w-100">
+                <Card.Img variant="top" src={item?.recipe.imagePath ? `https://upskilling-egypt.com:3006/${item?.recipe.imagePath}` : noImg} />
+                <Card.Body>
+                  <Card.Title>{item?.recipe.name}</Card.Title>
+                  <Card.Text>{item?.recipe.description}</Card.Text>
+                </Card.Body>
+              </Card>
+            </div>
+          </div>
+        ))}
 
-        <div className="search-categs col-6 col-md-2 border border-1 mb-4 px-3 py-2 rounded-3">
-          <select onChange={getCategSearchValue} name="categories" id="categories" className='w-100 border-0'>
-            <option value="">Search by Category</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>{category.name}</option>
-            ))}
-          </select>
-        </div>
 
-      </div> */}
+      </div>
 
 
 
