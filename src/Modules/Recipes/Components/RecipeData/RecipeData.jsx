@@ -152,7 +152,7 @@ export default function RecipesData() {
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Control defaultValue={recipeDetails?.price} disabled={view} {...register('price', { required: 'price is required!' })} type="number" placeholder="Price" className='bg-light' />
+            <Form.Control defaultValue={recipeDetails?.price} disabled={view} {...register('price', { required: 'price is required!', validate: (value) => value >= 0 || 'Invalid price!'  })} type="number" placeholder="Price" className='bg-light' />
             {errors.price && <span className='text-danger'>{errors.price.message}</span>}
           </Form.Group>
 
