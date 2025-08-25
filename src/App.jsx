@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap/dist/js/bootstrap.bundle.min.js'
 import '@fortawesome/fontawesome-free/css/all.min.css'
 import './App.css'
-import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import NotFound from './Modules/Shared/Components/NotFound/NotFound'
 import Login from './Modules/Authentication/Components/Login/Login '
 import Register from './Modules/Authentication/Components/Register/Register'
@@ -20,9 +19,7 @@ import Favourits from './Modules/Favourits/Components/FavList/Favourits'
 import Home from './Modules/Dashboard/Components/Home/Home'
 import { ToastContainer } from 'react-toastify'
 import ProtectedRoutes from './Modules/Shared/Components/ProtectedRoutes/ProtectedRoutes'
-import { jwtDecode } from 'jwt-decode'
 import RecipesData from './Modules/Recipes/Components/RecipeData/RecipeData'
-import ChangePassword from './Modules/Authentication/Components/ChangePassword/ChangePassword'
 
 function App() {
 

@@ -12,7 +12,6 @@ export default function SideBar({ logout }) {
 
   let { loginData } = useContext(AuthContext);
 
-
   let [collapse, setCollapse] = useState(false);
   let getCollapse = () => {
     setCollapse(!collapse);
@@ -30,7 +29,6 @@ export default function SideBar({ logout }) {
   const handleShow = () => {
     setShow(true);
   }
-
 
   return (
     <div className="sidebar-container">

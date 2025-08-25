@@ -4,14 +4,14 @@ import headerImg from '../../../../assets/Images/headerImg.svg'
 import { Button, Dropdown, Modal, Pagination, Table } from 'react-bootstrap'
 import DeleteAlert from '../../../Shared/Components/DeleteAlert/DeleteAlert';
 import NoData from '../../../Shared/Components/NoData/NoData';
-import { Categ_URLs } from '../../../../Constants/END_POINTS.JSX';
 import { useEffect } from 'react';
-import axios from 'axios';
 import loading from '../../../../assets/Images/loading.gif'
 import { toast } from 'react-toastify';
 import deleting from '../../../../assets/Images/deleting.gif'
 import { useForm } from 'react-hook-form';
 import { getCategories } from '../../../ApiCalls/ApiCalls';
+import { axiosInstance } from '../../../../Services/END_POINTS.JS';
+import { Categ_URLs } from '../../../../Services/END_POINTS.JS';
 
 
 export default function Categories() {
@@ -69,19 +69,22 @@ export default function Categories() {
   }
 
   let { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm();
+
   let onSubmit = async (data) => {
     try {
       if (categId) {
-        await axios.put(`${Categ_URLs.all}/${categId}`, data, { headers: { authorization: localStorage.getItem('token') } });
+        await axiosInstance.put(Categ_URLs.updateCategory(categId), data);
         toast.success('Category Name updated successfully');
+        getCategList(nameSearchValue, activePage);
       }
       else {
-        await axios.post(Categ_URLs.all, data, { headers: { authorization: localStorage.getItem('token') } });
+        await axiosInstance.post(Categ_URLs.all, data);
         toast.success('Category created successfully');
+        setActivePage(1);
+        getCategList(nameSearchValue, 1);
       }
       // reset();
       setCategId(null)
-      getCategList(nameSearchValue, activePage);
       handleCategoryClose();
     } catch (error) {
       toast.error(error.response.data.message || "Something went wrong!")
@@ -93,8 +96,7 @@ export default function Categories() {
   let deleteCategory = async () => {
     try {
       setIsDeleting(true);
-      await axios.delete(`${Categ_URLs.all}/${categId}`, { headers: { authorization: localStorage.getItem('token') } });
-      setIsDeleting(false);
+      await axiosInstance.delete(Categ_URLs.deleteCategory(categId));
       toast.success('Item deleted successfully');
       getCategList(nameSearchValue, activePage);
       setCategId(null)
@@ -103,6 +105,7 @@ export default function Categories() {
     } catch (error) {
       toast.error(error.response.data.message || "Something went wrong!")
     }
+    setIsDeleting(false);
   }
 
   const CustomToggle = React.forwardRef(({ onClick }, ref) => (

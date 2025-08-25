@@ -1,10 +1,9 @@
-
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { AUTH_URLs } from '../../../../Constants/END_POINTS.JSX';
 import { toast } from 'react-toastify';
-import axios from 'axios';
 import loading from '../../../../assets/Images/loading.gif'
+import { axiosInstance } from '../../../../Services/END_POINTS.JS';
+import { USER_URLs } from '../../../../Services/END_POINTS.JS';
 
 
 
@@ -14,12 +13,11 @@ export default function ForgotPassword() {
   let { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
 
   let onSubmit = async (data) => {
-    // console.log(AUTH_URLs.login)
     try {
-      let response = await axios.post(AUTH_URLs.forgot, data);
+      let response = await axiosInstance.post(USER_URLs.forgot, data);
       console.log(response)
       toast.success(response?.data?.message);
-      navigate('/reset-password', { state: { email: data.email } });  // should i do this? or store it in the local storage instead?
+      navigate('/reset-password', { state: { email: data.email } });
 
     } catch (error) {
       toast.error(error.response.data.message)

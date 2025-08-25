@@ -1,14 +1,14 @@
 
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
 import { toast } from 'react-toastify';
-import { AUTH_URLs } from '../../../../Constants/END_POINTS.JSX';
 import { useLocation, useNavigate } from 'react-router-dom';
 import loading from '../../../../assets/Images/loading.gif'
 import { useEffect, useState } from 'react';
 import { REQUIRED_VALIDATION } from '../../../../Services/VALIDATIONS.JS';
 import { PASSWORD_VALIDATION } from '../../../../Services/VALIDATIONS.JS';
 import { CONFIRM_PASSWORD_VALIDATION } from '../../../../Services/VALIDATIONS.JS';
+import { axiosInstance } from '../../../../Services/END_POINTS.JS';
+import { USER_URLs } from '../../../../Services/END_POINTS.JS';
 
 
 
@@ -24,16 +24,14 @@ export default function ResetPassword() {
   const password = watch('password'); // Watching the original password
 
   let onSubmit = async (data) => {
-    console.log(data)
     try {
-      let response = await axios.post(AUTH_URLs.reset, data);
+      let response = await axiosInstance.post(USER_URLs.reset, data);
       console.log(response)
       toast.success(response.data.message);
       navigate('/login');
 
     } catch (error) {
       toast.error(error.response.data.message)
-      console.log(error)
     }
   }
 
@@ -57,7 +55,7 @@ export default function ResetPassword() {
           <div className="input-group-prepend">
             <span className="input-group-text rounded-end-0 border-0 py-2" id="basic-addon1"><i className="fa-regular fa-envelope fs-5 text-secondary py-2 pe-2 border-end border-1 border-secondary"></i></span>
           </div>
-          <input disabled value={email} type="text" className="form-control border-0 bg-light mb-1" placeholder="Email" aria-label="email" aria-describedby="basic-addon1" />
+          <input disabled value={email} {...register('email')} type="text" className="form-control border-0 bg-light mb-1" placeholder="Email" aria-label="email" aria-describedby="basic-addon1" />
         </div>
 
         <div className="input-group mt-3">
@@ -85,7 +83,7 @@ export default function ResetPassword() {
           </div>
           <input {...register('confirmPassword', CONFIRM_PASSWORD_VALIDATION(password))} type={showConfirmPass ? 'text' : 'password'} className="form-control border-0 bg-light mb-1" placeholder="Confirm New Password" aria-label="password" aria-describedby="basic-addon1" />
           <div className="pss-toggle">
-            <button onMouseDown={(e) => e.preventDefault()} onMouseUp={(e) => e.preventDefault()} onClick={() => setShowConfirmPass(!showConfirmPass)} type='button' className="input-group-text py-2 border-0" id="basic-addon1">{showConfirmPass ? <i className="fa-solid fa-eye-slash fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i> : <i className="fa-solid fa-eye fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i>}</button>
+            <button onMouseDown={(e) => e.preventDefault()} onMouseUp={(e) => e.preventDefault()} onClick={() => setShowConfirmPass(!showConfirmPass)} type='button' className="input-group-text py-2 border-0" id="basic-addon2">{showConfirmPass ? <i className="fa-solid fa-eye-slash fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i> : <i className="fa-solid fa-eye fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i>}</button>
           </div>
         </div>
         {errors.confirmPassword && <span className='text-danger'>{errors.confirmPassword.message}</span>}

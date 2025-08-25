@@ -2,8 +2,6 @@ import { useNavigate } from 'react-router-dom'
 
 export default function RecipesHeader({ title = 'Fill', btnText }) {
     let navigate = useNavigate();
-    // let location = useLocation();
-    // let text = location.state?.text;
     return (
         <div className="recipes-header py-4 px-5 mt-4 rounded-4 d-flex justify-content-between align-items-center">
             <div>

@@ -1,9 +1,6 @@
-
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
-import { AUTH_URLs } from '../../../../Constants/END_POINTS.JSX';
 import { toast } from 'react-toastify';
-import axios from 'axios';
 import loading from '../../../../assets/Images/loading.gif'
 import { useEffect, useState } from 'react';
 import { PASSWORD_VALIDATION } from '../../../../Services/VALIDATIONS.JS';
@@ -11,6 +8,8 @@ import { EMAIL_VALIDATION } from '../../../../Services/VALIDATIONS.JS';
 import { PHONE_VALIDATION } from '../../../../Services/VALIDATIONS.JS';
 import { REQUIRED_VALIDATION } from '../../../../Services/VALIDATIONS.JS';
 import { CONFIRM_PASSWORD_VALIDATION } from '../../../../Services/VALIDATIONS.JS';
+import { axiosInstance } from '../../../../Services/END_POINTS.JS';
+import { USER_URLs } from '../../../../Services/END_POINTS.JS';
 
 
 export default function Register() {
@@ -36,12 +35,12 @@ export default function Register() {
     let userData = appendToFormData(data)
 
     try {
-      let response = await axios.post(AUTH_URLs.register, userData);
+      let response = await axiosInstance.post(USER_URLs.register, userData);
       toast.success(response.data.message);
       navigate('/verify-account', { state: { email: data.email } });
 
     } catch (error) {
-      toast.error(error.message)
+      toast.error(error.response.data.message)
     }
   }
 
@@ -118,7 +117,7 @@ export default function Register() {
               </div>
               <input {...register('confirmPassword', CONFIRM_PASSWORD_VALIDATION(password))} type={showConfirmPass ? 'text' : 'password'} className="form-control border-0 bg-light mb-1" placeholder="Confirm Password" aria-label="password" aria-describedby="basic-addon1" />
               <div className="pss-toggle">
-                <button onClick={() => setShowConfirmPass(!showConfirmPass)} type='button' className="input-group-text py-2 border-0" id="basic-addon1">{showConfirmPass ? <i className="fa-solid fa-eye-slash fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i> : <i className="fa-solid fa-eye fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i>}</button>
+                <button onClick={() => setShowConfirmPass(!showConfirmPass)} type='button' className="input-group-text py-2 border-0" id="basic-addon2">{showConfirmPass ? <i className="fa-solid fa-eye-slash fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i> : <i className="fa-solid fa-eye fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i>}</button>
               </div>
             </div>
             {errors.confirmPassword && <span className='text-danger'>{errors.confirmPassword.message}</span>}

@@ -1,18 +1,16 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { CONFIRM_PASSWORD_VALIDATION } from "../../../../Services/VALIDATIONS.JS";
 import { PASSWORD_VALIDATION } from "../../../../Services/VALIDATIONS.JS";
 import { useForm } from "react-hook-form";
 import logo from '../../../../assets/Images/logo.png'
 import { useEffect, useState } from "react";
 import loading from '../../../../assets/Images/loading.gif'
-import { AUTH_URLs } from "../../../../Constants/END_POINTS.JSX";
 import { toast } from "react-toastify";
-import axios from "axios";
+import { axiosInstance } from "../../../../Services/END_POINTS.JS";
+import { USER_URLs } from "../../../../Services/END_POINTS.JS";
 
 
 export default function ChangePassword() {
-
-  const location = useLocation();
 
   let navigate = useNavigate();
 
@@ -21,15 +19,13 @@ export default function ChangePassword() {
   const newPassword = watch('newPassword');
 
   let onSubmit = async (data) => {
-    // console.log(data)
     try {
-      let response = await axios.put(AUTH_URLs.change, data, { headers: { authorization: localStorage.getItem('token') } });
-      // console.log(response)
+      let response = await axiosInstance.put(USER_URLs.change, data);
       toast.success(response.data.message);
       navigate('/login');
 
     } catch (error) {
-      toast.error(error.response.data.additionalInfo.errors)
+      console.log(error)
     }
   }
 

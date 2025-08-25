@@ -2,14 +2,14 @@ import Header from "../../../Shared/Components/Header/Header";
 import headerImg from '../../../../assets/Images/headerImg.svg'
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import axios from "axios";
 import noImg from '../../../../assets/Images/noImg.png'
 import { Button, Card, Modal } from "react-bootstrap";
-import { Favs_URLs } from "../../../../Constants/END_POINTS.JSX";
 import loading from '../../../../assets/Images/loading.gif'
 import NoData from "../../../Shared/Components/NoData/NoData";
 import DeleteAlert from "../../../Shared/Components/DeleteAlert/DeleteAlert";
 import deleting from '../../../../assets/Images/deleting.gif'
+import { axiosInstance } from "../../../../Services/END_POINTS.JS";
+import { Favs_URLs } from "../../../../Services/END_POINTS.JS";
 
 
 
@@ -22,7 +22,7 @@ export default function Favourits() {
   let getFavs = async () => {
     setIsLoading(true);
     try {
-      let response = await axios.get(`${Favs_URLs.all}`, { headers: { authorization: localStorage.getItem('token') } });
+      let response = await axiosInstance.get(Favs_URLs.all);
       setFavList(response.data.data);
 
     } catch (error) {
@@ -37,12 +37,12 @@ export default function Favourits() {
 
 
   let [show, setShow] = useState(false);
-  let [recipe, setRecipe] = useState({});
+  let [favItem, setFavItem] = useState({});
 
   const handleClose = () => setShow(false);
   const handleShow = (item) => {
     setShow(true);
-    setRecipe(item);
+    setFavItem(item);
   }
 
   let [isDeleting, setIsDeleting] = useState(false);
@@ -50,15 +50,15 @@ export default function Favourits() {
   let removeFromFavs = async () => {
     try {
       setIsDeleting(true)
-      await axios.delete(`${Favs_URLs.all}/${recipe.id}`, { headers: { authorization: localStorage.getItem('token') } });
+      await axiosInstance.delete(Favs_URLs.removeFav(favItem.id));
       getFavs();
-      setIsDeleting(false);
-      handleClose();
-      toast.success(`${recipe.recipe.name} removed from favourits`);
-
+      
+      toast.success(`${favItem.recipe.name} removed from favourits`);
     } catch (error) {
-      toast.error(error.response.data.message || "Something went wrong!")
+      toast.error(error.response?.data.message || "Something went wrong!")
     }
+    setIsDeleting(false);
+    handleClose();
   }
 
   return (
@@ -69,9 +69,9 @@ export default function Favourits() {
 
         {isLoading && <img src={loading} alt="loading" className='mt-5 w-25' />}
 
-        {!isLoading && favList.length === 0 && <NoData />}
+        {!isLoading && favList?.length === 0 && <NoData />}
 
-        {!isLoading && favList.map(item => (
+        {!isLoading && favList?.map(item => (
           <div key={item.id} className="fav-recipe-container col-6 col-md-4 px-0">
             <div className="card-container mb-4 position-relative">
               <i onClick={() => handleShow(item)} className="fa-solid fa-heart text-danger bg-white py-1 border border-2 border-black pointer fav-icon rounded-3" data-bs-toggle="tooltip" data-bs-placement="right" title="Remove from favourits"></i>
@@ -86,10 +86,7 @@ export default function Favourits() {
           </div>
         ))}
 
-
       </div>
-
-
 
       {/* Delete confirmation */}
       <Modal show={show} onHide={handleClose}>

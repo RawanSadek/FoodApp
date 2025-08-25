@@ -1,13 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import axios from 'axios';
 import { toast } from 'react-toastify';
-import { AUTH_URLs } from '../../../../Constants/END_POINTS.JSX';
 import loading from '../../../../assets/Images/loading.gif'
 import { useContext, useState } from 'react';
 import { AuthContext } from '../../../../Contexts/AuthContext/AuthContext';
 import { EMAIL_VALIDATION } from '../../../../Services/VALIDATIONS.JS';
 import { REQUIRED_VALIDATION } from '../../../../Services/VALIDATIONS.JS';
+import { axiosInstance } from '../../../../Services/END_POINTS.JS';
+import { USER_URLs } from '../../../../Services/END_POINTS.JS';
 
 
 export default function Login() {
@@ -19,11 +19,9 @@ export default function Login() {
   let { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
 
   let onSubmit = async (data) => {
-    // console.log(AUTH_URLs.login)
     try {
-      let response = await axios.post(AUTH_URLs.login, data);
+      let response = await axiosInstance.post(USER_URLs.login, data);
       localStorage.setItem('token', response.data.token);
-      // console.log(response.data.token)
       getLoginData();
       toast.success('Welcome to the Food App!');
       navigate('/dashboard');

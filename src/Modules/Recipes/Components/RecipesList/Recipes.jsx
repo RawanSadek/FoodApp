@@ -4,19 +4,17 @@ import headerImg from '../../../../assets/Images/headerImg.svg'
 import { Button, Dropdown, Modal, Pagination, Table } from 'react-bootstrap'
 import NoData from '../../../Shared/Components/NoData/NoData'
 import loading from '../../../../assets/Images/loading.gif'
-import axios from 'axios'
-import { Recipes_URLs } from '../../../../Constants/END_POINTS.JSX'
 import noImg from '../../../../assets/Images/noImg.png'
 import DeleteAlert from '../../../Shared/Components/DeleteAlert/DeleteAlert'
 import deleting from '../../../../assets/Images/deleting.gif'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { getCategories } from '../../../ApiCalls/ApiCalls';
-import { Tags_URLs } from '../../../../Constants/END_POINTS.JSX'
 import { AuthContext } from '../../../../Contexts/AuthContext/AuthContext'
-import { Favs_URLs } from '../../../../Constants/END_POINTS.JSX'
-
-
+import { axiosInstance } from '../../../../Services/END_POINTS.JS'
+import { Favs_URLs } from '../../../../Services/END_POINTS.JS'
+import { Recipes_URLs } from '../../../../Services/END_POINTS.JS'
+import { Tags_URLs } from '../../../../Services/END_POINTS.JS'
 
 export default function Recipes() {
 
@@ -29,10 +27,20 @@ export default function Recipes() {
 
   let [recipesList, setRecipesList] = useState([]);
   let [noOfPages, setNoOfPages] = useState([]);
+
   let getRecipesList = async (name, tag, categ, pageNumber) => {
     try {
       setIsLoading(true);
-      let response = await axios.get(`${Recipes_URLs.all}/?name=${name}&tagId=${tag}&categoryId=${categ}&pageSize=5&pageNumber=${pageNumber}`, { headers: { authorization: localStorage.getItem('token') } })
+      let response = await axiosInstance.get(`${Recipes_URLs.all}`,
+        {
+          params: {
+            name: name,
+            tagId: tag,
+            categoryId: categ,
+            pageSize: 5,
+            pageNumber: pageNumber
+          }
+        })
       setRecipesList(response.data.data);
       setNoOfPages(Array(response.data.totalNumberOfPages).fill().map((_, index) => index + 1));
 
@@ -67,9 +75,9 @@ export default function Recipes() {
   let deleteRecipe = async () => {
     try {
       setIsDeleting(true);
-      await axios.delete(`${Recipes_URLs.all}/${recipeId}`, { headers: { authorization: localStorage.getItem('token') } });
+      let response = await axiosInstance.delete(Recipes_URLs.deleteRecipe(recipeId));
       setIsDeleting(false);
-      toast.success('Item deleted successfully');
+      toast.success('Recipe deleted Successfully');
       getRecipesList(nameSearchValue, tagSearchValue, categSearchValue, activePage);
       handleClose();
 
@@ -83,7 +91,7 @@ export default function Recipes() {
   let addToFavs = async (recipe) => {
     try {
       setFavsLoading(true);
-      await axios.post(`${Favs_URLs.all}`, { recipeId: recipe?.id }, { headers: { authorization: localStorage.getItem('token') } });
+      await axiosInstance.post(Favs_URLs.addFav, { recipeId: recipe?.id });
       getFavs();
       setFavsLoading(false);
       toast.success(`${recipe.name} added to favourits`);
@@ -97,7 +105,7 @@ export default function Recipes() {
     let favItem = favList.find(fav => fav.recipe.id === recipe?.id);
     try {
       setFavsLoading(true);
-      await axios.delete(`${Favs_URLs.all}/${favItem.id}`, { headers: { authorization: localStorage.getItem('token') } });
+      await axiosInstance.delete(Favs_URLs.removeFav(favItem.id));
       getFavs();
       setFavsLoading(false);
       toast.success(`${recipe.name} removed from favourits`);
@@ -114,7 +122,7 @@ export default function Recipes() {
 
   let getFavs = async () => {
     try {
-      let response = await axios.get(`${Favs_URLs.all}`, { headers: { authorization: localStorage.getItem('token') } });
+      let response = await axiosInstance.get(Favs_URLs.all);
       // console.log(response.data.data)
       setFavList(response.data.data)
 
@@ -149,7 +157,7 @@ export default function Recipes() {
 
   let [tags, setTags] = useState([]);
   let getTags = async () => {
-    let response = await axios.get(Tags_URLs.all, { headers: { authorization: localStorage.getItem('token') } });
+    let response = await axiosInstance.get(Tags_URLs.all);
     setTags(response.data);
   }
 

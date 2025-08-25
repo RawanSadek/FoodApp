@@ -1,13 +1,13 @@
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom"
-import { AUTH_URLs } from "../../../../Constants/END_POINTS.JSX";
 import { toast } from "react-toastify";
-import axios from "axios";
+import { axiosInstance } from "../../../../Services/END_POINTS.JS";
+import { USER_URLs } from "../../../../Services/END_POINTS.JS";
+import loading from '../../../../assets/Images/loading.gif'
 
 export default function VerifyAccount() {
 
   let { state } = useLocation();
-  // console.log(state.email);
 
   let navigate = useNavigate();
 
@@ -15,12 +15,12 @@ export default function VerifyAccount() {
 
   let onSubmit = async (data) => {    
     try {
-      let response = await axios.put(AUTH_URLs.verify, data);
+      let response = await axiosInstance.put(USER_URLs.verify, data);
       toast.success(response.data.message);
       navigate('/login');
 
     } catch (error) {
-      toast.error(error.message)
+      toast.error(error.response.data.message)
     }
   }
 
@@ -48,7 +48,7 @@ export default function VerifyAccount() {
           <input {...register('code')} type="text" className="form-control border-0 bg-light" placeholder="OTP" aria-label="otp" aria-describedby="basic-addon1" />
         </div>
 
-        <button type='submit' className='btn auth-btn theme-green-bg w-100 my-4 py-2 text-white fw-semibold fs-5'>Send</button>
+        <button disabled={isSubmitting} type='submit' className='btn auth-btn theme-green-bg w-100 my-4 py-2 text-white fw-semibold fs-5'>Send <img src={loading} alt="loading" hidden={!isSubmitting} className='loading-img' /></button>
       </form>
     </>
 

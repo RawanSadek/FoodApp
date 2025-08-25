@@ -4,12 +4,12 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import { Button } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
-import { Tags_URLs } from '../../../../Constants/END_POINTS.JSX';
 import { getCategories } from '../../../ApiCalls/ApiCalls';
-import { Recipes_URLs } from '../../../../Constants/END_POINTS.JSX';
 import { toast } from 'react-toastify';
 import loading from '../../../../assets/Images/loading.gif'
+import { Tags_URLs } from '../../../../Services/END_POINTS.JS';
+import { axiosInstance } from '../../../../Services/END_POINTS.JS';
+import { Recipes_URLs } from '../../../../Services/END_POINTS.JS';
 
 
 export default function RecipesData() {
@@ -18,9 +18,8 @@ export default function RecipesData() {
 
   let params = useParams();
   let text
-  if (params.id)
-  {
-    if(view)
+  if (params.id) {
+    if (view)
       text = 'View'
     else
       text = 'Edit'
@@ -52,13 +51,13 @@ export default function RecipesData() {
 
   let [tags, setTags] = useState([]);
   let getTags = async () => {
-    let response = await axios(Tags_URLs.all);
+    let response = await axiosInstance(Tags_URLs.all);
     setTags(response.data);
   }
 
   let [categories, setCategories] = useState([]);
   let getCategs = async () => {
-    let response = await getCategories('',9999, 1);
+    let response = await getCategories('', 9999, 1);
     setCategories(response.data.data);
   }
 
@@ -83,14 +82,13 @@ export default function RecipesData() {
   }
 
   let onSubmit = async (data) => {
-    // console.log(fileInputRef.current.files[0])
 
     let recipeData = appendToFormData(data)
 
     if (params.id) {
       try {
-        let response = await axios.put(`${Recipes_URLs.all}/${params.id}`, recipeData, { headers: { authorization: localStorage.getItem('token') } });
-        toast.success(response.data.message);
+        await axiosInstance.put(Recipes_URLs.updateRecipe(params.id), recipeData);
+        toast.success('Recipe updated successfully');
         navigate('/dashboard/recipes');
       } catch (error) {
         toast.error(error.response.data.message || "Something went wrong!")
@@ -98,7 +96,7 @@ export default function RecipesData() {
     }
     else {
       try {
-        let response = await axios.post(Recipes_URLs.all, recipeData, { headers: { authorization: localStorage.getItem('token') } });
+        let response = await axiosInstance.post(Recipes_URLs.all, recipeData);
         toast.success(response.data.message);
         navigate('/dashboard/recipes');
       } catch (error) {
@@ -110,18 +108,13 @@ export default function RecipesData() {
   let [recipeDetails, setRecipeDetails] = useState(null);
   let getRecipeDetails = async () => {
     try {
-      let response = await axios.get(`${Recipes_URLs.all}/${params.id}`, { headers: { authorization: localStorage.getItem('token') } });
-      console.log(response.data)
+      let response = await axiosInstance.get(Recipes_URLs.getRecipeDetails(params.id));
       setRecipeDetails(response.data)
     } catch (error) {
       toast.error(error.response.data.message || "Something went wrong!")
     }
     setIsLoading(false);
   }
-
-  // useEffect(() => {
-    
-  // }, [])
 
   let cancelRecipe = () => {
     reset();
@@ -141,7 +134,7 @@ export default function RecipesData() {
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Select defaultValue={params.id ? recipeDetails?.tag.id : ''} disabled={view}  {...register('tagId', { required: 'Tag is required!' })} placeholder='Tag' className='bg-light'>
+            <Form.Select defaultValue={params?.id ? recipeDetails?.tag.id : ''} disabled={view}  {...register('tagId', { required: 'Tag is required!' })} placeholder='Tag' className='bg-light'>
               <option value="" disabled hidden>Tag</option>
               {tags.map(tag =>
                 (<option key={tag?.id} value={tag?.id}>{tag?.name}</option>)
@@ -152,7 +145,7 @@ export default function RecipesData() {
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Control defaultValue={recipeDetails?.price} disabled={view} {...register('price', { required: 'price is required!', validate: (value) => value >= 0 || 'Invalid price!'  })} type="number" placeholder="Price" className='bg-light' />
+            <Form.Control defaultValue={recipeDetails?.price} disabled={view} {...register('price', { required: 'price is required!', validate: (value) => value >= 0 || 'Invalid price!' })} type="number" placeholder="Price" className='bg-light' />
             {errors.price && <span className='text-danger'>{errors.price.message}</span>}
           </Form.Group>
 

@@ -1,6 +1,4 @@
-
 import noDataImg from '../../../../assets/Images/nodata.png'
-
 
 export default function DeleteAlert({itemName}) {
 
