@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import loading from '../../../../assets/Images/loading.gif'
 import { toast } from 'react-toastify';
 import noUserImg from '../../../../assets/Images/noUserImg.png'
 import { Form } from 'react-bootstrap';
-import axios from 'axios';
-import { BASE_USER } from '../../../../Constants/END_POINTS.JSX';
-
-
+import { axiosInstance } from '../../../../Services/END_POINTS.JS';
+import { USER_URLs } from '../../../../Services/END_POINTS.JS';
 
 export default function UserData() {
 
@@ -19,7 +17,7 @@ export default function UserData() {
   let [userDetails, setUserDetails] = useState(null);
   let getUserDetails = async () => {
     try {
-      let response = await axios.get(`${BASE_USER}/${params.id}`, { headers: { authorization: localStorage.getItem('token') } });
+      let response = await axiosInstance.get(USER_URLs.getUserDetails(params.id));
       console.log(response.data)
       setUserDetails(response.data)
     } catch (error) {
@@ -33,9 +31,6 @@ export default function UserData() {
     if (params.id)
       getUserDetails();
   }, []);
-
-  // const [imgPreview, setImgPreview] = useState(null);
-
 
   return (
     <>

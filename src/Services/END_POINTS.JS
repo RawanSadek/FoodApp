@@ -8,14 +8,18 @@ export const axiosInstance =  axios.create({
 })
 
 //Users URLs
-const BASE_USER = `/users`
+export const BASE_USER = `/users`
 export const USER_URLs = {
     login: `${BASE_USER}/login`,
     register: `${BASE_USER}/register`,
     forgot: `${BASE_USER}/reset/request`,
     reset: `${BASE_USER}/reset`,
     verify: `${BASE_USER}/verify`,
-    change: `${BASE_USER}/ChangePassword`
+    change: `${BASE_USER}/ChangePassword`,
+
+    getAllUsers: `${BASE_USER}/`,
+    getUserDetails:(id)=>`/users/${id}`,
+    deleteUser:(id)=>`/users/${id}`
 }
 
 //Categories URLs

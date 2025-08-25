@@ -8,9 +8,9 @@ import loading from '../../../../assets/Images/loading.gif'
 import DeleteAlert from '../../../Shared/Components/DeleteAlert/DeleteAlert';
 import deleting from '../../../../assets/Images/deleting.gif'
 import NoData from '../../../Shared/Components/NoData/NoData'
-import axios from 'axios';
-import { BASE_USER } from '../../../../Constants/END_POINTS.JSX';
 import { toast } from 'react-toastify';
+import { axiosInstance } from '../../../../Services/END_POINTS.JS';
+import { USER_URLs } from '../../../../Services/END_POINTS.JS';
 
 
 export default function Users() {
@@ -26,12 +26,24 @@ export default function Users() {
   let getUsersList = async (userName, email, country, groups, pageNumber) => {
     try {
       setIsLoading(true);
-      let response = await axios.get(`${BASE_USER}/?userName=${userName}&email=${email}&country=${country}&groups=${groups}&pageSize=5&pageNumber=${pageNumber}`, { headers: { authorization: localStorage.getItem('token') } })
+      let response = await axiosInstance.get(USER_URLs.getAllUsers, 
+        {
+          params:{
+            userName: userName,
+            email: email,
+            country: country,
+            groups: groups,
+            pageSize: 5,
+            pageNumber: pageNumber
+          }
+        }
+      )
+
       setUsersList(response.data.data);
       setNoOfPages(Array(response.data.totalNumberOfPages).fill().map((_, index) => index + 1));
       
     } catch (error) {
-      toast.error(error.response.data.message || 'Something wrong happen!')
+      toast.error(error.response?.data.message || 'Something wrong happen!')
     }
     setIsLoading(false);
   }
@@ -54,7 +66,7 @@ export default function Users() {
   let deleteUser = async () => {
     try {
       setIsDeleting(true);
-      await axios.delete(`${BASE_USER}/${userId}`, { headers: { authorization: localStorage.getItem('token') } });
+      await axiosInstance.delete(USER_URLs.deleteUser(userId));
       setIsDeleting(false);
       handleClose();
       getUsersList(userNameSearchValue, emailSearchValue, countrySearchValue, groupSearchValue, activePage);
