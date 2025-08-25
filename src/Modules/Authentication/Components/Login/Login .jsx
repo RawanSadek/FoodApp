@@ -6,6 +6,8 @@ import { AUTH_URLs } from '../../../../Constants/END_POINTS.JSX';
 import loading from '../../../../assets/Images/loading.gif'
 import { useContext, useState } from 'react';
 import { AuthContext } from '../../../../Contexts/AuthContext/AuthContext';
+import { EMAIL_VALIDATION } from '../../../../Services/VALIDATIONS.JS';
+import { REQUIRED_VALIDATION } from '../../../../Services/VALIDATIONS.JS';
 
 
 export default function Login() {
@@ -45,7 +47,7 @@ export default function Login() {
         <div className="input-group-prepend">
           <span className="input-group-text rounded-end-0 border-0 py-2" id="basic-addon1"><i className="fa-solid fa-mobile-screen fs-5 text-secondary py-2 pe-2 border-end border-1 border-secondary"></i></span>
         </div>
-        <input {...register('email', { required: 'Email is required!', pattern: { value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, message: 'Invalid Email!' } })} type="text" className="form-control border-0 bg-light" placeholder="Enter your E-mail" aria-label="email" aria-describedby="basic-addon1" />
+        <input {...register('email', EMAIL_VALIDATION)} type="text" className="form-control border-0 bg-light" placeholder="Enter your E-mail" aria-label="email" aria-describedby="basic-addon1" />
       </div>
       {errors.email && <span className='text-danger'>{errors.email.message}</span>}
 
@@ -53,7 +55,7 @@ export default function Login() {
         <div className="input-group-prepend">
           <span className="input-group-text rounded-end-0 border-0 py-2" id="basic-addon1"><i className="fa-solid fa-lock fs-5 text-secondary py-2 pe-2 border-end border-1 border-secondary"></i></span>
         </div>
-        <input {...register('password', { required: 'Password is required!' })} type={showPass?'text':'password'} className="form-control border-0 bg-light" placeholder="Password" aria-label="password" aria-describedby="basic-addon1" />
+        <input {...register('password', REQUIRED_VALIDATION('Password'))} type={showPass?'text':'password'} className="form-control border-0 bg-light" placeholder="Password" aria-label="password" aria-describedby="basic-addon1" />
         <div className="pss-toggle">
           <button onMouseDown={(e)=>e.preventDefault()} onMouseUp={(e)=>e.preventDefault()} onClick={()=>setShowPass(!showPass)} type='button' className="input-group-text py-2 border-0" id="basic-addon1">{showPass?<i className="fa-solid fa-eye-slash fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i>:<i className="fa-solid fa-eye fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i>}</button>
         </div>

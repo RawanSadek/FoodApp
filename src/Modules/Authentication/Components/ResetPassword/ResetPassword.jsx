@@ -6,6 +6,9 @@ import { AUTH_URLs } from '../../../../Constants/END_POINTS.JSX';
 import { useLocation, useNavigate } from 'react-router-dom';
 import loading from '../../../../assets/Images/loading.gif'
 import { useEffect, useState } from 'react';
+import { REQUIRED_VALIDATION } from '../../../../Services/VALIDATIONS.JS';
+import { PASSWORD_VALIDATION } from '../../../../Services/VALIDATIONS.JS';
+import { CONFIRM_PASSWORD_VALIDATION } from '../../../../Services/VALIDATIONS.JS';
 
 
 
@@ -55,13 +58,12 @@ export default function ResetPassword() {
           </div>
           <input disabled value={email} type="text" className="form-control border-0 bg-light mb-1" placeholder="Email" aria-label="email" aria-describedby="basic-addon1" />
         </div>
-        {/* {errors.email && <span className='text-danger'>{errors.email.message}</span>} */}
 
         <div className="input-group mt-3">
           <div className="input-group-prepend">
             <span className="input-group-text rounded-end-0 border-0 py-2" id="basic-addon1"><i className="fa-solid fa-lock fs-5 text-secondary py-2 pe-2 border-end border-1 border-secondary"></i></span>
           </div>
-          <input {...register('seed', { required: 'OTP is required!' })} type="text" className="form-control border-0 bg-light mb-1" placeholder="OTP" aria-label="seed" aria-describedby="basic-addon1" />
+          <input {...register('seed', REQUIRED_VALIDATION('OTP'))} type="text" className="form-control border-0 bg-light mb-1" placeholder="OTP" aria-label="seed" aria-describedby="basic-addon1" />
         </div>
         {errors.seed && <span className='text-danger'>{errors.seed.message}</span>}
 
@@ -69,7 +71,7 @@ export default function ResetPassword() {
           <div className="input-group-prepend">
             <span className="input-group-text rounded-end-0 border-0 py-2" id="basic-addon1"><i className="fa-solid fa-lock fs-5 text-secondary py-2 pe-2 border-end border-1 border-secondary"></i></span>
           </div>
-          <input {...register('password', { required: 'Password is required!', pattern: { value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\S]{6,}$/, message: 'The password must include at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 6 characters long' } })} type={showPass ? 'text' : 'password'} className="form-control border-0 bg-light mb-1" placeholder="New Password" aria-label="password" aria-describedby="basic-addon1" />
+          <input {...register('password', PASSWORD_VALIDATION)} type={showPass ? 'text' : 'password'} className="form-control border-0 bg-light mb-1" placeholder="New Password" aria-label="password" aria-describedby="basic-addon1" />
           <div className="pss-toggle">
             <button onClick={() => setShowPass(!showPass)} type='button' className="input-group-text py-2 border-0" id="basic-addon1">{showPass ? <i className="fa-solid fa-eye-slash fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i> : <i className="fa-solid fa-eye fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i>}</button>
           </div>
@@ -80,7 +82,7 @@ export default function ResetPassword() {
           <div className="input-group-prepend">
             <span className="input-group-text rounded-end-0 border-0 py-2" id="basic-addon1"><i className="fa-solid fa-lock fs-5 text-secondary py-2 pe-2 border-end border-1 border-secondary"></i></span>
           </div>
-          <input {...register('confirmPassword', { required: 'Please confirm your password', validate: (value) => value === password || 'Passwords must match' })} type={showConfirmPass ? 'text' : 'password'} className="form-control border-0 bg-light mb-1" placeholder="Confirm New Password" aria-label="password" aria-describedby="basic-addon1" />
+          <input {...register('confirmPassword', CONFIRM_PASSWORD_VALIDATION(password))} type={showConfirmPass ? 'text' : 'password'} className="form-control border-0 bg-light mb-1" placeholder="Confirm New Password" aria-label="password" aria-describedby="basic-addon1" />
           <div className="pss-toggle">
             <button onMouseDown={(e)=>e.preventDefault()} onMouseUp={(e)=>e.preventDefault()} onClick={() => setShowConfirmPass(!showConfirmPass)} type='button' className="input-group-text py-2 border-0" id="basic-addon1">{showConfirmPass ? <i className="fa-solid fa-eye-slash fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i> : <i className="fa-solid fa-eye fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i>}</button>
           </div>

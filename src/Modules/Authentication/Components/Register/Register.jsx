@@ -6,6 +6,11 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import loading from '../../../../assets/Images/loading.gif'
 import { useEffect, useState } from 'react';
+import { PASSWORD_VALIDATION } from '../../../../Services/VALIDATIONS.JS';
+import { EMAIL_VALIDATION } from '../../../../Services/VALIDATIONS.JS';
+import { PHONE_VALIDATION } from '../../../../Services/VALIDATIONS.JS';
+import { REQUIRED_VALIDATION } from '../../../../Services/VALIDATIONS.JS';
+import { CONFIRM_PASSWORD_VALIDATION } from '../../../../Services/VALIDATIONS.JS';
 
 
 export default function Register() {
@@ -63,7 +68,7 @@ export default function Register() {
               <div className="input-group-prepend">
                 <span className="input-group-text rounded-end-0 border-0 py-2" id="basic-addon1"><i className="fa-solid fa-mobile-screen fs-5 text-secondary py-2 pe-2 border-end border-1 border-secondary"></i></span>
               </div>
-              <input {...register('userName', { required: 'Username is required!' })} type="text" className="form-control border-0 bg-light" placeholder="UserName" aria-label="username" aria-describedby="basic-addon1" />
+              <input {...register('userName', REQUIRED_VALIDATION('Username'))} type="text" className="form-control border-0 bg-light" placeholder="UserName" aria-label="username" aria-describedby="basic-addon1" />
             </div>
             {errors.userName && <span className='text-danger'>{errors.userName.message}</span>}
 
@@ -71,7 +76,7 @@ export default function Register() {
               <div className="input-group-prepend">
                 <span className="input-group-text rounded-end-0 border-0 py-2" id="basic-addon1"><i className="fa-solid fa-earth-africa fs-5 text-secondary py-2 pe-2 border-end border-1 border-secondary"></i></span>
               </div>
-              <input {...register('country', { required: 'Country is required!' })} type="text" className="form-control border-0 bg-light" placeholder="Country" aria-label="country" aria-describedby="basic-addon1" />
+              <input {...register('country', REQUIRED_VALIDATION('Country'))} type="text" className="form-control border-0 bg-light" placeholder="Country" aria-label="country" aria-describedby="basic-addon1" />
             </div>
             {errors.country && <span className='text-danger'>{errors.country.message}</span>}
 
@@ -79,7 +84,7 @@ export default function Register() {
               <div className="input-group-prepend">
                 <span className="input-group-text rounded-end-0 border-0 py-2" id="basic-addon1"><i className="fa-solid fa-lock fs-5 text-secondary py-2 pe-2 border-end border-1 border-secondary"></i></span>
               </div>
-              <input {...register('password', { required: 'Password is required!', pattern: { value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d])[A-Za-z\d\S]{6,}$/, message: 'The password must include at least one lowercase letter, one uppercase letter, one digit, one special character, and be at least 6 characters long' } })} type={showPass ? 'text' : 'password'} className="form-control border-0 bg-light mb-1" placeholder="New Password" aria-label="password" aria-describedby="basic-addon1" />
+              <input {...register('password', PASSWORD_VALIDATION)} type={showPass ? 'text' : 'password'} className="form-control border-0 bg-light mb-1" placeholder="New Password" aria-label="password" aria-describedby="basic-addon1" />
               <div className="pss-toggle">
                 <button onMouseDown={(e)=>e.preventDefault()} onMouseUp={(e)=>e.preventDefault()} onClick={() => setShowPass(!showPass)} type='button' className="input-group-text py-2 border-0" id="basic-addon1">{showPass ? <i className="fa-solid fa-eye-slash fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i> : <i className="fa-solid fa-eye fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i>}</button>
               </div>
@@ -94,7 +99,7 @@ export default function Register() {
               <div className="input-group-prepend">
                 <span className="input-group-text rounded-end-0 border-0 py-2" id="basic-addon1"><i className="fa-solid fa-mobile-screen fs-5 text-secondary py-2 pe-2 border-end border-1 border-secondary"></i></span>
               </div>
-              <input {...register('email', { required: 'Email is required!', pattern: { value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, message: 'Invalid Email!' } })} type="text" className="form-control border-0 bg-light" placeholder="Enter your E-mail" aria-label="email" aria-describedby="basic-addon1" />
+              <input {...register('email', EMAIL_VALIDATION)} type="text" className="form-control border-0 bg-light" placeholder="Enter your E-mail" aria-label="email" aria-describedby="basic-addon1" />
             </div>
             {errors.email && <span className='text-danger'>{errors.email.message}</span>}
 
@@ -102,7 +107,7 @@ export default function Register() {
               <div className="input-group-prepend">
                 <span className="input-group-text rounded-end-0 border-0 py-2" id="basic-addon1"><i className="fa-solid fa-phone fs-5 text-secondary py-2 pe-2 border-end border-1 border-secondary"></i></span>
               </div>
-              <input {...register('phoneNumber', { required: 'Phone Number is required!', pattern: { value: /^\+?[0-9\s\-]{9,15}$/, message: "Invalid phone number!!" } })} type="text" className="form-control border-0 bg-light" placeholder="Phone Number" aria-label="phoneNumber" aria-describedby="basic-addon1" />
+              <input {...register('phoneNumber', PHONE_VALIDATION)} type="text" className="form-control border-0 bg-light" placeholder="Phone Number" aria-label="phoneNumber" aria-describedby="basic-addon1" />
             </div>
             {errors.phoneNumber && <span className='text-danger'>{errors.phoneNumber.message}</span>}
 
@@ -110,7 +115,7 @@ export default function Register() {
               <div className="input-group-prepend">
                 <span className="input-group-text rounded-end-0 border-0 py-2" id="basic-addon1"><i className="fa-solid fa-lock fs-5 text-secondary py-2 pe-2 border-end border-1 border-secondary"></i></span>
               </div>
-              <input {...register('confirmPassword', { required: 'Please confirm your password', validate: (value) => value === password || 'Passwords must match' })} type={showConfirmPass ? 'text' : 'password'} className="form-control border-0 bg-light mb-1" placeholder="Confirm Password" aria-label="password" aria-describedby="basic-addon1" />
+              <input {...register('confirmPassword', CONFIRM_PASSWORD_VALIDATION(password))} type={showConfirmPass ? 'text' : 'password'} className="form-control border-0 bg-light mb-1" placeholder="Confirm Password" aria-label="password" aria-describedby="basic-addon1" />
               <div className="pss-toggle">
                 <button onClick={() => setShowConfirmPass(!showConfirmPass)} type='button' className="input-group-text py-2 border-0" id="basic-addon1">{showConfirmPass ? <i className="fa-solid fa-eye-slash fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i> : <i className="fa-solid fa-eye fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i>}</button>
               </div>
