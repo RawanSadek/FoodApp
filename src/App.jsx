@@ -38,7 +38,6 @@ function App() {
         { path: 'reset-password', element: <ResetPassword /> },
         { path: 'forgot-password', element: <ForgotPassword /> },
         { path: 'verify-account', element: <VerifyAccount /> },
-        // { path: 'change-password', element: <ChangePassword /> }
       ]
     },
     {

@@ -4,9 +4,6 @@ import noDataImg from '../../../../assets/Images/nodata.png'
 
 export default function DeleteAlert({itemName}) {
 
-  
-
-  
   return (
     <>
       <img src={noDataImg} alt="no data" className='mb-3' />

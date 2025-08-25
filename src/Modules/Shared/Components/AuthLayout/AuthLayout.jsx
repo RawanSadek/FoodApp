@@ -20,10 +20,6 @@ export default function AuthLayout() {
           </div>
         </div>
       </div>
- 
-      {/* <div className="loading-overlay d-flex align-items-center justify-content-center">
-        <img src={loading} alt="loading" className=''/>
-      </div> */}
     </div>
   )
 }

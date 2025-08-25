@@ -6,14 +6,13 @@ import { AuthContext } from '../../../../Contexts/AuthContext/AuthContext';
 
 export default function Home() {
 
-    let {loginData} = useContext(AuthContext);
-
-  console.log(loginData)
+  let { loginData } = useContext(AuthContext);
+  
   return (
     <div>
-      <Header title={`Welcome ${loginData?.userName}`} desc={'You can now add your items that any user can order it from the Application and you can edit'} imgPath={headerImg}/>
-      
-      <RecipesHeader title={'Fill'} btnText={'Fill'}/>
+      <Header title={`Welcome ${loginData?.userName}`} desc={'You can now add your items that any user can order it from the Application and you can edit'} imgPath={headerImg} />
+
+      <RecipesHeader title={'Fill'} btnText={'Fill'} />
     </div>
   )
 }

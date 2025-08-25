@@ -6,7 +6,8 @@ export const AUTH_URLs = {
     register: `${BASE_USER}/register`,
     forgot: `${BASE_USER}/reset/request`,
     reset: `${BASE_USER}/reset`,
-    verify: `${BASE_USER}/verify`
+    verify: `${BASE_USER}/verify`,
+    change: `${BASE_USER}/ChangePassword`
 }
 
 export const Categ_URLs = {
