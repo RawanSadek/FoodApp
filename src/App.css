@@ -231,7 +231,9 @@ body {
     display: flex;
     justify-content: space-between;
     text-align: center;
-    /* border: none; */
+    margin-bottom: 10px;
+    box-shadow: none;
+    
 }
   table tbody tr .table-data::before {
     content: attr(data-label);
