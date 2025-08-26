@@ -211,9 +211,9 @@ export default function Users() {
             }
             {!isLoading && usersList.map((user) => (
               <tr key={user?.id}>
-                <td>{user?.id}</td>
-                <td>{user?.userName}</td>
-                <td>
+                <td data-label="ID" className='table-data'>{user?.id}</td>
+                <td data-label="Username" className='table-data'>{user?.userName}</td>
+                <td data-label="Profile Picture" className='table-data'>
                   {imgLoading && <img src={loading} alt="loading" hidden={!imgLoading} className='loading-img ms-3' />}
                   <img src={`https://upskilling-egypt.com:3006/${user?.imagePath}`} hidden={imgLoading} alt="img" className='rounded-circle'
                     onError={(e) => {
@@ -225,11 +225,11 @@ export default function Users() {
                   />
 
                 </td>
-                <td>{user?.email}</td>
-                <td>{user?.phoneNumber}</td>
-                <td>{user?.country}</td>
-                <td>{user?.group.name}</td>
-                <td>
+                <td data-label="Email" className='table-data'>{user?.email}</td>
+                <td data-label="Pnone Number" className='table-data'>{user?.phoneNumber}</td>
+                <td data-label="Country" className='table-data'>{user?.country}</td>
+                <td data-label="Group" className='table-data'>{user?.group.name}</td>
+                <td data-label="Actions" className='table-data'>
                   <Dropdown>
                     <Dropdown.Toggle as={CustomToggle} id="dropdown-custom"></Dropdown.Toggle>
                     <Dropdown.Menu className='rounded-4 border-0 shadow-sm'>

@@ -2,7 +2,8 @@ import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import loading from '../../../../assets/Images/loading.gif'
-import { useEffect, useState } from 'react';
+import noProfilePic from '../../../../assets/Images/noProfilePic.png'
+import { useEffect, useRef, useState } from 'react';
 import { PASSWORD_VALIDATION } from '../../../../Services/VALIDATIONS.JS';
 import { EMAIL_VALIDATION } from '../../../../Services/VALIDATIONS.JS';
 import { PHONE_VALIDATION } from '../../../../Services/VALIDATIONS.JS';
@@ -52,15 +53,43 @@ export default function Register() {
       trigger('confirmPassword');
   }, [watch('password')])
 
+  let fileInputRef = useRef();
+
+  let handleClick = () => {
+    fileInputRef.current.click();
+  };
+
+
+  const [imgPreview, setImgPreview] = useState(null);
+  let handleFileChange = (event) => {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      if (file) {
+        setImgPreview(URL.createObjectURL(file)); // create a temporary preview URL
+      }
+    }
+  }
+
   return (
     <>
-      <div className="auth-title-container my-3">
+      <div className="auth-title-container mt-1">
         <h5 className='auth-title fw-bold'>Register</h5>
         <p className='auth-subtitle text-secondary'>Welcome Back! Please enter your details</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)}>
+
+          <div className="img-input rounded text-center w-30 m-auto" onClick={handleClick}>
+            {imgPreview ? <img src={imgPreview} className='w-30 rounded-circle' /> : <img src={noProfilePic} alt='no img' className='rounded-circle w-30'/>}
+            <p className='fw-medium mt-2'>Choose a <span className="theme-green-text">Profile Picture</span> to upload</p>
+
+            <input {...register('profileImage')} ref={(e) => {
+              fileInputRef.current = e; // store for manual click
+              register("profileImage").ref(e); // give to RHF
+            }} onChange={handleFileChange} type="file" hidden className='img-input' />
+          </div>
         <div className="row">
+
 
           <div className="col-md-6">
 
@@ -122,14 +151,16 @@ export default function Register() {
             </div>
             {errors.confirmPassword && <span className='text-danger'>{errors.confirmPassword.message}</span>}
 
-            <div className="links d-flex justify-content-end align-items-center">
-              <Link to='/login' className='text-decoration-none fw-semibold mt-3 theme-green-text'>Login Now?</Link>
-            </div>
+          </div>
+          
+
+          <div className="links d-flex justify-content-end align-items-center">
+            <Link to='/login' className='text-decoration-none fw-semibold mt-3 theme-green-text'>Login Now?</Link>
           </div>
         </div>
 
         <div className="text-center">
-          <button disabled={isSubmitting} type='submit' className='btn auth-btn theme-green-bg w-75 my-4 py-2 text-white fw-semibold fs-5'>Register <img src={loading} alt="loading" hidden={!isSubmitting} className='loading-img' /></button>
+          <button disabled={isSubmitting} type='submit' className='btn auth-btn theme-green-bg w-75 mt-3 py-2 text-white fw-semibold fs-5'>Register <img src={loading} alt="loading" hidden={!isSubmitting} className='loading-img' /></button>
         </div>
       </form>
     </>

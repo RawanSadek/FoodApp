@@ -12,7 +12,7 @@ export default function AuthLayout() {
         <div className="row vh-100 justify-content-center align-items-center ">
           <div className={`${isRegister ? "col-md-8" : "col-md-5"} bg-white rounded-4 px-5 py-4`}>
             <div className="logo text-center">
-              <img src={logo} alt="logo" className={`${isRegister? 'w-50':'w-75'}`} />
+              <img src={logo} alt="logo" className={`${isRegister? 'w-30':'w-75'}`} />
             </div>
             
             <Outlet />

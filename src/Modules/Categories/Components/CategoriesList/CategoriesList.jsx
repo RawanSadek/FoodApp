@@ -179,9 +179,9 @@ export default function Categories() {
 
             {!isLoading && categList.map((item) => (
               <tr key={item?.id}>
-                <td>{item?.id}</td>
-                <td>{item?.name}</td>
-                <td>{new Date(item?.creationDate).toLocaleDateString("en-GB", {
+                <td data-label="ID" className='table-data'>{item?.id}</td>
+                <td data-label="Name" className='table-data'>{item?.name}</td>
+                <td data-label="Creation Date" className='table-data'>{new Date(item?.creationDate).toLocaleDateString("en-GB", {
                   weekday: "long",
                   year: "numeric",
                   month: "long",
@@ -189,7 +189,7 @@ export default function Categories() {
                   hour: "2-digit",
                   minute: "2-digit",
                 })}</td>
-                <td>
+                <td data-label="Actions" className='table-data'>
                   <Dropdown>
                     <Dropdown.Toggle as={CustomToggle} id="dropdown-custom"></Dropdown.Toggle>
                     <Dropdown.Menu className='rounded-4 border-0 shadow-sm'>

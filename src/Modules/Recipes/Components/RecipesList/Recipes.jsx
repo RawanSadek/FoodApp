@@ -255,9 +255,9 @@ export default function Recipes() {
 
             {!isLoading && recipesList.map((item) => (
               <tr key={item?.id}>
-                <td>{item?.id}</td>
-                <td>{item?.name}</td>
-                <td>
+                <td data-label="ID" className='table-data'>{item?.id}</td>
+                <td data-label="Name" className='table-data'>{item?.name}</td>
+                <td data-label="Image" className='table-data'>
                   {imgLoading && <img src={loading} alt="loading" hidden={!imgLoading} className='loading-img ms-3' />}
                   <img src={`https://upskilling-egypt.com:3006/${item?.imagePath}`} hidden={imgLoading} alt="img" className='rounded-3'
                     onError={(e) => {
@@ -269,11 +269,11 @@ export default function Recipes() {
                   />
 
                 </td>
-                <td>{item?.price}</td>
-                <td>{item?.description}</td>
-                <td>{item?.tag.name}</td>
-                <td>{item?.category[0]?.name}</td>
-                <td>
+                <td data-label="Price" className='table-data'>{item?.price}</td>
+                <td data-label="Description" className='table-data'>{item?.description}</td>
+                <td data-label="Tag" className='table-data'>{item?.tag.name}</td>
+                <td data-label="Category" className='table-data'>{item?.category[0]?.name}</td>
+                <td data-label="Actions" className='table-data'>
                   {loginData?.userGroup == 'SuperAdmin' ?
                     <Dropdown>
                       <Dropdown.Toggle as={CustomToggle} id="dropdown-custom"></Dropdown.Toggle>

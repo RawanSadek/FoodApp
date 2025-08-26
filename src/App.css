@@ -205,3 +205,43 @@ body {
     font-size: 14px;
     width: 25px;
 }
+
+.w-30{
+    width: 30%;
+}
+
+.img-input{
+    cursor: pointer;
+}
+
+
+@media (max-width: 910px) {
+  table thead {
+    display: none; /* hide headers */
+  }
+  table tbody tr {
+    display: block;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+  }
+  table tbody tr .table-data {
+    padding: 0 50px;
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    /* border: none; */
+}
+  table tbody tr .table-data::before {
+    content: attr(data-label);
+    font-weight: bold;
+    /* margin-right: 10px; */
+  }
+
+  table tbody tr td[colspan] {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
