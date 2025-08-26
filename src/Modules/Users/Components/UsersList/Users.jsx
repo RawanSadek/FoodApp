@@ -171,7 +171,7 @@ export default function Users() {
 
         <div className="search-tags col-6 col-md-2 border border-1 mb-4 px-3 py-2 rounded-3">
           <select onChange={getGroupSearchValue} name="group" id="group" className='w-100 border-0'>
-            <option value="" >Search by country</option>
+            <option value="" >Search by group</option>
             <option value="1">Admin</option>
             <option value="2">System User</option>
           </select>

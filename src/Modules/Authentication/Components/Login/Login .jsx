@@ -28,7 +28,7 @@ export default function Login() {
 
     } catch (error) {
       toast.error('Wrong Email or Password!')
-      console.log(error)
+      // console.log(error)
     }
   }
 
