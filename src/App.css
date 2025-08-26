@@ -227,7 +227,7 @@ body {
     padding: 10px;
   }
   table tbody tr .table-data {
-    padding: 0 50px;
+    padding: 0 10px;
     display: flex;
     justify-content: space-between;
     text-align: center;
