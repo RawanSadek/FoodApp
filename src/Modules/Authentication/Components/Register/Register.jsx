@@ -147,7 +147,7 @@ export default function Register() {
               </div>
               <input {...register('confirmPassword', CONFIRM_PASSWORD_VALIDATION(password))} type={showConfirmPass ? 'text' : 'password'} className="form-control border-0 bg-light" placeholder="Confirm Password" aria-label="password" aria-describedby="basic-addon1" />
               <div className="pss-toggle">
-                <button onClick={() => setShowConfirmPass(!showConfirmPass)} type='button' className="input-group-text py-2 border-0 rounded-start-0" id="basic-addon2">{showConfirmPass ? <i className="fa-solid fa-eye-slash fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i> : <i className="fa-solid fa-eye fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i>}</button>
+                <button onMouseDown={(e) => e.preventDefault()} onMouseUp={(e) => e.preventDefault()} onClick={() => setShowConfirmPass(!showConfirmPass)} type='button' className="input-group-text py-2 border-0 rounded-start-0" id="basic-addon2">{showConfirmPass ? <i className="fa-solid fa-eye-slash fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i> : <i className="fa-solid fa-eye fs-5 text-secondary py-2 px-2 border-start border-1 border-secondary"></i>}</button>
               </div>
             </div>
             {errors.confirmPassword && <span className='text-danger'>{errors.confirmPassword.message}</span>}
