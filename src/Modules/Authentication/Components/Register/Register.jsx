@@ -28,12 +28,13 @@ export default function Register() {
     formData.append('phoneNumber', data.phoneNumber);
     formData.append('password', data.password);
     formData.append('confirmPassword', data.confirmPassword);
-    formData.append('profileImage', data.profileImage);
+    formData.append('profileImage', fileInputRef.current.files[0]);
     return formData;
   }
 
   let onSubmit = async (data) => {
     let userData = appendToFormData(data)
+    console.log(data)
 
     try {
       let response = await axiosInstance.post(USER_URLs.register, userData);
