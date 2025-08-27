@@ -8,39 +8,40 @@ A responsive food app built with Vite + React, featuring complete authentication
 🚀 Features
 
 🔐 Authentication
-. Login
-. Register
-. Verify account
-. Forgot & Reset password
-. Change password
+- Login
+- Register
+- Verify account
+- Forgot & Reset password
+- Change password
+  
 
 👨‍💼 Admin Portal
-. Manage categories (add, edit, delete)
-. Manage recipes (add, edit, delete)
-. View & delete users
+- Manage categories (add, edit, delete)
+- Manage recipes (add, edit, delete)
+- View & delete users
 
 👤 User Portal
-. Browse recipes
-. Add/remove recipes from favourites
+- Browse recipes
+- Add/remove recipes from favourites
+- 
 
 📱 Responsive Design
-. Works seamlessly across desktop, tablet, and mobile devices
-
+- Works seamlessly across desktop, tablet, and mobile devices
 
 
 🛠️ Tech Stack
-. Vite + React (JavaScript)
-. React Context (state management)
-. React-Bootstrap
-. React Router DOM
-. JWT Decode
-. React Hook Form
-. React Pro Sidebar
-. React Toastify
-. Axios
-. Font Awesome
+- Vite + React (JavaScript)
+- React Context (state management)
+- React-Bootstrap
+- React Router DOM
+- JWT Decode
+- React Hook Form
+- React Pro Sidebar
+- React Toastify
+- Axios
+- Font Awesome
 
 📬 Contact
 If you'd like to connect, discuss this project, or collaborate:
-💼 LinkedIn: www.linkedin.com/in/rawanahmedsadek
-📫 Email: rawansadek267@gmail.com
+- 💼 LinkedIn: www.linkedin.com/in/rawanahmedsadek
+- 📫 Email: rawansadek267@gmail.com
