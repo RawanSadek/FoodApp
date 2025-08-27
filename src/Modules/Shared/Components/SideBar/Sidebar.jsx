@@ -6,11 +6,11 @@ import { AuthContext } from "../../../../Contexts/AuthContext/AuthContext";
 import ChangePassword from "../../../Authentication/Components/ChangePassword/ChangePassword";
 import { Modal } from "react-bootstrap";
 
-export default function SideBar({ logout }) {
+export default function SideBar() {
 
   let location = useLocation();
 
-  let { loginData } = useContext(AuthContext);
+  let { loginData, logout } = useContext(AuthContext);
 
   let [collapse, setCollapse] = useState(false);
   let getCollapse = () => {
