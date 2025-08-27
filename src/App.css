@@ -247,3 +247,7 @@ body {
     align-items: center;
   }
 }
+
+.w-10{
+    width: 15%;
+}

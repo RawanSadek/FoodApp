@@ -67,7 +67,7 @@ export default function Favourits() {
 
       <div className="row justify-content-around align-items-center my-5">
 
-        {isLoading && <img src={loading} alt="loading" className='mt-5 w-25' />}
+        {isLoading && <img src={loading} alt="loading" className='mt-5 w-10' />}
 
         {!isLoading && favList?.length === 0 && <NoData />}
 

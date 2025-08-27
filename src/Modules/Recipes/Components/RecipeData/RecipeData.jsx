@@ -37,12 +37,11 @@ export default function RecipesData() {
 
   const [imgPreview, setImgPreview] = useState(null);
   let handleFileChange = (event) => {
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      if (file) {
-        setImgPreview(URL.createObjectURL(file)); // create a temporary preview URL
-      }
-    }
+    // if (event.target.files.length > 0) {
+      
+    //   }
+      const file = event.target?.files[0];
+      setImgPreview(file && URL.createObjectURL(file)); // create a temporary preview URL
   }
 
   let [isLoading, setIsLoading] = useState(true);
