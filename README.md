@@ -1,12 +1,47 @@
-# React + Vite
+🍽️ Online Food App 
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A responsive food app built with Vite + React, featuring complete authentication, admin and user portals, and full CRUD management with React Context.
 
-Currently, two official plugins are available:
+🚀 Live Demo
+🔗 View Live Site: https://food-application1.netlify.app/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+🚀 Features
 
-## Expanding the ESLint configuration
+🔐 Authentication
+- Login
+- Register
+- Verify account
+- Forgot & Reset password
+- Change password
+  
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+👨‍💼 Admin Portal
+- Manage categories (add, edit, delete)
+- Manage recipes (add, edit, delete)
+- View & delete users
+
+👤 User Portal
+- Browse recipes
+- Add/remove recipes from favourites
+- 
+
+📱 Responsive Design
+- Works seamlessly across desktop, tablet, and mobile devices
+
+
+🛠️ Tech Stack
+- Vite + React (JavaScript)
+- React Context (state management)
+- React-Bootstrap
+- React Router DOM
+- JWT Decode
+- React Hook Form
+- React Pro Sidebar
+- React Toastify
+- Axios
+- Font Awesome
+
+📬 Contact
+If you'd like to connect, discuss this project, or collaborate:
+- 💼 LinkedIn: www.linkedin.com/in/rawanahmedsadek
+- 📫 Email: rawansadek267@gmail.com
