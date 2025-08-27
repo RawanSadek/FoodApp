@@ -2,10 +2,26 @@ import axios from "axios"
 
 export const BASE_URL = 'https://upskilling-egypt.com:3006/api/v1'
 
+export const authenticationAxiosInstance =  axios.create({
+    baseURL:BASE_URL, 
+});
+
 export const axiosInstance =  axios.create({
     baseURL:BASE_URL, 
     headers: { Authorization: localStorage.getItem('token') }
-})
+});
+
+// Interceptor: runs before every request to avoid unauthorized error
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization =  token;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
 
 //Users URLs
 export const BASE_USER = `/users`

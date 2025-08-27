@@ -12,7 +12,7 @@ import { USER_URLs } from '../../../../Services/END_POINTS.JS';
 
 export default function Login() {
 
-  let {getLoginData} = useContext(AuthContext);
+  let {getLoginData, loginData} = useContext(AuthContext);
 
   let navigate = useNavigate();
 
@@ -23,7 +23,7 @@ export default function Login() {
       let response = await axiosInstance.post(USER_URLs.login, data);
       localStorage.setItem('token', response.data.token);
       getLoginData();
-      toast.success('Welcome to the Food App!');
+      toast.success(`Welcome to the Food App!`);
       navigate('/dashboard');
 
     } catch (error) {
