@@ -12,7 +12,7 @@ import { USER_URLs } from '../../../../Services/END_POINTS.JS';
 
 export default function Login() {
 
-  let {getLoginData, loginData} = useContext(AuthContext);
+  let {getLoginData} = useContext(AuthContext);
 
   let navigate = useNavigate();
 
